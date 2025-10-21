@@ -1,10 +1,8 @@
 pipeline {
   agent any
   tools { jdk 'jdk21' }
-  stages {
-    stage('Verify Java') {
-      steps { sh 'echo $JAVA_HOME && java -version && ./gradlew -version' }
-    }
+  stage('Verify Java') {
+    steps { sh 'echo $JAVA_HOME && java -version && ./gradlew -version' }
   }
   options {
     timestamps()
