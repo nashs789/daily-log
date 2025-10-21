@@ -13,6 +13,16 @@ pipeline {
     stage('Verify Java') {
       steps { sh 'echo $JAVA_HOME && java -version && ./gradlew -version' }
     }
+    stage('Verify Docker') {
+      steps {
+        sh '''
+          set -eux
+          docker version
+          docker ps >/dev/null
+          id $(whoami) | grep docker
+        '''
+      }
+    }
     stage('Checkout') {
       steps {
         checkout scm
