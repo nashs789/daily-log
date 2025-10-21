@@ -54,3 +54,15 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.withType(Test).configureEach {
+	useJUnitPlatform()
+	include '**/*Test*', '**/*Tests', '**/*TestCase'
+	reports {
+		junitXml.required = true
+		html.required = true
+	}
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
