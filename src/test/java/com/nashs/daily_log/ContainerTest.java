@@ -3,17 +3,13 @@ package com.nashs.daily_log;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest
 @Testcontainers
-@ActiveProfiles("test")
 public abstract class ContainerTest {
 
     @Container
@@ -28,10 +24,6 @@ public abstract class ContainerTest {
         r.add("spring.datasource.url",      POSTGRES::getJdbcUrl);
         r.add("spring.datasource.username", POSTGRES::getUsername);
         r.add("spring.datasource.password", POSTGRES::getPassword);
-
-        // Flyway 쓰면 자동 적용(마이그레이션이 classpath:db/migration에 있어야 함)
-        r.add("spring.flyway.enabled",   () -> "true");
-        r.add("spring.flyway.locations", () -> "classpath:db/migration");
         r.add("spring.jpa.hibernate.ddl-auto", () -> "create");
     }
 
