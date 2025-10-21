@@ -1,6 +1,6 @@
 package com.nashs.daily_log.infra.login.repository.impl;
 
-import com.nashs.daily_log.DbSmokeIT;
+import com.nashs.daily_log.ContainerTest;
 import com.nashs.daily_log.domain.login.info.UserInfo;
 import com.nashs.daily_log.infra.login.entity.User;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @Sql(scripts = "/testdata/user/user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "/testdata/user/user_cleanup.sql",   executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class UserRepositoryImplTest extends DbSmokeIT {
+class UserRepositoryImplTest extends ContainerTest {
 
     @Autowired
     private UserRepositoryImpl userRepository;
