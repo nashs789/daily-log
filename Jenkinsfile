@@ -10,10 +10,10 @@ pipeline {
     SPRING_PROFILES_ACTIVE = 'test'
   }
   stages {
+    stage('Verify Java') {
+      steps { sh 'echo $JAVA_HOME && java -version && ./gradlew -version' }
+    }
     stage('Checkout') {
-      stage('Verify Java') {
-        steps { sh 'echo $JAVA_HOME && java -version && ./gradlew -version' }
-      }
       steps {
         checkout scm
         sh 'git rev-parse --short HEAD'
