@@ -17,9 +17,8 @@ public class GoogleOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest req) throws OAuth2AuthenticationException {
         OAuth2User user = super.loadUser(req);
-        // TODO: 여기서 DB upsert 처리(기존/신규 구분)하고, DB상의 역할(권한)도 끌어오는 게 베스트
         var authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
-        // record 로 파싱
+        // Record 로 파싱
         GoogleProfile profile = GoogleProfile.fromAttributes(user.getAttributes());
         Map<String, Object> attrs = Map.of(
                 "sub", profile.sub(),

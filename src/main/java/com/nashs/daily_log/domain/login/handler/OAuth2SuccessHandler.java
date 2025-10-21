@@ -1,8 +1,11 @@
 package com.nashs.daily_log.domain.login.handler;
 
 import com.nashs.daily_log.domain.login.info.GoogleProfile;
+import com.nashs.daily_log.domain.login.info.UserInfo;
 import com.nashs.daily_log.domain.login.oauthPrincipal.GoogleOAuth2Principal;
+import com.nashs.daily_log.domain.login.repository.UserRepository;
 import com.nashs.daily_log.domain.login.service.JwtService;
+import com.nashs.daily_log.infra.login.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -28,22 +32,43 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     //@Value("${APP_CALLBACK_SCHEME:}")
     private String appScheme = "/"; // 예: myapp://oauth2/callback
 
+    private final UserRepository userRepository;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth) throws IOException {
         OAuth2User principal = (OAuth2User) auth.getPrincipal();
         String platform = ((OAuth2AuthenticationToken) auth).getAuthorizedClientRegistrationId();
 
         if ("google".equals(platform)) {
-            // 메소드로 만들자
             log.info("profile = {}", principal.getAttributes());
         }
 
-        // TODO: DB upsert(google sub→우리 userId 매핑). 지금은 sub를 그대로 userId로 사용(데모)
-        String userId = "test"; // sub;
-        String email = "test@test.com";
+        // ##### 임시 코드 (좋은 방법 찾기)#####
+        Map<String, Object> attributes = principal.getAttributes();
 
-        String access = jwt.createAccessToken(userId, email);
-        String refresh = jwt.createRefreshToken(userId);
+        String sub = (String) attributes.get("sub");
+        Long id = (Long) attributes.get("id");
+        String email = (String) attributes.get("email");
+        Boolean emailVerified = (Boolean) attributes.get("email_verified");
+        String username = (String) attributes.get("name");
+        String picture = (String) attributes.get("picture");
+        // ##### 임시 코드 #####
+
+        if (!userRepository.isRegisteredUser(sub)) {
+            UserInfo userInfo = userRepository.saveSocialUser(UserInfo.builder()
+                                                                      .id(id)
+                                                                      .sub(sub)
+                                                                      .email(email)
+                                                                      .emailVerified(emailVerified)
+                                                                      .provider(User.Provider.GOOGLE)
+                                                                      .username(username)
+                                                                      .picture(picture)
+                                                                      .build());
+            log.info("신규 등록 = {}", userInfo);
+        }
+
+        String access = jwt.createAccessToken(sub, email);
+        String refresh = jwt.createRefreshToken(sub);
 
         if (appScheme != null && !appScheme.isBlank()) {
             // 모바일 딥링크로 리다이렉트
