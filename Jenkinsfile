@@ -30,6 +30,8 @@ pipeline {
         sh '''
           set -eux
           ./gradlew clean test --no-daemon
+          echo "==== JUnit XML files ===="
+          find . -type f -name "TEST-*.xml" -maxdepth 8 -print | sed 's/^/  /' || true
         '''
       }
       post {
