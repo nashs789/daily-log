@@ -3,7 +3,8 @@ pipeline {
   tools { jdk 'jdk21' }
   stages {
     stage('Verify Java') {
-    steps { sh 'echo $JAVA_HOME && java -version && ./gradlew -version' }
+      steps { sh 'echo $JAVA_HOME && java -version && ./gradlew -version' }
+    }
   }
   options {
     timestamps()
