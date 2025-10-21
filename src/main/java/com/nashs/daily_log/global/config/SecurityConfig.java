@@ -1,5 +1,9 @@
 package com.nashs.daily_log.global.config;
 
+import com.nashs.daily_log.domain.login.handler.OAuth2FailureHandler;
+import com.nashs.daily_log.domain.login.handler.OAuth2SuccessHandler;
+import com.nashs.daily_log.domain.login.service.GoogleOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,18 +13,27 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final GoogleOAuth2UserService oAuth2UserService;
+    private final OAuth2SuccessHandler successHandler;
+    private final OAuth2FailureHandler failureHandler;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-            .formLogin(AbstractHttpConfigurer::disable)
-            .httpBasic(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/").permitAll()
+                    .requestMatchers("/oauth2/**", "/login/**").permitAll()
                     .anyRequest()
-                    .permitAll() // ← 임시 전체 허용 (SNS 로그인 붙이기 전)
-            );
+                    .authenticated()
+            )
+            .oauth2Login(oauth -> oauth
+                    .userInfoEndpoint(u -> u.userService(oAuth2UserService))
+                    .successHandler(successHandler)
+                    .failureHandler(failureHandler)
+            )
+            .logout(l -> l.logoutSuccessUrl("/").permitAll());
         return http.build();
     }
 }
