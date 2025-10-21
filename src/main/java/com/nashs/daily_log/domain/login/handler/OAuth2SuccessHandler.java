@@ -1,27 +1,23 @@
 package com.nashs.daily_log.domain.login.handler;
 
-import com.nashs.daily_log.domain.login.info.GoogleProfile;
+import com.nashs.daily_log.domain.login.info.GoogleAttrs;
 import com.nashs.daily_log.domain.login.info.UserInfo;
-import com.nashs.daily_log.domain.login.oauthPrincipal.GoogleOAuth2Principal;
+import com.nashs.daily_log.domain.login.parser.GoogleAttributeParser;
 import com.nashs.daily_log.domain.login.repository.UserRepository;
 import com.nashs.daily_log.domain.login.service.JwtService;
-import com.nashs.daily_log.infra.login.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 @Slf4j
 @Component
@@ -33,6 +29,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private String appScheme = "/"; // 예: myapp://oauth2/callback
 
     private final UserRepository userRepository;
+    private final GoogleAttributeParser googleAttributeParser;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth) throws IOException {
@@ -43,27 +40,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             log.info("profile = {}", principal.getAttributes());
         }
 
-        // ##### 임시 코드 (좋은 방법 찾기)#####
-        Map<String, Object> attributes = principal.getAttributes();
-
-        String sub = (String) attributes.get("sub");
-        Long id = (Long) attributes.get("id");
-        String email = (String) attributes.get("email");
-        Boolean emailVerified = (Boolean) attributes.get("email_verified");
-        String username = (String) attributes.get("name");
-        String picture = (String) attributes.get("picture");
-        // ##### 임시 코드 #####
+        GoogleAttrs attrs = googleAttributeParser.fromPrincipal(principal);
+        String sub = attrs.sub();
+        String email = attrs.email();
 
         if (!userRepository.isRegisteredUser(sub)) {
-            UserInfo userInfo = userRepository.saveSocialUser(UserInfo.builder()
-                                                                      .id(id)
-                                                                      .sub(sub)
-                                                                      .email(email)
-                                                                      .emailVerified(emailVerified)
-                                                                      .provider(User.Provider.GOOGLE)
-                                                                      .username(username)
-                                                                      .picture(picture)
-                                                                      .build());
+            UserInfo userInfo = userRepository.saveSocialUser(attrs.toUserInfo());
             log.info("신규 등록 = {}", userInfo);
         }
 
