@@ -1,9 +1,6 @@
 pipeline {
   agent any
   tools { jdk 'jdk21' }
-  stage('Verify Java') {
-    steps { sh 'echo $JAVA_HOME && java -version && ./gradlew -version' }
-  }
   options {
     timestamps()
     ansiColor('xterm')
@@ -14,6 +11,9 @@ pipeline {
   }
   stages {
     stage('Checkout') {
+      stage('Verify Java') {
+        steps { sh 'echo $JAVA_HOME && java -version && ./gradlew -version' }
+      }
       steps {
         checkout scm
         sh 'git rev-parse --short HEAD'
