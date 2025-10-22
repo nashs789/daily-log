@@ -1,0 +1,38 @@
+package com.nashs.daily_log;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+@Testcontainers
+public abstract class ContainerTest {
+
+    @Container
+    static PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine")
+            .withDatabaseName("life_log")
+            .withUsername("test")
+            .withPassword("test")
+            .withReuse(false);
+
+    @DynamicPropertySource
+    static void overrideProps(DynamicPropertyRegistry r) {
+        r.add("spring.datasource.url",      POSTGRES::getJdbcUrl);
+        r.add("spring.datasource.username", POSTGRES::getUsername);
+        r.add("spring.datasource.password", POSTGRES::getPassword);
+        r.add("spring.jpa.hibernate.ddl-auto", () -> "create");
+    }
+
+    @Autowired javax.sql.DataSource ds;
+
+    @Test
+    void 도커_DB_테스트() {
+        var url = ((com.zaxxer.hikari.HikariDataSource) ds).getJdbcUrl();
+        System.out.println(">>> JDBC URL = " + url);
+        Assertions.assertThat(url).contains("jdbc:postgresql://localhost:");
+    }
+}
