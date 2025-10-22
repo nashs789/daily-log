@@ -8,6 +8,7 @@ import com.nashs.daily_log.domain.login.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
@@ -33,10 +35,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth) throws IOException {
         OAuth2User principal = (OAuth2User) auth.getPrincipal();
         String platform = ((OAuth2AuthenticationToken) auth).getAuthorizedClientRegistrationId();
-        System.out.println("In onAuthenticationSuccess: " + auth);
 
         if ("google".equals(platform)) {
-            System.out.println("profile: " + principal.getAttributes());
+            log.info("profile = {}", principal.getAttributes());
         }
 
         GoogleAttrs attrs = googleAttributeParser.fromPrincipal(principal);
@@ -45,7 +46,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         if (!userRepository.isRegisteredUser(sub)) {
             UserInfo userInfo = userRepository.saveSocialUser(attrs.toUserInfo());
-            // log.info("신규 등록 = {}", userInfo);
+            log.info("신규 등록 = {}", userInfo);
         }
 
         String access = jwt.createAccessToken(sub, email);

@@ -27,7 +27,6 @@ public class GoogleOAuth2UserService extends DefaultOAuth2UserService {
                 "picture", profile.picture()
         );
         // 여기서는 그대로 반환(필요 시 DB upsert 등 도메인 처리 추가)
-        System.out.println("OAuth2 Google Login check: " + profile);
         return new GoogleOAuth2Principal(profile, authorities, attrs);
     }
 }
