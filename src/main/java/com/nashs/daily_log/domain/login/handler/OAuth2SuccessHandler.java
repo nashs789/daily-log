@@ -35,6 +35,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth) throws IOException {
         OAuth2User principal = (OAuth2User) auth.getPrincipal();
         String platform = ((OAuth2AuthenticationToken) auth).getAuthorizedClientRegistrationId();
+        log.info("In onAuthenticationSuccess = {}", auth);
 
         if ("google".equals(platform)) {
             log.info("profile = {}", principal.getAttributes());

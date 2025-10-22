@@ -2,6 +2,7 @@ package com.nashs.daily_log.domain.login.service;
 
 import com.nashs.daily_log.domain.login.info.GoogleProfile;
 import com.nashs.daily_log.domain.login.oauthPrincipal.GoogleOAuth2Principal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class GoogleOAuth2UserService extends DefaultOAuth2UserService {
     @Override
@@ -27,6 +29,7 @@ public class GoogleOAuth2UserService extends DefaultOAuth2UserService {
                 "picture", profile.picture()
         );
         // 여기서는 그대로 반환(필요 시 DB upsert 등 도메인 처리 추가)
+        log.info("OAuth2 Google Login check = {}", profile);
         return new GoogleOAuth2Principal(profile, authorities, attrs);
     }
 }
