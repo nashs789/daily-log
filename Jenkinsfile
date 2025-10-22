@@ -84,13 +84,19 @@ pipeline {
     }
       steps {
         sh '''
-          set -eux
-          JAR=$(ls build/libs/*SNAPSHOT*.jar || ls build/libs/*.jar | head -n1)
-          echo "Using $JAR"
-          cp "$JAR" /opt/myapp/app.jar
-          # 안전 재시작
+          set -euo pipefail
+          # stop 및 포트 해제 대기
           bash /opt/myapp/stop.sh || true
+          for i in $(seq 1 20); do
+            if ! lsof -t -iTCP:8081 -sTCP:LISTEN >/dev/null 2>&1; then break; fi
+            sleep 0.3
+          done
+
+          # 복사 & 시작
+          JAR=$(ls build/libs/*SNAPSHOT*.jar || ls build/libs/*.jar | head -n1)
+          cp -f "$JAR" /opt/myapp/app.jar
           bash /opt/myapp/run.sh
+
           sleep 2
           pgrep -af 'java.*app.jar' || (echo "App not running!" && exit 1)
         '''
