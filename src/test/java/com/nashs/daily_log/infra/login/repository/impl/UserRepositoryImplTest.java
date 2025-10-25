@@ -1,8 +1,10 @@
 package com.nashs.daily_log.infra.login.repository.impl;
 
 import com.nashs.daily_log.ContainerTest;
-import com.nashs.daily_log.domain.login.info.UserInfo;
+import com.nashs.daily_log.domain.user.exception.UserException;
+import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.infra.login.entity.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @SpringBootTest
 @Testcontainers
@@ -23,8 +26,9 @@ class UserRepositoryImplTest extends ContainerTest {
     private UserRepositoryImpl userRepository;
 
     @Test
-    void 이미_가입한_유저_확인() {
-        // when & then
+    @DisplayName("이미 가입한 유저인지 확인")
+    void isRegisteredUser() {
+        // given & when & then
         assertTrue(
                 userRepository.isRegisteredUser("user1")
                 && userRepository.isRegisteredUser("user2")
@@ -33,22 +37,44 @@ class UserRepositoryImplTest extends ContainerTest {
     }
 
     @Test
-    void 가입하지_않은_유저() {
-        // when & then
+    @DisplayName("가입하지 않은 유저인지 확인")
+    void isNotRegisteredUser() {
+        // given & when & then
         assertFalse(userRepository.isRegisteredUser("user4"));
     }
 
     @Test
-    void 유저_저장() {
-        // given
+    @DisplayName("신규 유저 저장")
+    void saveUser() {
+        // given & when
         UserInfo userInfo = userRepository.saveSocialUser(UserInfo.builder()
                                                                   .sub("user4")
                                                                   .provider(User.Provider.GOOGLE)
                                                                   .build());
-        // when & then
+        // then
         assertAll(() -> {
             assertEquals("user4", userInfo.getSub());
             assertEquals(User.Provider.GOOGLE, userInfo.getProvider());
         });
+    }
+
+    @Test
+    @DisplayName("가입한 유저 조회")
+    void findUserBySub() {
+        // given & when
+        UserInfo userInfo = userRepository.findBySub("user1");
+        // then
+        assertEquals("user1", userInfo.getSub());
+    }
+
+    @Test
+    @DisplayName("가입하지 않은 유저 조회")
+    void findNotRegisteredUser() {
+        // given & when
+        UserException userException = assertThrows(UserException.class, () -> userRepository.findBySub("user999-test-no-info"));
+        // then
+        assertEquals(UserException.class, userException.getClass());
+        assertEquals(NOT_FOUND, userException.getStatus());
+        assertEquals("존재하지 않는 유저 입니다.", userException.getMessage());
     }
 }
