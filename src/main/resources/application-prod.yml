@@ -33,3 +33,12 @@ logging:
         level:
             org.springframework.security=DEBUG
             org.springframework.security.oauth2=DEBUG
+
+notify:
+    enabled: true
+    slack:
+        enabled: true
+        webhook: ${SLACK_WEBHOOK_URL}
+    discord:
+        enabled: true
+        webhook: ${DISCORD_WEBHOOK_URL}
