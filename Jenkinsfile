@@ -84,15 +84,43 @@ pipeline {
     }
       steps {
         sh '''
-          set -eux
-          JAR=$(ls build/libs/*SNAPSHOT*.jar || ls build/libs/*.jar | head -n1)
-          echo "Using $JAR"
-          cp "$JAR" /opt/myapp/app.jar
-          # 안전 재시작
+          set -euo
+          echo "[deploy] whoami=$(whoami)"
+          ls -ld /opt/myapp || true
+
+          # 안전 정지 및 포트 해제 대기
           bash /opt/myapp/stop.sh || true
+          i=0
+          while ss -ltn | grep -qE '[:\\.]8081\\b'; do
+            i=$((i+1)); [ "$i" -ge 40 ] && break
+            sleep 0.25
+          done
+
+          echo "[deploy] build/libs 목록:"
+          ls -lh build/libs || true
+
+          # 최신 Spring Boot 실행 JAR 선택 ( -plain / sources / javadoc 제외 )
+          JAR="$(ls -1t build/libs/*.jar 2>/dev/null | grep -Ev '(-plain|sources|javadoc)\\.jar$' | head -n1 || true)"
+          [ -n "$JAR" ] && [ -f "$JAR" ] || { echo "[deploy] Boot JAR을 찾지 못했습니다."; exit 1; }
+          echo "[deploy] picked: $JAR"
+
+          # Boot Loader 존재로 실행 JAR 검증 (plain.jar 방지)
+          if ! jar tf "$JAR" | grep -q 'org/springframework/boot/loader/'; then
+            echo "[deploy] 선택된 파일이 실행 JAR이 아닙니다(아마 -plain.jar). 빌드 설정을 확인하세요."
+            exit 1
+          fi
+
+          # 원자적 교체
+          cp -f "$JAR" /opt/myapp/app.jar.new
+          mv -f /opt/myapp/app.jar.new /opt/myapp/app.jar
+
+          # 기동
+          sleep 1
           bash /opt/myapp/run.sh
+
+          # 기동 확인
           sleep 2
-          pgrep -af 'java.*app.jar' || (echo "App not running!" && exit 1)
+          pgrep -af 'java.*app.jar'
         '''
       }
     }

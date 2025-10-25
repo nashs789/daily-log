@@ -12,8 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 @Component
 public class OAuth2FailureHandler implements AuthenticationFailureHandler {
-    //@Value("${APP_CALLBACK_SCHEME:}")
-    private String appScheme = "myapp://oauth2/callback";
+    private String appScheme = "/";
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse res, AuthenticationException ex) throws IOException {
