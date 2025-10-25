@@ -84,22 +84,42 @@ pipeline {
     }
       steps {
         sh '''
-          set -euo
-          # stop 및 포트 해제 대기
-          bash /opt/myapp/stop.sh || true
-          for i in $(seq 1 20); do
-            ss -ltn | grep -q ":8081 " || break
-            sleep 0.3
-          done
+              set -Eeuo pipefail
 
-          # 복사 & 시작
-          JAR=$(ls build/libs/*SNAPSHOT*.jar || ls build/libs/*.jar | head -n1)
-          cp -f "$JAR" /opt/myapp/app.jar
-          bash /opt/myapp/run.sh
+              echo "[deploy] whoami=$(whoami)"
+              echo "[deploy] target perms:"
+              ls -ld /opt/myapp || true
 
-          sleep 2
-          pgrep -af 'java.*app.jar' || (echo "App not running!" && exit 1)
-        '''
+              # 쓰기 권한 체크 (없으면 상세정보 출력 후 실패)
+              if [ ! -w /opt/myapp ]; then
+                echo "[deploy] No write permission to /opt/myapp"
+                id || true
+                exit 1
+              fi
+
+              # 안전 정지 및 포트 해제 대기
+              bash /opt/myapp/stop.sh || true
+              for i in $(seq 1 40); do
+                if ! ss -ltn | grep -qE '[:\\.]8081\\b'; then break; fi
+                sleep 0.25
+              done
+
+              # 최신 JAR 1개 선택
+              JAR="$(ls -1t build/libs/*.jar | head -n1)"
+              echo "[deploy] JAR=$JAR"
+              test -f "$JAR"
+
+              # 원자적 교체(임시파일 -> mv)
+              cp -f "$JAR" /opt/myapp/app.jar.new
+              mv -f /opt/myapp/app.jar.new /opt/myapp/app.jar
+
+              # 기동
+              bash /opt/myapp/run.sh
+
+              # 기동 확인
+              sleep 2
+              pgrep -af 'java.*app.jar'
+            '''
       }
     }
   }
