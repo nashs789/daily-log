@@ -45,7 +45,7 @@ public class NotifyService {
         }
     }
 
-    public void sendSlack(String title, String msg) {
+    public void sendSlack(final String title, final String msg) {
         Slack slack = props.getSlack();
 
         if (slack.isNotEnabled() || slack.hasNotWebhookUri()) return;
@@ -59,7 +59,7 @@ public class NotifyService {
               .toBodilessEntity();
     }
 
-    public void sendDiscord(String msg) {
+    public void sendDiscord(final String msg) {
         Discord discord = props.getDiscord();
 
         if (discord.isNotEnabled() || discord.hasNotWebhookUri()) return;

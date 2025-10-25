@@ -1,6 +1,7 @@
 package com.nashs.daily_log.domain.login.info;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.infra.login.entity.User;
 
 public record GoogleAttrs(

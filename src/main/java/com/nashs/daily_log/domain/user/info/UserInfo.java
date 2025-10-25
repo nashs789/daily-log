@@ -1,4 +1,4 @@
-package com.nashs.daily_log.domain.login.info;
+package com.nashs.daily_log.domain.user.info;
 
 import com.nashs.daily_log.infra.login.entity.User.Provider;
 import lombok.Builder;

@@ -1,9 +1,9 @@
 package com.nashs.daily_log.domain.login.handler;
 
 import com.nashs.daily_log.domain.login.info.GoogleAttrs;
-import com.nashs.daily_log.domain.login.info.UserInfo;
+import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.domain.login.parser.GoogleAttributeParser;
-import com.nashs.daily_log.domain.login.repository.UserRepository;
+import com.nashs.daily_log.domain.user.repository.UserRepository;
 import com.nashs.daily_log.domain.login.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,14 +44,13 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         GoogleAttrs attrs = googleAttributeParser.fromPrincipal(principal);
         String sub = attrs.sub();
         String email = attrs.email();
-
-        if (!userRepository.isRegisteredUser(sub)) {
-            UserInfo userInfo = userRepository.saveSocialUser(attrs.toUserInfo());
-            log.info("신규 등록 = {}", userInfo);
-        }
-
+        UserInfo userInfo = userRepository.isRegisteredUser(sub)
+                          ? userRepository.findBySub(sub)
+                          : userRepository.saveSocialUser(attrs.toUserInfo());
         String access = jwt.createAccessToken(sub, email);
         String refresh = jwt.createRefreshToken(sub);
+
+        log.info("user login = {}", userInfo);
 
         if (appScheme != null && !appScheme.isBlank()) {
             // 모바일 딥링크로 리다이렉트

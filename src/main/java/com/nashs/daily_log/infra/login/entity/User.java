@@ -1,6 +1,6 @@
 package com.nashs.daily_log.infra.login.entity;
 
-import com.nashs.daily_log.domain.login.info.UserInfo;
+import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.infra.common.Timestamp;
 import jakarta.persistence.*;
 import lombok.*;
