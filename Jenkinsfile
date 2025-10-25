@@ -84,11 +84,11 @@ pipeline {
     }
       steps {
         sh '''
-          set -euo pipefail
+          set -euo
           # stop 및 포트 해제 대기
           bash /opt/myapp/stop.sh || true
           for i in $(seq 1 20); do
-            if ! lsof -t -iTCP:8081 -sTCP:LISTEN >/dev/null 2>&1; then break; fi
+            ss -ltn | grep -q ":8081 " || break
             sleep 0.3
           done
 
