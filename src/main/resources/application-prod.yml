@@ -27,3 +27,9 @@ spring:
     flyway:
         enabled: true
         locations: classpath:db/migration
+
+logging:
+    pattern:
+        level:
+            org.springframework.security=DEBUG
+            org.springframework.security.oauth2=DEBUG
