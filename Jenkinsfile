@@ -115,6 +115,7 @@ pipeline {
           mv -f /opt/myapp/app.jar.new /opt/myapp/app.jar
 
           # 기동
+          sleep 1
           bash /opt/myapp/run.sh
 
           # 기동 확인
