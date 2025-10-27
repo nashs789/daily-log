@@ -1,0 +1,73 @@
+.mdtpl { background:#fff; border:1px solid #eee; border-radius:12px; }
+.mdtpl__toolbar{ display:flex; gap:8px; padding:12px; border-bottom:1px solid #eee; align-items:center; }
+.mdtpl__name{ flex:0 0 240px; height:36px; padding:0 10px; border:1px solid #ddd; border-radius:8px; }
+.mdtpl__btn{ height:36px; padding:0 12px; border:1px solid #ddd; background:#f8f9fb; border-radius:8px; cursor:pointer; }
+.mdtpl__spacer{ flex:1; }
+.mdtpl__grid{ display:grid; grid-template-columns: 1fr 1fr; gap:0; }
+.mdtpl__left{ padding:12px; border-right:1px solid #eee; }
+.mdtpl__right{ padding:12px; }
+.mdtpl__label{ font-size:12px; color:#666; display:block; margin-bottom:6px; }
+.mdtpl__text{ width:100%; resize:vertical; border:1px solid #ddd; border-radius:8px; padding:10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+.mdtpl__params{ margin-top:12px; }
+.mdtpl__paramsHead{ display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
+.mdtpl__hint{ color:#999; }
+.mdtpl__paramList{ display:grid; grid-template-columns: 1fr 2fr; gap:8px 12px; align-items:center; }
+.mdtpl__paramLabel{ color:#444; font-weight:600; }
+.mdtpl__paramInput{ height:34px; border:1px solid #ddd; border-radius:8px; padding:0 10px; }
+.mdtpl__previewHead{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.mdtpl__preview{ min-height:200px; border:1px solid #ddd; border-radius:8px; padding:14px; background:#fafafa; overflow:auto; }
+
+/* 반응형 */
+@media (max-width: 1023px){
+    .mdtpl__grid{ grid-template-columns: 1fr; }
+    .mdtpl__left{ border-right:none; border-bottom:1px solid #eee; }
+}
+
+/* 기본 마크다운 스타일 (간단) */
+.markdown-body h1,h2,h3{ margin: 14px 0 8px; font-weight:700; }
+.markdown-body p, .markdown-body li{ line-height:1.6; }
+.markdown-body ul{ padding-left: 1.2rem; }
+.markdown-body blockquote{ margin: 8px 0; padding: 6px 10px; border-left: 4px solid #d0d7de; color:#57606a; background:#f6f8fa; border-radius:4px; }
+.markdown-body code{ background:#f6f8fa; border:1px solid #d0d7de; border-radius:4px; padding:2px 4px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+
+/* 1) 그리드 칼럼이 내용 때문에 밀리지 않도록 */
+.mdtpl__grid{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); /* ← 핵심 */
+    gap: 16px;
+}
+
+/* 2) 칸 자체가 줄어들 수 있게 최소 폭 0 보장 */
+.mdtpl__left,
+.mdtpl__right{ min-width: 0; }
+
+/* 3) 박스 크기 계산 안정화 (패딩/보더 포함) */
+.mdtpl, .mdtpl *{ box-sizing: border-box; }
+
+/* 4) 텍스트 영역이 오른쪽으로 삐져나가지 않도록 */
+.mdtpl__text{
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    resize: vertical; /* 가로 리사이즈 금지 */
+}
+
+/* 5) 미리보기 박스도 컨테이너 범위 내에서만 스크롤 */
+.mdtpl__preview{
+    max-width: 100%;
+    overflow: auto;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+}
+
+/* 6) 코드/프리 포맷 텍스트 줄바꿈 */
+.markdown-body pre,
+.markdown-body code{
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* 7) 모바일에서는 단일 칼럼 */
+@media (max-width: 1023px){
+    .mdtpl__grid{ grid-template-columns: 1fr; }
+}

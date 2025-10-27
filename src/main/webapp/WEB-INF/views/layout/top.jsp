@@ -9,17 +9,17 @@
             aria-label="메뉴 열기"
             style="background:#ff4757;border:0;color:#fff;padding:0 10px;border-radius:8px;">☰</button>
 
-    <div class="brand"><a href="${pageContext.request.contextPath}/">DailyLog</a></div>
+    <div class="brand"><a href="/">DailyLog</a></div>
     <div style="flex:1"></div>
     <div>
-        <a href="${pageContext.request.contextPath}/oauth2/authorization/google" style="color:#fff">Login</a>
+        <a href="/oauth2/authorization/google" style="color:#fff">Login</a>
     </div>
 </div>
 
 <!-- 어둡게 가리는 오버레이 -->
 <div class="backdrop" data-menu-close aria-hidden="true"></div>
 
-<script src="${pageContext.request.contextPath}/webjars/jquery/3.7.1/jquery.min.js"></script>
+<script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
 
 <script>
     $(function () {
