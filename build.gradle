@@ -34,6 +34,10 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-database-postgresql'
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
+	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
 
 	compileOnly 'org.projectlombok:lombok'
 
@@ -66,5 +70,11 @@ tasks.withType(Test).configureEach {
 	}
 	testLogging {
 		events "passed", "skipped", "failed"
+	}
+}
+
+tasks.named('bootJar') {
+	from('src/main/webapp') {
+		into('META-INF/resources')
 	}
 }

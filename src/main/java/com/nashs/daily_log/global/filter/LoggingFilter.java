@@ -33,18 +33,18 @@ public class LoggingFilter implements Filter {
         }
     }
 
-    private void logRequest(ContentCachingRequestWrapper request) {
-        String body = getBody(request.getContentAsByteArray(), request.getCharacterEncoding());
+    private void logRequest(ContentCachingRequestWrapper req) {
+        String body = getBody(req.getContentAsByteArray(), req.getCharacterEncoding());
         log.info("HTTP Request - Method: {}, URI: {}, Body: {}",
-                 request.getMethod(),
-                 request.getRequestURI(),
+                 req.getMethod(),
+                 req.getRequestURI(),
                  body);
     }
 
-    private void logResponse(ContentCachingResponseWrapper response) {
-        String body = getBody(response.getContentAsByteArray(), response.getCharacterEncoding());
-        log.info("HTTP Response - Status: {}, Body: {}",
-                 response.getStatus(),
+    private void logResponse(ContentCachingResponseWrapper res) {
+        String body = getBody(res.getContentAsByteArray(), res.getCharacterEncoding());
+        log.debug("HTTP Response - Status: {}, Body: {}",
+                 res.getStatus(),
                  body);
     }
 
