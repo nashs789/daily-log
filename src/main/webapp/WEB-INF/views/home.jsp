@@ -5,20 +5,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>LifeLog</title>
-    <!-- 정적 CSS: src/main/resources/static/css/app.css -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/app.css"/>
-    <style>
-        body{margin:0;background:#f7f7f9;font-family:system-ui,-apple-system,Segoe UI,Roboto}
-        .topbar{height:56px;display:flex;align-items:center;padding:0 16px;background:#111;color:#fff}
-        .topbar .brand a{color:#fff;text-decoration:none;font-weight:700}
-        .page{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 56px - 48px)}
-        .sidebar{background:#fff;border-right:1px solid #eee}
-        .content{padding:24px}
-        .footer{height:48px;display:flex;align-items:center;justify-content:center;color:#777;background:#fff;border-top:1px solid #eee}
-        .nav a{display:block;padding:10px 14px;color:#222;text-decoration:none;border-radius:8px;margin:4px 8px}
-        .nav a.active{background:#eef2ff;color:#2b50ff}
-    </style>
+    <title>DailyLog</title>
+    <link rel="stylesheet" href="/css/layout/home.css"/>
 </head>
 <body>
 <!-- 상단바 -->
@@ -26,7 +14,7 @@
 
 <div class="page">
     <!-- 좌측 메뉴 -->
-    <aside class="sidebar">
+    <aside class="sidebar-wrap">
         <jsp:include page="/WEB-INF/views/layout/leftMenu.jsp"/>
     </aside>
 
