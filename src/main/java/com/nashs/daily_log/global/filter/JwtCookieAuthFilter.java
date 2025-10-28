@@ -1,6 +1,7 @@
 package com.nashs.daily_log.global.filter;
 
 import com.nashs.daily_log.domain.auth.service.JwtService;
+import com.nashs.daily_log.global.utils.CookieUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -25,31 +26,19 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
-        log.info("@@@@@@@@@@@@");
         // 이미 인증돼 있으면 패스
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            String token = readCookie(req, accessCookieName);
+            String token = CookieUtils.readCookieByName(req, accessCookieName);
 
             if (StringUtils.hasText(token) && jwt.validateAccessToken(token)) {
                 String sub = jwt.getSubject(token);
-                // 권한 로딩 정책에 맞추어 조정
                 var auth = new UsernamePasswordAuthenticationToken(sub, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
-                SecurityContextHolder.getContext().setAuthentication(auth);
+
+                SecurityContextHolder.getContext()
+                                     .setAuthentication(auth);
             }
         }
+
         chain.doFilter(req, res);
-    }
-
-    private static String readCookie(HttpServletRequest req, String name) {
-        Cookie[] cs = req.getCookies();
-        if (cs == null) return null;
-
-        for (Cookie c : cs) {
-            if (name.equals(c.getName())) {
-                return c.getValue();
-            }
-        }
-
-        return null;
     }
 }

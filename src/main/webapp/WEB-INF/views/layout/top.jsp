@@ -8,10 +8,10 @@
             aria-expanded="false"
             aria-label="메뉴 열기"
             style="background:#ff4757;border:0;color:#fff;padding:0 10px;border-radius:8px;">☰</button>
-    <div class="brand"><a href="/">DailyLog</a></div>
+    <div class="brand"><a href="/">LifeLog</a></div>
     <div style="flex:1"></div>
     <div>
-        <a href="${lifelog.app.base}/login" style="color:#fff">Login</a>
+        <a href="${lifelog.app.base}/auth/login" style="color:#fff">Login</a>
     </div>
 </div>
 

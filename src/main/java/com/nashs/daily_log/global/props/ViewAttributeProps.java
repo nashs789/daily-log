@@ -1,4 +1,4 @@
-package com.nashs.daily_log.global.view;
+package com.nashs.daily_log.global.props;
 
 import com.nashs.daily_log.api.template.props.UrlProps;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +13,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @ControllerAdvice(annotations = Controller.class)
-public class ViewAttributes {
+public class ViewAttributeProps {
 
     private final UrlProps urlProps;
 

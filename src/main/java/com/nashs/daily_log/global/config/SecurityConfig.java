@@ -43,7 +43,8 @@ public class SecurityConfig {
             )
             .logout(l -> l.logoutSuccessUrl("/").permitAll());
 
-        http.addFilterBefore(new JwtCookieAuthFilter(jwtService, authCookieProps.accessName()), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtCookieAuthFilter(jwtService, authCookieProps.accessName()),
+                             UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

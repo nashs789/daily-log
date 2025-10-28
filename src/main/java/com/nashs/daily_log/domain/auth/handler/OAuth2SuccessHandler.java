@@ -6,7 +6,7 @@ import com.nashs.daily_log.domain.auth.props.AuthCookieProps;
 import com.nashs.daily_log.domain.auth.service.JwtService;
 import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.domain.user.repository.UserRepository;
-import io.micrometer.common.util.StringUtils;
+import com.nashs.daily_log.global.utils.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Objects;
 
 @Slf4j
 @Component
@@ -43,7 +42,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String platform = ((OAuth2AuthenticationToken) auth).getAuthorizedClientRegistrationId();
 
         if ("google".equals(platform)) {
-            log.info("profile = {}", principal.getAttributes());
+            log.info("google login");
         }
 
         GoogleAttrs attrs = googleAttributeParser.fromPrincipal(principal);
@@ -58,19 +57,22 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         String access = jwt.createAccessToken(sub, email);
         String refresh = jwt.createRefreshToken(sub);
-        ResponseCookie accessCookie = ResponseCookie.from(nullSafe(cookieProps.accessName(), "ACCESS"), access)
+
+        // TODO - token DB 저장
+
+        ResponseCookie accessCookie = ResponseCookie.from(StringUtils.nullSafe(cookieProps.accessName(), "ACCESS"), access)
                                                     .httpOnly(true)
                                                     .secure(cookieProps.secure())
-                                                    .sameSite(nullSafe(cookieProps.sameSite(), "Lax"))
-                                                    .domain(nullOrTrim(cookieProps.domain()))      // 도메인 설정 없으면 생략
+                                                    .sameSite(StringUtils.nullSafe(cookieProps.sameSite(), "Lax"))
+                                                    .domain(StringUtils.nullOrTrim(cookieProps.domain()))      // 도메인 설정 없으면 생략
                                                     .path("/")
                                                     .maxAge(Duration.ofMinutes(cookieProps.accessMaxAgeMins()))
                                                     .build();
-        ResponseCookie refreshCookie = ResponseCookie.from(nullSafe(cookieProps.refreshName(), "REFRESH"), refresh)
+        ResponseCookie refreshCookie = ResponseCookie.from(StringUtils.nullSafe(cookieProps.refreshName(), "REFRESH"), refresh)
                                                      .httpOnly(true)
                                                      .secure(cookieProps.secure())
-                                                     .sameSite(nullSafe(cookieProps.sameSite(), "Lax"))
-                                                     .domain(nullOrTrim(cookieProps.domain()))
+                                                     .sameSite(StringUtils.nullSafe(cookieProps.sameSite(), "Lax"))
+                                                     .domain(StringUtils.nullOrTrim(cookieProps.domain()))
                                                      .path("/auth/refresh")
                                                      .maxAge(Duration.ofDays(cookieProps.refreshMaxAgeDays()))
                                                      .build();
@@ -81,16 +83,5 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         res.setHeader("Location", ServletUriComponentsBuilder.fromCurrentContextPath()
                                                                          .build()
                                                                          .toUriString() + "/");
-    }
-
-    private static String nullOrTrim(String s) {
-        if (Objects.isNull(s)) {
-            return null;
-        }
-
-        return s.trim().isEmpty() ? null : s.trim();
-    }
-    private static String nullSafe(String s, String dft) {
-        return StringUtils.isEmpty(s) ? dft : s;
     }
 }

@@ -33,19 +33,21 @@ public class LoggingFilter implements Filter {
         }
     }
 
+    // TODO - 로깅 debug 로 고민 해보자(1)
     private void logRequest(ContentCachingRequestWrapper req) {
-        String body = getBody(req.getContentAsByteArray(), req.getCharacterEncoding());
-        log.info("HTTP Request - Method: {}, URI: {}, Body: {}",
-                 req.getMethod(),
-                 req.getRequestURI(),
-                 body);
+//        String body = getBody(req.getContentAsByteArray(), req.getCharacterEncoding());
+//        log.info("HTTP Request - Method: {}, URI: {}, Body: {}",
+//                 req.getMethod(),
+//                 req.getRequestURI(),
+//                 body);
     }
 
+    // TODO - 로깅 debug 로 고민 해보자(2)
     private void logResponse(ContentCachingResponseWrapper res) {
-        String body = getBody(res.getContentAsByteArray(), res.getCharacterEncoding());
-        log.debug("HTTP Response - Status: {}, Body: {}",
-                 res.getStatus(),
-                 body);
+//        String body = getBody(res.getContentAsByteArray(), res.getCharacterEncoding());
+//        log.debug("HTTP Response - Status: {}, Body: {}",
+//                 res.getStatus(),
+//                 body);
     }
 
     private String getBody(byte[] content, String encoding) {

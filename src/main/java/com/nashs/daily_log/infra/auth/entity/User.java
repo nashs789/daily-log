@@ -1,4 +1,4 @@
-package com.nashs.daily_log.infra.login.entity;
+package com.nashs.daily_log.infra.auth.entity;
 
 import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.infra.common.Timestamp;

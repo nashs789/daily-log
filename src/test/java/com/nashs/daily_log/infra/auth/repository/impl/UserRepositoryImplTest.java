@@ -1,9 +1,9 @@
-package com.nashs.daily_log.infra.login.repository.impl;
+package com.nashs.daily_log.infra.auth.repository.impl;
 
 import com.nashs.daily_log.ContainerTest;
 import com.nashs.daily_log.domain.user.exception.UserException;
 import com.nashs.daily_log.domain.user.info.UserInfo;
-import com.nashs.daily_log.infra.login.entity.User;
+import com.nashs.daily_log.infra.auth.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

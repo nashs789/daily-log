@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>DailyLog</title>
+    <title>LifeLog</title>
     <link rel="stylesheet" href="${lifelog.app.css}/layout/home.css"/>
 </head>
 <body>

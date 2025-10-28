@@ -33,11 +33,11 @@ public class NotifyService {
             String method = req.getMethod();
             LocalDateTime time = LocalDateTime.now();
             String topStack = Arrays.stream(ex.getStackTrace())
-                                    .limit(7)
+                                    .limit(3)
                                     .map(StackTraceElement::toString)
                                     .collect(Collectors.joining(System.lineSeparator()));
             String title = String.format("[Error]: %s", ex.getClass().getName());
-            String msg = String.format("%s %s (%s) \nmsg: %s\nstack(top7):\n%s", method, path, time, ex.getMessage(), topStack);
+            String msg = String.format("%s %s (%s) \nmsg: %s\nstack(top3):\n%s", method, path, time, ex.getMessage(), topStack);
 
             sendSlack(title, msg);
             sendDiscord(msg);
