@@ -85,7 +85,7 @@ pipeline {
     }
     steps {
       sh '''
-        set -euo pipefail
+        set -euo
         bash /opt/myapp/stop.sh || true
         for i in $(seq 1 20); do ss -ltn | grep -q ":8081 " || break; sleep 0.3; done
 
