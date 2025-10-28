@@ -22,7 +22,6 @@ public class GoogleOAuth2UserService extends DefaultOAuth2UserService {
         var authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
         // Record 로 파싱
         GoogleProfile profile = GoogleProfile.fromAttributes(user.getAttributes());
-        log.info("[OAuth] attrs={}", user.getAttributes());
         Map<String, Object> attrs = Map.of(
                 "sub", profile.sub(),
                 "email", profile.email(),

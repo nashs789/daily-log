@@ -8,23 +8,20 @@
             aria-expanded="false"
             aria-label="메뉴 열기"
             style="background:#ff4757;border:0;color:#fff;padding:0 10px;border-radius:8px;">☰</button>
-
     <div class="brand"><a href="/">DailyLog</a></div>
     <div style="flex:1"></div>
     <div>
-        <a href="/oauth2/authorization/google" style="color:#fff">Login</a>
+        <a href="${lifelog.app.base}/oauth2/authorization/google" style="color:#fff">Login</a>
     </div>
 </div>
 
 <!-- 어둡게 가리는 오버레이 -->
 <div class="backdrop" data-menu-close aria-hidden="true"></div>
 
-<script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+<script src="${lifelog.app.script.jquery}"></script>
 
 <script>
     $(function () {
-        if (!$) { console.error('jQuery not loaded'); return; }
-
         var $body    = $('body');
         var $sidebar = $('#sidebar');                 // layout/leftMenu.jsp 에 id="sidebar"
         var $toggles = $('[data-menu-toggle]');

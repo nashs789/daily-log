@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.nashs.daily_log.domain.notify.service.NotifyProperties.*;
+import static com.nashs.daily_log.domain.notify.service.NotifyProps.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotifyService {
-    private final NotifyProperties props;
+    private final NotifyProps props;
     private final RestClient client;
 
     public void sendExceptionAsync(Exception ex, HttpServletRequest req) {

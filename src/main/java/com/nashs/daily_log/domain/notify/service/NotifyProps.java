@@ -11,7 +11,7 @@ import java.util.Objects;
 @Getter
 @Component
 @ConfigurationProperties(prefix = "notify")
-public class NotifyProperties {
+public class NotifyProps {
     @Setter
     private boolean enabled  = true;
     private final Slack slack = new Slack();

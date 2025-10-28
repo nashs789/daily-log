@@ -6,21 +6,21 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>DailyLog</title>
-    <link rel="stylesheet" href="/css/layout/home.css"/>
+    <link rel="stylesheet" href="${lifelog.app.css}/layout/home.css"/>
 </head>
 <body>
 <!-- 상단바 -->
-<jsp:include page="/WEB-INF/views/layout/top.jsp"/>
+<jsp:include page="${lifelog.app.jsp}/layout/top.jsp"/>
 
 <div class="page">
     <!-- 좌측 메뉴 -->
     <aside class="sidebar-wrap">
-        <jsp:include page="/WEB-INF/views/layout/leftMenu.jsp"/>
+        <jsp:include page="${lifelog.app.jsp}/layout/leftMenu.jsp"/>
     </aside>
 
     <!-- 메인 컨텐츠 -->
     <main class="content">
-        <link rel="stylesheet" href="/css/layout/markdown.css"/>
+        <link rel="stylesheet" href="${lifelog.app.css}/layout/markdown.css"/>
 
         <div id="md-template" class="mdtpl">
             <div class="mdtpl__toolbar">
@@ -69,18 +69,16 @@
 </div>
 
 <!-- 푸터 -->
-<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
+<jsp:include page="${lifelog.app.jsp}/layout/footer.jsp"/>
 </body>
 </html>
 
 <!-- 마크다운 파서 & XSS 세이프가드 -->
-<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<script src="${lifelog.app.script.marked}"></script>
+<script src="${lifelog.app.script.safeGuard}"></script>
 
 <script>
     (function ($) {
-        if (!$) { console.error('jQuery not loaded'); return; }
-
         const $tplText     = $('#tplText');
         const $paramList   = $('#paramList');
         const $preview     = $('#preview');
@@ -113,14 +111,19 @@
             tokens.forEach(tok => {
                 const id = 'param_' + tok.replace('$','S');
                 const $row = $(`
-          <div class="mdtpl__paramRow">
-            <label for="${id}" class="mdtpl__paramLabel">${tok}</label>
-            <input id="${id}" class="mdtpl__paramInput" type="text" data-token="${tok}" placeholder="${tok} 값을 입력" />
-          </div>
-        `);
-                if (values[tok] != null) $row.find('input').val(values[tok]);
+                  <div class="mdtpl__paramRow">
+                    <label for="${id}" class="mdtpl__paramLabel">${tok}</label>
+                    <input id="${id}" class="mdtpl__paramInput" type="text" data-token="${tok}" placeholder="${tok} 값을 입력" />
+                  </div>
+                `);
+
+                if (values[tok] != null) {
+                    $row.find('input').val(values[tok]);
+                }
+
                 $paramList.append($row);
             });
+
             if (focusedToken) {
                 const $f = $paramList.find('input[data-token="'+focusedToken+'"]');
                 if ($f.length) $f.focus();
@@ -149,7 +152,7 @@
                 filled = filled.split(tok).join(val);
             });
 
-            // 마크다운 → HTML
+            // markdown to HTML
             const html = marked.parse(filled, { breaks: true, gfm: true });
             // sanitize
             const safe = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
@@ -169,11 +172,19 @@
 
         // ----- 로컬 저장/불러오기 (데모용: localStorage)
         const LS_KEY = 'dailylog.templates';
+
         function loadAll() {
-            try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); }
-            catch(e){ return {}; }
+            try {
+                return JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+            } catch(e) {
+                return {};
+            }
         }
-        function saveAll(obj) { localStorage.setItem(LS_KEY, JSON.stringify(obj)); }
+
+        function saveAll(obj) {
+            localStorage.setItem(LS_KEY, JSON.stringify(obj));
+        }
+
         function refreshSelect() {
             const all = loadAll();
             $tplLoad.find('option:not(:first)').remove();
@@ -184,18 +195,26 @@
 
         $tplSave.on('click', function(){
             const name = ($tplName.val() || '').trim();
-            if (!name) { alert('템플릿 이름을 입력하세요.'); return; }
+
+            if (!name) {
+                alert('템플릿 이름을 입력하세요.');
+                return;
+            }
+
             const all = loadAll();
             all[name] = { name, text: $tplText.val() || '' };
             saveAll(all);
             refreshSelect();
-            alert('저장되었습니다.');
+            alert('저장 되었습니다.');
         });
 
         $tplLoad.on('change', function(){
             const name = $(this).val();
+
             if (!name) return;
+
             const all = loadAll();
+
             if (all[name]) {
                 $tplName.val(all[name].name);
                 $tplText.val(all[name].text);
@@ -211,4 +230,13 @@
         })();
 
     })(window.jQuery);
+
+    $.ajax({
+        url: '${lifelog.app.base}/api/template',
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({ msg: 'hello' }),
+        success: function (res) { console.log('PING OK:', res); },
+        error: function (xhr) { console.error('PING ERR:', xhr.responseText); }
+    });
 </script>
