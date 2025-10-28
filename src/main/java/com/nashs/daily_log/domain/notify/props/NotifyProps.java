@@ -1,4 +1,4 @@
-package com.nashs.daily_log.domain.notify.service;
+package com.nashs.daily_log.domain.notify.props;
 
 import lombok.Getter;
 import lombok.Setter;

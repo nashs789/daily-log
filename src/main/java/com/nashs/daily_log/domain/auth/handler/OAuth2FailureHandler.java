@@ -1,4 +1,4 @@
-package com.nashs.daily_log.domain.login.handler;
+package com.nashs.daily_log.domain.auth.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

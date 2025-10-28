@@ -1,6 +1,6 @@
 package com.nashs.daily_log.global.view;
 
-import com.nashs.daily_log.api.template.controller.UrlProps;
+import com.nashs.daily_log.api.template.props.UrlProps;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

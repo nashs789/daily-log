@@ -1,4 +1,4 @@
-package com.nashs.daily_log.api.template.controller;
+package com.nashs.daily_log.api.template.props;
 
 import lombok.Data;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.nashs.daily_log.domain.login.info;
+package com.nashs.daily_log.domain.auth.info;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nashs.daily_log.domain.user.info.UserInfo;

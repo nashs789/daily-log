@@ -1,4 +1,4 @@
-package com.nashs.daily_log.domain.login.info;
+package com.nashs.daily_log.domain.auth.info;
 
 import java.util.Map;
 

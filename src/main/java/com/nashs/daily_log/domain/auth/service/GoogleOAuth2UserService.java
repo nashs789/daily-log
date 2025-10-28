@@ -1,7 +1,7 @@
-package com.nashs.daily_log.domain.login.service;
+package com.nashs.daily_log.domain.auth.service;
 
-import com.nashs.daily_log.domain.login.info.GoogleProfile;
-import com.nashs.daily_log.domain.login.oauthPrincipal.GoogleOAuth2Principal;
+import com.nashs.daily_log.domain.auth.info.GoogleProfile;
+import com.nashs.daily_log.domain.auth.oauthPrincipal.GoogleOAuth2Principal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

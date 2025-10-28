@@ -1,5 +1,6 @@
 package com.nashs.daily_log.domain.notify.service;
 
+import com.nashs.daily_log.domain.notify.props.NotifyProps;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.nashs.daily_log.domain.notify.service.NotifyProps.*;
+import static com.nashs.daily_log.domain.notify.props.NotifyProps.*;
 
 @Slf4j
 @Service

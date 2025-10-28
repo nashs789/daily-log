@@ -1,6 +1,6 @@
-package com.nashs.daily_log.domain.login.oauthPrincipal;
+package com.nashs.daily_log.domain.auth.oauthPrincipal;
 
-import com.nashs.daily_log.domain.login.info.GoogleProfile;
+import com.nashs.daily_log.domain.auth.info.GoogleProfile;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
