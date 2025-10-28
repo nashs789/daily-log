@@ -44,7 +44,6 @@ url:
     jquery: test
   base: test
   jsp: test
-  jsp: test
   css: test
   image: test
 
