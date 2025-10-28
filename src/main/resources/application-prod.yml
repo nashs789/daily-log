@@ -60,3 +60,9 @@ auth:
     refresh-name: REFRESH
     access-max-age-mins: 15
     refresh-max-age-days: 14
+
+jwt:
+  issuer: lifelog
+  secret: ${JWT_SECRET}
+  access-exp-minutes: 15
+  refresh-exp-days: 14
