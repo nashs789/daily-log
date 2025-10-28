@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.6'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'war'
 }
 
 group = 'com.nashs'
@@ -80,4 +81,8 @@ tasks.named('bootJar') {
 	from('src/main/webapp') {
 		into('META-INF/resources')
 	}
+}
+
+bootWar {
+	archiveFileName = 'app.war'
 }
