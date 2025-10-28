@@ -32,24 +32,24 @@ notify:
   enabled: true
   slack:
     enabled: true
-    webhook: ${SLACK_WEBHOOK_URL}
+    webhook: test
   discord:
     enabled: true
-    webhook: ${DISCORD_WEBHOOK_URL}
+    webhook: test
 
 url:
   script:
-    marked: https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js
-    safe-guard: https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js
-    jquery: /webjars/jquery/3.7.1/jquery.min.js
-  base: https://inbok.shop
-  jsp: /WEB-INF/views
-  css: /css
-  image: /image
+    marked: test
+    safe-guard: test
+    jquery: test
+  base: test
+  jsp: test
+  css: test
+  image: test
 
 auth:
   cookie:
-    domain: inbok.shop
+    domain: test
     secure: true # 로컬 http면 false
     same-site: Lax
     access-name: ACCESS
