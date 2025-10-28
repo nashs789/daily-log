@@ -23,13 +23,16 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/").permitAll()
-                    .requestMatchers("/api/**").permitAll()
-                    //.requestMatchers("/oauth2/**", "/login/**").permitAll()
+                    .requestMatchers("/", "/login", "/oauth2/**",
+                                     "/css/**","/js/**","/images/**","/webjars/**").permitAll()
                     .anyRequest().permitAll()
-                    //.authenticated()
+            )
+            .formLogin(form -> form
+                    .loginPage("/login")
+                    .permitAll()
             )
             .oauth2Login(oauth -> oauth
+                    .loginPage("/login")
                     .userInfoEndpoint(u -> u.userService(oAuth2UserService))
                     .successHandler(successHandler)
                     .failureHandler(failureHandler)

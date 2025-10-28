@@ -13,6 +13,7 @@ public class UrlProps {
     private String base;
     private String jsp;
     private String css;
+    private String image;
     private Script script;
 
     @Getter

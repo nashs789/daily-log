@@ -11,7 +11,7 @@
     <div class="brand"><a href="/">DailyLog</a></div>
     <div style="flex:1"></div>
     <div>
-        <a href="${lifelog.app.base}/oauth2/authorization/google" style="color:#fff">Login</a>
+        <a href="${lifelog.app.base}/login" style="color:#fff">Login</a>
     </div>
 </div>
 

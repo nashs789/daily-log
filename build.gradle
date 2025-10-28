@@ -40,6 +40,8 @@ dependencies {
 	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
 	implementation 'org.webjars:jquery:3.7.1'
 
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
 	compileOnly 'org.projectlombok:lombok'
 
 	annotationProcessor 'org.projectlombok:lombok'

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/template")
-public class TemplateApiController {
+public class TemplateRestController {
 
     @PutMapping
     public ResponseEntity<String> test() {
