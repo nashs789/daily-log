@@ -43,7 +43,7 @@ pipeline {
       steps {
         withCredentials([
           string(credentialsId: 'GOOGLE_CLIENT_ID',     variable: 'GOOGLE_CLIENT_ID'),
-          string(credentialsId: 'GOOGLE_CLIENT_SECRET', variable: 'GOOGLE_CLIENT_SECRET')
+          string(credentialsId: 'GOOGLE_CLIENT_SECRET', variable: 'GOOGLE_CLIENT_SECRET'),
           string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET')
         ]) {
           sh '''
