@@ -41,9 +41,11 @@ public class SecurityConfig {
                     .successHandler(successHandler)
                     .failureHandler(failureHandler)
             )
-            .logout(l -> l.logoutSuccessUrl("/").permitAll());
-
-        http.addFilterBefore(new JwtCookieAuthFilter(jwtService, authCookieProps.accessName()),
+            .logout(l -> l.logoutSuccessUrl("/")
+                          .deleteCookies(authCookieProps.accessName(), authCookieProps.refreshName())
+                          .invalidateHttpSession(true)
+                          .clearAuthentication(true))
+            .addFilterBefore(new JwtCookieAuthFilter(jwtService, authCookieProps.accessName()),
                              UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

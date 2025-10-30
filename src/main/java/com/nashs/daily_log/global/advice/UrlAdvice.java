@@ -1,7 +1,6 @@
-package com.nashs.daily_log.global.props;
+package com.nashs.daily_log.global.advice;
 
-import com.nashs.daily_log.api.template.props.UrlProps;
-import jakarta.servlet.http.HttpServletRequest;
+import com.nashs.daily_log.global.props.UrlProps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -13,12 +12,12 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @ControllerAdvice(annotations = Controller.class)
-public class ViewAttributeProps {
+public class UrlAdvice {
 
     private final UrlProps urlProps;
 
     @ModelAttribute("lifelog")
-    public Map<String, Object> lifelogAttributes(HttpServletRequest req) {
+    public Map<String, Object> lifelogAttributes() {
         return Map.of("app", urlProps);
     }
 }

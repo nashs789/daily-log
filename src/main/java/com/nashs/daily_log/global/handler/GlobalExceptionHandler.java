@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Map;
 
@@ -21,11 +22,10 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     private final NotifyService notifier;
 
-    // TODO - Client 응답 Object 에서 나중에 Exception 정의하고 바꾸기
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleAny(Exception ex, HttpServletRequest req) {
-        notifier.sendExceptionAsync(ex, req);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Hello");
+    @ExceptionHandler(NoResourceFoundException.class)
+    public org.springframework.http.ResponseEntity<Void> noRes(NoResourceFoundException ex) {
+        return org.springframework.http.ResponseEntity.notFound()
+                                                      .build();
     }
 
     @ExceptionHandler(ResponseStatusException.class)
@@ -42,5 +42,11 @@ public class GlobalExceptionHandler {
                                      "error","error",
                                      "message", e.getReason())
                              );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleAny(Exception ex, HttpServletRequest req) {
+        notifier.sendExceptionAsync(ex, req);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Hello");
     }
 }

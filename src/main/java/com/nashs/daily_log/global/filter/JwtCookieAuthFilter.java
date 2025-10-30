@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,7 +27,6 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
-        // 이미 인증돼 있으면 패스
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             String token = CookieUtils.readCookieByName(req, accessCookieName);
 
@@ -34,6 +34,7 @@ public class JwtCookieAuthFilter extends OncePerRequestFilter {
                 String sub = jwt.getSubject(token);
                 var auth = new UsernamePasswordAuthenticationToken(sub, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
 
+                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                 SecurityContextHolder.getContext()
                                      .setAuthentication(auth);
             }

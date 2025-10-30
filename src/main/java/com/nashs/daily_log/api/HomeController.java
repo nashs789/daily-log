@@ -12,6 +12,6 @@ public class HomeController {
     @GetMapping("/")
     public String home(LifeLogUser user) {
         log.info("user:{}", user);
-        return "home"; // /WEB-INF/views/home.jsp
+        return "home";
     }
 }

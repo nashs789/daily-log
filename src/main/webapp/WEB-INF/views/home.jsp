@@ -8,10 +8,9 @@
     <title>LifeLog</title>
     <link rel="stylesheet" href="${lifelog.app.css}/layout/home.css"/>
 </head>
-<body>
-<!-- 상단바 -->
-<jsp:include page="${lifelog.app.jsp}/layout/top.jsp"/>
 
+<body>
+<jsp:include page="${lifelog.app.jsp}/layout/top.jsp"/>
 <div class="page">
     <!-- 좌측 메뉴 -->
     <aside class="sidebar-wrap">

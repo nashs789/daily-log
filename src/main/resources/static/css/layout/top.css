@@ -1,0 +1,65 @@
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    background: #111;          /* 검은 배경 */
+    color: #fff;               /* 기본 글자색 흰색 */
+    overflow: hidden;          /* 넘침 방지 */
+}
+
+/* 오른쪽 끝으로 보내는 컨테이너 */
+.userbox {
+    margin-left: auto;         /* 오른쪽 정렬 */
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;              /* ellipsis 동작 위해 */
+}
+
+/* 동그란 아바타 (상단바 높이 56px 기준 살짝 작게) */
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 1px solid rgba(255,255,255,.25);
+    background: #333;          /* 이미지 로드 실패 대비 */
+}
+
+/* 이름은 흰색, 한 줄, 넘치면 ... 처리 */
+.username {
+    color: #fff;
+    max-width: 18ch;           /* 필요시 조정 */
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;
+}
+
+/* 로그아웃 버튼: 검은 배경에서 잘 보이도록 */
+.logout {
+    color: #fff;
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.06);
+    transition: background .15s ease, opacity .15s ease;
+}
+.logout:hover,
+.logout:focus {
+    background: rgba(255,255,255,.12);
+    outline: none;
+}
+
+/* Topbar 안의 모든 링크는 흰색으로 */
+.topbar a { color: #fff; }
+
+/* 아주 좁은 화면에서는 이름 숨기고 콤팩트하게 */
+@media (max-width: 480px) {
+    .username { display: none; }
+    .logout { padding: 6px 8px; font-size: 12px; }
+}

@@ -12,6 +12,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 public class LifeLogUserArgumentResolver implements HandlerMethodArgumentResolver {
@@ -26,7 +27,7 @@ public class LifeLogUserArgumentResolver implements HandlerMethodArgumentResolve
                                   NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) {
         var ctx = SecurityContextHolder.getContext();
         var auth = (ctx != null) ? ctx.getAuthentication() : null;
-        if (auth == null || !auth.isAuthenticated()) {
+        if (Objects.isNull(auth) || !auth.isAuthenticated()) {
             return null;
         }
 
