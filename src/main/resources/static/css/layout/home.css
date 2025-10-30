@@ -1,3 +1,4 @@
+/* ===== 기본 레이아웃 ===== */
 .topbar {
     position: sticky; top: 0; z-index: 100;
 }
@@ -100,21 +101,15 @@ body.menu-open .backdrop {
 }
 /* 데스크톱: 항상 보이게 */
 @media (min-width:1024px) {
-    .hamburger {
-        display:none
-    }
+    .hamburger { display:none }
     .layout-row {
         display:grid;
         grid-template-columns: var(--sidebar-w) 1fr
     }
     #sidebar {
-        /*position:sticky;*/
-        /*top:var(--top-h);*/
         transform:none
     }
-    .backdrop {
-        display:none
-    }
+    .backdrop { display:none }
 }
 .footer {
     height:48px;
@@ -125,8 +120,11 @@ body.menu-open .backdrop {
     background:#fff;
     border-top:1px solid #eee
 }
-/**/
+
+/* 콘텐츠 좌우 이동 트랜지션 */
 :root { --sidebar-w: 264px; }
 .content { transition: margin-left .24s ease; }
-body.menu-open .content { margin-left: var(--sidebar-w); }
-
+/* 데스크톱에서만 콘텐츠를 옆으로 밀어줌 (모바일에서 버튼 밀림 방지) */
+@media (min-width:1024px) {
+    body.menu-open .content { margin-left: var(--sidebar-w); }
+}
