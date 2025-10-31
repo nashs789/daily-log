@@ -25,7 +25,6 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserInfo saveSocialUser(final UserInfo userInfo) {
         return userJpaRepository.save(User.builder()
-                                          .id(userInfo.getId())
                                           .sub(userInfo.getSub())
                                           .email(userInfo.getEmail())
                                           .provider(userInfo.getProvider())
@@ -33,13 +32,13 @@ public class UserRepositoryImpl implements UserRepository {
                                           .username(userInfo.getUsername())
                                           .picture(userInfo.getPicture())
                                           .build())
-                                .toUserInfo();
+                                          .toInfo();
     }
 
     @Override
     public UserInfo findBySub(final String sub) {
         return userJpaRepository.findBySub(sub)
                                 .orElseThrow(() -> new UserException(NO_SUCH_USER))
-                                .toUserInfo();
+                                .toInfo();
     }
 }

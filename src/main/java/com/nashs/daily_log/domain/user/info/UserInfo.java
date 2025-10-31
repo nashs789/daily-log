@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 @Builder
 public class UserInfo {
-    private Long id;
     private String sub;
     private String email;
     private Provider provider;
@@ -20,7 +19,6 @@ public class UserInfo {
 
     public LifeLogUser toLifeLogUser() {
         return LifeLogUser.builder()
-                          .id(id)
                           .sub(sub)
                           .email(email)
                           .name(username)

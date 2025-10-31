@@ -1,4 +1,5 @@
 (function ($) {
+    const base = document.querySelector('meta[name="lifelog:base"]')?.content || '';
     const $tplText     = $('#tplText');
     const $paramList   = $('#paramList');
     const $preview     = $('#preview');
@@ -7,20 +8,22 @@
     const $tplLoad     = $('#tplLoad');
     const $copyRendered= $('#copyRendered');
 
-    // 기본 템플릿
-    const defaultTpl = `# 오늘 할일
-- $1
-- $2
-- $3
-
-> 메모: $?
-`;
-
     // ----- 유틸: 템플릿에서 파라미터 토큰 추출 (중복 제거, 등장 순 유지)
     function extractTokens(text) {
         const m = text.match(/\$[a-zA-Z0-9?]+/g) || [];
         const seen = new Set();
+
         return m.filter(t => (seen.has(t) ? false : (seen.add(t), true)));
+    }
+
+    function readParamsByKeys(keys) {
+        const $scope = $('.mdtpl__params');
+
+        return keys.reduce((acc, tok) => {
+            const $inp = $scope.find(`input[data-token="${tok}"]`);
+            acc[tok] = ($inp.val() ?? '');
+            return acc;
+        }, {});
     }
 
     // ----- UI: 파라미터 입력 필드 생성/동기화
@@ -84,33 +87,12 @@
     $paramList.on('input', 'input[data-token]', render);
     $copyRendered.on('click', function () {
         const { filled } = render();
+
         navigator.clipboard.writeText(filled).then(() => {
-            $copyRendered.text('복사됨!'); setTimeout(() => $copyRendered.text('렌더된 텍스트 복사'), 1200);
+            $copyRendered.text('복사됨!');
+            setTimeout(() => $copyRendered.text('렌더된 텍스트 복사'), 1200);
         });
     });
-
-    // ----- 로컬 저장/불러오기 (데모용: localStorage)
-    const LS_KEY = 'dailylog.templates';
-
-    function loadAll() {
-        try {
-            return JSON.parse(localStorage.getItem(LS_KEY) || '{}');
-        } catch(e) {
-            return {};
-        }
-    }
-
-    function saveAll(obj) {
-        localStorage.setItem(LS_KEY, JSON.stringify(obj));
-    }
-
-    function refreshSelect() {
-        const all = loadAll();
-        $tplLoad.find('option:not(:first)').remove();
-        Object.keys(all).forEach(name => {
-            $tplLoad.append(`<option value="${name}">${name}</option>`);
-        });
-    }
 
     $tplSave.on('click', function(){
         const name = ($tplName.val() || '').trim();
@@ -120,12 +102,26 @@
             return;
         }
 
-        const all = loadAll();
-        all[name] = { name, text: $tplText.val() || '' };
+        const content = $tplText.val() || '';
+        const opts = {
+            method: 'PUT',
+            params: {
+                title: name,
+                content: JSON.stringify(content),
+                rawContent: content,
+                params: readParamsByKeys(extractTokens(content))
+            }
+        };
 
-        saveAll(all);
-        refreshSelect();
-        alert('저장 되었습니다.');
+        // 로그인 했을때랑 구분
+        console.log('${lifeLogUser}');
+
+        callApi(base + "/api/template", opts)
+            .then(res => {
+                console.log(res)
+            });
+
+        //alert('저장 되었습니다.');
     });
 
     $tplLoad.on('change', function(){
@@ -144,8 +140,13 @@
 
     // 초기화
     (function init(){
-        refreshSelect();
-        if (!$tplText.val()) $tplText.val(defaultTpl);
+        $tplText.val(`# 오늘 할일
+- $1
+- $2
+- $3
+
+> 메모: $?
+`);
         render();
     })();
 

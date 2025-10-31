@@ -4,7 +4,6 @@ import com.nashs.daily_log.domain.auth.service.JwtService;
 import com.nashs.daily_log.global.utils.CookieUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

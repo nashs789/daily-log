@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class GlobalExceptionHandler {
     private final NotifyService notifier;
 

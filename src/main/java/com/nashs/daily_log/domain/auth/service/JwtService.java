@@ -1,10 +1,13 @@
 package com.nashs.daily_log.domain.auth.service;
 
+import com.nashs.daily_log.domain.auth.props.AuthCookieProps;
 import com.nashs.daily_log.domain.auth.props.JwtProps;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -14,12 +17,14 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class JwtService {
+    private final AuthCookieProps authCookieProps;
     private final JwtProps props;
-    private final SecretKey key;
+    private SecretKey key;
 
-    public JwtService(JwtProps props) {
-        this.props = props;
+    @PostConstruct
+    void init() {
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(props.secret()));
     }
 
@@ -31,7 +36,10 @@ public class JwtService {
                    .subject(sub)
                    .issuedAt(Date.from(now))
                    .expiration(Date.from(exp))
-                   .claims(Map.of("email", email, "typ", "access"))
+                   .claims(Map.of(
+                           "email", email,
+                           "typ", authCookieProps.accessName())
+                   )
                    .signWith(key)
                    .compact();
     }
@@ -44,15 +52,15 @@ public class JwtService {
                    .subject(sub)
                    .issuedAt(Date.from(now))
                    .expiration(Date.from(exp))
-                   .claims(Map.of("typ", "refresh"))
+                   .claims(Map.of("typ", authCookieProps.refreshName()))
                    .signWith(key)
                    .compact();
     }
 
     public boolean validateAccessToken(String token) {
         try {
-            Claims c = parse(token);
-            return "access".equals(c.get("typ", String.class));
+            return authCookieProps.accessName()
+                                  .equals(parse(token).get("typ", String.class));
         } catch (Exception e) {
             return false;
         }
@@ -60,8 +68,8 @@ public class JwtService {
 
     public boolean validateRefreshToken(String token) {
         try {
-            Claims c = parse(token);
-            return "refresh".equals(c.get("typ", String.class));
+            return authCookieProps.refreshName()
+                                  .equals(parse(token).get("typ", String.class));
         } catch (Exception e) {
             return false;
         }
@@ -73,6 +81,10 @@ public class JwtService {
 
     public String getEmail(String token) {
         return parse(token).get("email", String.class);
+    }
+
+    public String getUserId(String token) {
+        return parse(token).get("id", String.class);
     }
 
     private Claims parse(String token) {

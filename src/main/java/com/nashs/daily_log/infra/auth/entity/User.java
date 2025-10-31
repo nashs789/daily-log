@@ -24,10 +24,7 @@ public class User extends Timestamp {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
+    @Column(nullable = false, unique = true)
     private String sub;
 
     @Column
@@ -45,9 +42,8 @@ public class User extends Timestamp {
     @Column
     private String picture;
 
-    public UserInfo toUserInfo() {
+    public UserInfo toInfo() {
         return UserInfo.builder()
-                       .id(id)
                        .sub(sub)
                        .email(email)
                        .provider(provider)
@@ -55,5 +51,11 @@ public class User extends Timestamp {
                        .username(username)
                        .picture(picture)
                        .build();
+    }
+
+    public static User fromInfo(UserInfo userInfo) {
+        return User.builder()
+                   .sub(userInfo.getSub())
+                   .build();
     }
 }
