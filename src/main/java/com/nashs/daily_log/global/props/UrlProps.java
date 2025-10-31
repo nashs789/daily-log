@@ -14,6 +14,7 @@ public class UrlProps {
     private String jsp;
     private String css;
     private String image;
+    private String js;
     private Script script;
 
     @Getter

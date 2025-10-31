@@ -1,4 +1,4 @@
-package com.nashs.daily_log.infra.common;
+package com.nashs.daily_log.infra.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

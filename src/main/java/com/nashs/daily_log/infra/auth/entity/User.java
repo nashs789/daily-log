@@ -1,7 +1,7 @@
 package com.nashs.daily_log.infra.auth.entity;
 
 import com.nashs.daily_log.domain.user.info.UserInfo;
-import com.nashs.daily_log.infra.common.Timestamp;
+import com.nashs.daily_log.infra.common.entity.Timestamp;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

@@ -120,23 +120,24 @@
 .mdtpl__left,
 .mdtpl__right{ min-width: 0; }
 
-/* 모바일 최적화 */
 @media (max-width: 768px){
     /* 2컬럼 → 1컬럼 */
     .mdtpl__grid{ grid-template-columns: 1fr; gap:12px; }
 
-    /* 툴바를 하단 sticky 액션바처럼 */
+    /* 툴바: 하단 sticky 액션바 */
     .mdtpl__toolbar{
         position: sticky;
         top: auto;
         bottom: 0;
         border-top:1px solid #eee;
         border-bottom:none;
-        padding: 10px calc(12px + env(safe-area-inset-right))
-        max(10px, env(safe-area-inset-bottom))
-        calc(12px + env(safe-area-inset-left));
+        /* top right bottom left (iOS safe-area 반영) */
+        padding: 10px calc(12px + env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
         background: rgba(255,255,255,0.92);
         backdrop-filter: saturate(180%) blur(8px);
+        z-index: 30; /* 오버레이/콘텐츠 위 */
+        flex-wrap: wrap;
+        gap: 8px;
     }
 
     /* 버튼은 2열로 자연스럽게 줄바꿈 */
@@ -148,8 +149,44 @@
     .content{ padding-bottom: 88px; }
 }
 
-/* 극좁은 화면 보호(가로 스크롤 허용) */
+/* 극좁은 화면 보호 */
 @media (max-width: 360px){
     .mdtpl__toolbar{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
     .mdtpl__toolbar::-webkit-scrollbar{ display:none; }
+}
+
+/* 레이아웃 요소가 줄어들 수 있게 */
+.mdtpl__toolbar *, .mdtpl__previewHead *, .mdtpl__left, .mdtpl__right { min-width: 0; }
+
+
+/* 왼쪽 라벨과 오른쪽 헤더를 동일 규격으로 */
+.mdtpl__label,
+.mdtpl__previewHead{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+
+    padding:10px 12px;
+    margin:0 0 10px;
+
+    background:var(--md-head-bg);
+    border:1px solid var(--md-head-bd);
+    border-radius:8px;
+
+    min-height:40px;
+    box-sizing:border-box;
+}
+
+/* 타이틀 텍스트 규격(좌/우 동일) */
+.mdtpl__label, .mdtpl__previewHead > span{
+    font-size:14px;
+    font-weight:600;
+    color:var(--md-head-fg);
+    margin-top: 15px;
+}
+
+/* 버튼은 오른쪽 끝 정렬 유지 */
+.mdtpl__previewHead .mdtpl__btn{
+    margin-left:auto;
 }

@@ -52,6 +52,7 @@ url:
   jsp: /WEB-INF/views
   css: /css
   image: /image
+  js: /js
 
 auth:
   cookie:

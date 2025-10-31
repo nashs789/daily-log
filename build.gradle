@@ -40,6 +40,7 @@ dependencies {
 	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
 	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
 	implementation 'org.webjars:jquery:3.7.1'
+	implementation "com.vladmihalcea:hibernate-types-60:2.21.1"
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

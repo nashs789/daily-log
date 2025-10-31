@@ -7,13 +7,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/template")
 public class TemplateRestController {
 
     @PutMapping
-    public ResponseEntity<String> test(LifeLogUser user) {
-        return ResponseEntity.ok("hi");
+    public ResponseEntity<Map<String, Object>> test(LifeLogUser user) {
+        return ResponseEntity.ok(Map.of("ok", true));
     }
 }

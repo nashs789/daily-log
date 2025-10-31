@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="lifelog:base" content="${lifelog.app.base}">
     <title>LifeLog</title>
     <link rel="stylesheet" href="${lifelog.app.css}/layout/home.css"/>
 </head>
@@ -76,6 +77,9 @@
 <script src="${lifelog.app.script.marked}"></script>
 <script src="${lifelog.app.script.safeGuard}"></script>
 
+<script src="${lifelog.app.js}/layout/home.js"></script>
+<script src="${lifelog.app.js}/common/common.js"></script>
+
 <script>
     (function ($) {
         const $tplText     = $('#tplText');
@@ -108,10 +112,9 @@
             const values = currentParamValues();
             $paramList.empty();
             tokens.forEach(tok => {
-                const id = 'param_' + tok.replace('$','S');
+                const id = 'param_' + tok.replace('$', 'S');
                 const $row = $(`
                   <div class="mdtpl__paramRow">
-                    <label for="${id}" class="mdtpl__paramLabel">${tok}</label>
                     <input id="${id}" class="mdtpl__paramInput" type="text" data-token="${tok}" placeholder="${tok} 값을 입력" />
                   </div>
                 `);
@@ -186,7 +189,9 @@
 
         function refreshSelect() {
             const all = loadAll();
+
             $tplLoad.find('option:not(:first)').remove();
+
             Object.keys(all).forEach(name => {
                 $tplLoad.append(`<option value="${name}">${name}</option>`);
             });
@@ -202,8 +207,11 @@
 
             const all = loadAll();
             all[name] = { name, text: $tplText.val() || '' };
-            saveAll(all);
-            refreshSelect();
+
+            console.log('????')
+            console.log(all);
+            // saveAll(all);
+            // refreshSelect();
             alert('저장 되었습니다.');
         });
 
@@ -230,12 +238,16 @@
 
     })(window.jQuery);
 
-    $.ajax({
-        url: '${lifelog.app.base}/api/template',
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify({ msg: 'hello' }),
-        success: function (res) { console.log('PING OK:', res); },
-        error: function (xhr) { console.error('PING ERR:', xhr.responseText); }
-    });
+
+    callApi("${lifelog.app.base}/api/template", {method: "PUT", params: {msg: "hello!!!" }})
+        .then(res => console.log(res));
+
+    <%--$.ajax({--%>
+    <%--    url: '${lifelog.app.base}/api/template',--%>
+    <%--    method: 'PUT',--%>
+    <%--    contentType: 'application/json',--%>
+    <%--    data: JSON.stringify({ msg: 'hello' }),--%>
+    <%--    success: function (res) { console.log('PING OK:', res); },--%>
+    <%--    error: function (xhr) { console.error('PING ERR:', xhr.responseText); }--%>
+    <%--});--%>
 </script>
