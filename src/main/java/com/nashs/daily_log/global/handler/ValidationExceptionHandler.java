@@ -1,4 +1,4 @@
-package com.nashs.daily_log.global.advice;
+package com.nashs.daily_log.global.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class ValidationAdvice {
+public class ValidationExceptionHandler {
 
     public record FieldError(String field, String msg) {}
     public record ValidErrorResponse(String code, String msg, List<FieldError> fieldErrors) {}

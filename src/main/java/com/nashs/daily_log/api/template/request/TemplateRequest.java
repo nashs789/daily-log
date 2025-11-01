@@ -6,7 +6,9 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Map;
 
-public record TemplateSaveRequest(
+public record TemplateRequest(
+        Long id,
+
         @NotBlank(message = "제목을 입력 하세요.")
         @Size(max = 30, message = "제목은 30자 이하로 입력 하세요.")
         String title,
@@ -27,6 +29,7 @@ public record TemplateSaveRequest(
 ) {
         public TemplateInfo toInfo() {
                 return TemplateInfo.builder()
+                                   .id(id)
                                    .title(title)
                                    .content(content)
                                    .rawContent(rawContent)

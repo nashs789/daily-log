@@ -1,5 +1,6 @@
-package com.nashs.daily_log.infra.auth.entity;
+package com.nashs.daily_log.infra.user.entity;
 
+import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.infra.common.entity.Timestamp;
 import jakarta.persistence.*;
@@ -24,7 +25,7 @@ public class User extends Timestamp {
     }
 
     @Id
-    @Column(nullable = false, unique = true)
+    @Column
     private String sub;
 
     @Column
@@ -57,5 +58,9 @@ public class User extends Timestamp {
         return User.builder()
                    .sub(userInfo.getSub())
                    .build();
+    }
+
+    public static User fromLifeLogUser(LifeLogUser lifeLogUser) {
+        return User.fromInfo(lifeLogUser.toUserInfo());
     }
 }

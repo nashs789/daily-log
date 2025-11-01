@@ -1,14 +1,14 @@
-package com.nashs.daily_log.infra.auth.repository.impl;
+package com.nashs.daily_log.infra.user.repository.impl;
 
-import com.nashs.daily_log.domain.user.exception.UserException;
+import com.nashs.daily_log.infra.user.exception.UserInfraException;
 import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.domain.user.repository.UserRepository;
-import com.nashs.daily_log.infra.auth.entity.User;
-import com.nashs.daily_log.infra.auth.repository.UserJpaRepository;
+import com.nashs.daily_log.infra.user.entity.User;
+import com.nashs.daily_log.infra.user.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import static com.nashs.daily_log.domain.user.exception.UserException.UserExceptionCode.NO_SUCH_USER;
+import static com.nashs.daily_log.infra.user.exception.UserInfraException.UserInfraExceptionCode.NO_SUCH_USER;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserInfo findBySub(final String sub) {
         return userJpaRepository.findBySub(sub)
-                                .orElseThrow(() -> new UserException(NO_SUCH_USER))
+                                .orElseThrow(() -> new UserInfraException(NO_SUCH_USER))
                                 .toInfo();
     }
 }

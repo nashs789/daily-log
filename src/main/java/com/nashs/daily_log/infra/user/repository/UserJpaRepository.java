@@ -1,6 +1,6 @@
-package com.nashs.daily_log.infra.auth.repository;
+package com.nashs.daily_log.infra.user.repository;
 
-import com.nashs.daily_log.infra.auth.entity.User;
+import com.nashs.daily_log.infra.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,18 +1,17 @@
 package com.nashs.daily_log.api.template.controller;
 
-import com.nashs.daily_log.api.template.request.TemplateSaveRequest;
-import com.nashs.daily_log.api.template.response.TemplateSaveResponse;
+import com.nashs.daily_log.api.template.request.TemplateRequest;
+import com.nashs.daily_log.api.template.response.TemplateFindResponse;
+import com.nashs.daily_log.api.template.response.TemplateResponse;
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
-import com.nashs.daily_log.domain.template.info.TemplateInfo;
 import com.nashs.daily_log.domain.template.service.TemplateService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,21 +21,32 @@ public class TemplateRestController {
 
     private final TemplateService templateService;
 
-    @PutMapping
-    public ResponseEntity<TemplateSaveResponse> test(
-            @Valid @RequestBody TemplateSaveRequest templateSaveRequest,
+    @GetMapping
+    public ResponseEntity<List<TemplateFindResponse>> findAllTemplate(LifeLogUser lifeLogUser) {
+        return ResponseEntity.ok(templateService.findAllTemplate(lifeLogUser)
+                                                .stream()
+                                                .map(TemplateFindResponse::fromInfo)
+                                                .toList());
+    }
+
+    @PatchMapping
+    public ResponseEntity<TemplateResponse> updateTemplate(
+            @Valid @RequestBody TemplateRequest templateRequest,
             LifeLogUser lifeLogUser
     ) {
-        log.info("templateSaveRequest = {}", templateSaveRequest);
-        log.info("user = {}", lifeLogUser);
+        templateService.updateTemplate(lifeLogUser, templateRequest.toInfo().setupUser(lifeLogUser));
 
-        TemplateInfo templateInfo = templateSaveRequest.toInfo();
-        templateInfo.setUserInfo(lifeLogUser.toInfo());
+        return ResponseEntity.ok(null);
+    }
 
-        TemplateInfo info = templateService.saveTemplate(templateInfo);
-
-        log.info("info = {}", info);
-
-        return ResponseEntity.ok(new TemplateSaveResponse());
+    @PutMapping
+    public ResponseEntity<TemplateResponse> saveTemplate(
+            @Valid @RequestBody TemplateRequest templateRequest,
+            LifeLogUser lifeLogUser
+    ) {
+        return ResponseEntity.ok(TemplateResponse.fromInfo(
+                templateService.saveTemplate(templateRequest.toInfo()
+                                                            .setupUser(lifeLogUser))
+        ));
     }
 }

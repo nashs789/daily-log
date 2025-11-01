@@ -2,7 +2,7 @@ package com.nashs.daily_log.domain.auth.info;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nashs.daily_log.domain.user.info.UserInfo;
-import com.nashs.daily_log.infra.auth.entity.User;
+import com.nashs.daily_log.infra.user.entity.User;
 
 public record GoogleAttrs(
         String sub,

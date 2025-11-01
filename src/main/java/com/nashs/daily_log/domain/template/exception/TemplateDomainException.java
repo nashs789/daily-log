@@ -1,23 +1,23 @@
-package com.nashs.daily_log.domain.user.exception;
+package com.nashs.daily_log.domain.template.exception;
 
 import com.nashs.daily_log.domain.common.exception.DomainException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-public class UserException extends DomainException {
+public class TemplateDomainException extends DomainException {
 
     @Getter
     @RequiredArgsConstructor
-    public enum UserExceptionCode {
-        NO_SUCH_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저 입니다.")
+    public enum TemplateDomainExceptionCode {
+        NOT_TEMPLATE_OWNER(HttpStatus.NOT_FOUND, "템플릿 소유 유저가 아닙니다.")
         ;
 
         private final HttpStatus status;
         private final String msg;
     }
 
-    public UserException(UserExceptionCode code) {
+    public TemplateDomainException(TemplateDomainExceptionCode code) {
         super(code.getStatus(), code.getMsg());
     }
 }

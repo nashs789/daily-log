@@ -5,7 +5,7 @@ import com.nashs.daily_log.domain.auth.parser.GoogleAttributeParser;
 import com.nashs.daily_log.domain.auth.props.AuthCookieProps;
 import com.nashs.daily_log.domain.auth.service.JwtService;
 import com.nashs.daily_log.domain.user.info.UserInfo;
-import com.nashs.daily_log.domain.user.repository.UserRepository;
+import com.nashs.daily_log.domain.user.service.UserService;
 import com.nashs.daily_log.global.utils.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,7 +33,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final AuthCookieProps cookieProps;
     private final JwtService jwt;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final GoogleAttributeParser googleAttributeParser;
 
     @Override
@@ -48,9 +48,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         GoogleAttrs attrs = googleAttributeParser.fromPrincipal(principal);
         String sub = attrs.sub();
         String email = attrs.email();
-        UserInfo userInfo = userRepository.isRegisteredUser(sub)
-                          ? userRepository.findBySub(sub)
-                          : userRepository.saveSocialUser(attrs.toUserInfo());
+        UserInfo userInfo = userService.isRegisteredUser(sub)
+                          ? userService.findBySub(sub)
+                          : userService.saveSocialUser(attrs.toUserInfo());
 
         // TODO - Redis 로 이전 예정 + 토큰
         log.info("userInfo = {}", userInfo);

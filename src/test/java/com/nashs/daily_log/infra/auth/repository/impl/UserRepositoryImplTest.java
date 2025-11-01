@@ -1,9 +1,10 @@
 package com.nashs.daily_log.infra.auth.repository.impl;
 
 import com.nashs.daily_log.ContainerTest;
-import com.nashs.daily_log.domain.user.exception.UserException;
+import com.nashs.daily_log.infra.user.exception.UserInfraException;
 import com.nashs.daily_log.domain.user.info.UserInfo;
-import com.nashs.daily_log.infra.auth.entity.User;
+import com.nashs.daily_log.infra.user.entity.User;
+import com.nashs.daily_log.infra.user.repository.impl.UserRepositoryImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,10 +72,10 @@ class UserRepositoryImplTest extends ContainerTest {
     @DisplayName("가입하지 않은 유저 조회")
     void findNotRegisteredUser() {
         // given & when
-        UserException userException = assertThrows(UserException.class, () -> userRepository.findBySub("user999-test-no-info"));
+        UserInfraException userInfraException = assertThrows(UserInfraException.class, () -> userRepository.findBySub("user999-test-no-info"));
         // then
-        assertEquals(UserException.class, userException.getClass());
-        assertEquals(NOT_FOUND, userException.getStatus());
-        assertEquals("존재하지 않는 유저 입니다.", userException.getMessage());
+        assertEquals(UserInfraException.class, userInfraException.getClass());
+        assertEquals(NOT_FOUND, userInfraException.getStatus());
+        assertEquals("존재하지 않는 유저 입니다.", userInfraException.getMessage());
     }
 }

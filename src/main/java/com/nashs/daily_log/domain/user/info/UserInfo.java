@@ -1,7 +1,7 @@
 package com.nashs.daily_log.domain.user.info;
 
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
-import com.nashs.daily_log.infra.auth.entity.User.Provider;
+import com.nashs.daily_log.infra.user.entity.User.Provider;
 import lombok.Builder;
 import lombok.Data;
 

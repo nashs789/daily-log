@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="lifelog:base" content="${lifelog.app.base}">
     <title>LifeLog</title>
     <link rel="stylesheet" href="${lifelog.app.css}/layout/home.css"/>
     <link rel="stylesheet" href="${lifelog.app.css}/layout/markdown.css"/>
@@ -27,21 +26,13 @@
                 <select id="tplLoad" class="mdtpl__btn">
                     <option value="">저장된 템플릿 불러오기…</option>
                 </select>
-                <button id="tplSave"   class="mdtpl__btn">저장</button>
+                <button id="tplSave" class="mdtpl__btn">저장</button>
             </div>
 
             <div class="mdtpl__grid">
                 <div class="mdtpl__left">
                     <label class="mdtpl__label">템플릿 (마크다운)</label>
-                    <textarea id="tplText" class="mdtpl__text" rows="12" placeholder="여기에 템플릿을 작성하세요. 예시:
-오늘 할일
-- $1
-- $2
-- $3
-
-메모: $?
-"></textarea>
-
+                    <textarea id="tplText" class="mdtpl__text" rows="12"></textarea>
                     <div class="mdtpl__params">
                         <div class="mdtpl__paramsHead">
                             <span>파라미터</span>
@@ -79,3 +70,101 @@
 
 <script src="${lifelog.app.js}/layout/home.js"></script>
 <script src="${lifelog.app.js}/common/common.js"></script>
+
+<script>
+    const $tplText     = $('#tplText');
+    const $paramList   = $('#paramList');
+    const $preview     = $('#preview');
+    const $tplName     = $('#tplName');
+    const $tplSave     = $('#tplSave');
+    const $tplLoad     = $('#tplLoad');
+    const $copyRendered= $('#copyRendered');
+    const templateMap = new Map();
+    const defaultTemplate = `# 오늘 할일
+- $1
+- $2
+- $3
+
+> 메모: $?
+`;
+    $(document).ready(function() {
+        init();
+    });
+
+    $tplText.on('input', render);
+    $paramList.on('input', 'input[data-token]', render);
+    $copyRendered.on('click', function () {
+        const { filled } = render();
+
+        navigator.clipboard.writeText(filled).then(() => {
+            $copyRendered.text('복사됨!');
+            setTimeout(() => $copyRendered.text('렌더된 텍스트 복사'), 1200);
+        });
+    });
+
+    $tplLoad.on('change', function(){
+        const id = $(this).val();
+        const template = templateMap.get(id);
+
+        $tplName.val(id ? template.title : '');
+        $tplText.val(id ? template.rawContent : defaultTemplate);
+        $tplSave.text(id ? '수정' : '저장');
+
+        setupParams();
+        render();
+    });
+
+    $tplSave.on('click', function(){
+        const name = ($tplName.val() || '').trim();
+        const user = '${lifeLogUser}';
+        const id = $tplLoad.val();
+
+        if (!user) return;
+
+        if (!name) {
+            alert('템플릿 이름을 입력하세요.');
+            return;
+        }
+
+        const content = $tplText.val() || '';
+        const opts = {
+            method: id ? 'PATCH' : 'PUT',
+            params: {
+                id: id,
+                title: name,
+                content: JSON.stringify(content),
+                rawContent: content,
+                params: currentParamValues()
+            }
+        };
+
+        callApi("${lifelog.app.base}/api/template", opts)
+            .then(res => {
+                console.log(res)
+            });
+
+        alert('처리 되었습니다.');
+        location.reload();
+    });
+
+    function init() {
+        const user = '${lifeLogUser}';
+
+        $tplText.val(defaultTemplate);
+
+        if (user) {
+            const templateList = loadTemplateList();
+
+            templateList.then(list => {
+                refreshSelect(list);
+            });
+        }
+
+        render();
+        setupParams();
+    }
+
+    async function loadTemplateList() {
+        return await callApi("${lifelog.app.base}/api/template", {method: 'GET'});
+    }
+</script>

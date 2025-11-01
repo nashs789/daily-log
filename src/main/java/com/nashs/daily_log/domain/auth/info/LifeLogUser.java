@@ -13,7 +13,7 @@ public record LifeLogUser(
         String picture,
         List<String> roles
 ) {
-    public UserInfo toInfo() {
+    public UserInfo toUserInfo() {
         return UserInfo.builder()
                        .sub(sub)
                        .email(email)
