@@ -88,7 +88,7 @@ public class WebhookService {
         Map<Object, Object> platformParams = new HashMap<>();
 
         for (String key : savedParams.keySet()) {
-            content = content.replace(key, savedParams.get(key));
+            content = content.replace(key, savedParams.getOrDefault(key, ""));
         }
 
         if (webhookPlatform.isDiscord()) {
