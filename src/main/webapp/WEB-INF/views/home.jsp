@@ -161,7 +161,7 @@
         const discordUrl = $('#discordWebhook').val();
         const slackUrl = $('#slackWebhook').val();
 
-        if (!isDiscordUrl(discordUrl) || !isSlackUrl(slackUrl)) {
+        if ((discordUrl && !isDiscordUrl(discordUrl)) || (slackUrl && !isSlackUrl(slackUrl))) {
             alert('유효한 Webhook URL이 아닙니다.');
             return;
         }

@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.nashs.daily_log.domain.webhook.props.WebhookProps.Discord;
@@ -23,6 +24,10 @@ import static com.nashs.daily_log.domain.webhook.props.WebhookProps.Slack;
 @Service
 @RequiredArgsConstructor
 public class WebhookService {
+
+    private final Pattern SLACK = Pattern.compile("^https://hooks\\.slack\\.com/services/.+");
+    private final Pattern DISCORD = Pattern.compile("^https://(discord(?:app)?\\.com)/api/webhooks/.+");
+
     private final WebhookProps props;
     private final RestClient client;
 
