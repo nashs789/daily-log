@@ -51,4 +51,12 @@ public class TemplateRepositoryImpl implements TemplateRepository {
                 templateInfo.getParams()
         );
     }
+
+    @Override
+    public void deleteTemplate(Long id) {
+        Template template = templateJpaRepository.findById(id)
+                                                 .orElseThrow(() -> new TemplateInfraException(NO_SUCH_TEMPLATE));
+
+        templateJpaRepository.delete(template);
+    }
 }

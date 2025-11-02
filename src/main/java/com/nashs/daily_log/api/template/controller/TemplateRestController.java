@@ -34,9 +34,11 @@ public class TemplateRestController {
             @Valid @RequestBody TemplateRequest templateRequest,
             LifeLogUser lifeLogUser
     ) {
-        templateService.updateTemplate(lifeLogUser, templateRequest.toInfo().setupUser(lifeLogUser));
+        templateService.updateTemplate(lifeLogUser, templateRequest.toInfo()
+                                                                   .setupUser(lifeLogUser));
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.noContent()
+                             .build();
     }
 
     @PutMapping
@@ -48,5 +50,16 @@ public class TemplateRestController {
                 templateService.saveTemplate(templateRequest.toInfo()
                                                             .setupUser(lifeLogUser))
         ));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTemplate(
+            @PathVariable Long id,
+            LifeLogUser lifeLogUser
+    ) {
+        templateService.deleteTemplate(lifeLogUser, id);
+
+        return ResponseEntity.noContent()
+                             .build();
     }
 }

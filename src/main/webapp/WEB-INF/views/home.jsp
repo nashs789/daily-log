@@ -27,6 +27,8 @@
                     <option value="">저장된 템플릿 불러오기…</option>
                 </select>
                 <button id="tplSave" class="mdtpl__btn">저장</button>
+                <button id="tplDelete" class="mdtpl__btn mdtpl__btn--danger">삭제</button>
+                <button id="tplSendToggle" class="mdtpl__btn mdtpl__btn--primary">전송</button>
             </div>
 
             <div class="mdtpl__grid">
@@ -155,11 +157,26 @@
 
         callApi("${lifelog.app.base}/api/template", opts)
             .then(res => {
-                console.log(res)
+                alert('처리 되었습니다.');
+                location.reload();
             });
+    });
 
-        alert('처리 되었습니다.');
-        location.reload();
+    $('#tplDelete').on('click', function(){
+        const id = $tplLoad.val();
+
+        if (!id) {
+            alert('삭제할 템플릿을 선택하세요.');
+            return;
+        }
+
+        if (!confirm('정말 삭제할까요?')) return;
+
+        callApi(`${lifelog.app.base}/api/template/` + id, { method: 'DELETE' })
+            .then(() => {
+                alert('처리 되었습니다.');
+                location.reload();
+            });
     });
 
     function init() {

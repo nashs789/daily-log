@@ -12,4 +12,5 @@ public interface TemplateRepository {
     List<TemplateInfo> findAllTemplate(LifeLogUser lifeLogUser);
     TemplateInfo saveTemplate(TemplateInfo templateInfo);
     void updateTemplate(TemplateInfo templateInfo);
+    void deleteTemplate(Long id);
 }
