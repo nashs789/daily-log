@@ -99,8 +99,6 @@ function setupParams() {
     $paramList.find('input[data-token]')
         .each(function () {
             const paramId = $(this).data('token');
-            console.log($(this));
-            console.log(paramId);
 
             $(this).val(templateInfo.params[paramId]);
         });
