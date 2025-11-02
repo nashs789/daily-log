@@ -55,7 +55,6 @@
                 </div>
             </div>
         </div>
-
     </main>
 </div>
 
@@ -91,8 +90,24 @@
         init();
     });
 
-    $tplText.on('input', render);
-    $paramList.on('input', 'input[data-token]', render);
+    let composing = false;
+
+    $paramList.on('compositionstart', 'input[data-token]', () => {
+        composing = true;
+    });
+
+    $paramList.on('compositionend', 'input[data-token]', () => {
+        composing = false; render({ skipRebuild: true });
+    });
+
+    $tplText.on('input', () => render());
+
+    $paramList.on('input', 'input[data-token]', function () {
+        if (composing) return;
+
+        render({ skipRebuild: true });
+    });
+
     $copyRendered.on('click', function () {
         const { filled } = render();
 
@@ -153,11 +168,7 @@
         $tplText.val(defaultTemplate);
 
         if (user) {
-            const templateList = loadTemplateList();
-
-            templateList.then(list => {
-                refreshSelect(list);
-            });
+            loadTemplateList();
         }
 
         render();
@@ -165,6 +176,9 @@
     }
 
     async function loadTemplateList() {
-        return await callApi("${lifelog.app.base}/api/template", {method: 'GET'});
+        await callApi("${lifelog.app.base}/api/template", {method: 'GET'})
+            .then(list => {
+                refreshSelect(list);
+            });
     }
 </script>

@@ -23,17 +23,10 @@ public class TemplateRestController {
 
     @GetMapping
     public ResponseEntity<List<TemplateFindResponse>> findAllTemplate(LifeLogUser lifeLogUser) {
-//        return ResponseEntity.ok(templateService.findAllTemplate(lifeLogUser)
-//                                                .stream()
-//                                                .map(TemplateFindResponse::fromInfo)
-//                                                .toList());
-        List<TemplateFindResponse> list = templateService.findAllTemplate(lifeLogUser)
-                                                         .stream()
-                                                         .map(TemplateFindResponse::fromInfo)
-                                                         .toList();
-        log.info("findAllTemplate {}", list);
-
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(templateService.findAllTemplate(lifeLogUser)
+                                                .stream()
+                                                .map(TemplateFindResponse::fromInfo)
+                                                .toList());
     }
 
     @PatchMapping

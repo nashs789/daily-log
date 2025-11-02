@@ -46,27 +46,39 @@ function currentParamValues() {
 }
 
 // ----- 렌더 파이프: 치환 → 마크다운 → HTML sanitize → 표시
-function render() {
+let lastTokens = [];
+function arraysEqual(a,b){
+    if(a.length !== b.length) return false;
+
+    for(let i = 0; i < a.length; i++)
+        if(a[i] !== b[i]) return false;
+
+    return true;
+}
+
+// 렌더 함수: skipRebuild 지원
+function render(opts = {}) {
+    const skipRebuild = !!opts.skipRebuild;
     const src = $tplText.val() || '';
     const tokens = extractTokens(src);
-    rebuildParamInputs(tokens);
+
+    if (!skipRebuild) {
+        if (!arraysEqual(tokens, lastTokens)) {
+            rebuildParamInputs(tokens);
+            lastTokens = tokens;
+        }
+    }
 
     const vals = currentParamValues();
     let filled = src;
-
-    tokens.forEach(tok => {
+    (tokens || []).forEach(tok => {
         const val = (vals[tok] ?? '');
-        // 모든 등장 위치를 치환
         filled = filled.split(tok).join(val);
     });
 
-    // markdown to HTML
     const html = marked.parse(filled, { breaks: true, gfm: true });
-    // sanitize
     const safe = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
-
     $preview.html(safe);
-
     return { filled, safe };
 }
 
