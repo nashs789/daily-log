@@ -1,6 +1,8 @@
-package com.nashs.daily_log.domain.notify.service;
+package com.nashs.daily_log.domain.webhook.service;
 
-import com.nashs.daily_log.domain.notify.props.NotifyProps;
+import com.nashs.daily_log.domain.template.info.TemplateInfo;
+import com.nashs.daily_log.domain.webhook.enums.WebhookPlatform;
+import com.nashs.daily_log.domain.webhook.props.WebhookProps;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,17 +11,19 @@ import org.springframework.web.client.RestClient;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.nashs.daily_log.domain.notify.props.NotifyProps.*;
+import static com.nashs.daily_log.domain.webhook.props.WebhookProps.Discord;
+import static com.nashs.daily_log.domain.webhook.props.WebhookProps.Slack;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NotifyService {
-    private final NotifyProps props;
+public class WebhookService {
+    private final WebhookProps props;
     private final RestClient client;
 
     public void sendExceptionAsync(Exception ex, HttpServletRequest req) {
@@ -39,14 +43,14 @@ public class NotifyService {
             String title = String.format("[Error]: %s", ex.getClass().getName());
             String msg = String.format("%s %s (%s) \nmsg: %s\nstack(top3):\n%s", method, path, time, ex.getMessage(), topStack);
 
-            sendSlack(title, msg);
-            sendDiscord(msg);
+            sendErrorToSlack(title, msg);
+            sendErrorToDiscord(msg);
         } catch (Exception e) {
             log.error("sendExceptionAsync", e);
         }
     }
 
-    public void sendSlack(final String title, final String msg) {
+    public void sendErrorToSlack(final String title, final String msg) {
         Slack slack = props.getSlack();
 
         if (slack.isNotEnabled() || slack.hasNotWebhookUri()) return;
@@ -60,7 +64,7 @@ public class NotifyService {
               .toBodilessEntity();
     }
 
-    public void sendDiscord(final String msg) {
+    public void sendErrorToDiscord(final String msg) {
         Discord discord = props.getDiscord();
 
         if (discord.isNotEnabled() || discord.hasNotWebhookUri()) return;
@@ -68,6 +72,29 @@ public class NotifyService {
         client.post()
               .uri(props.getDiscord().getWebhook())
               .body(Map.of("content", "```\n" + msg + "\n```"))
+              .retrieve()
+              .toBodilessEntity();
+    }
+
+    public void sendTemplateToPlatform(TemplateInfo templateInfo, WebhookPlatform webhookPlatform) {
+        String toUrl = webhookPlatform.isDiscord() ? templateInfo.getDiscord() : templateInfo.getSlack();
+        String content = templateInfo.getRawContent();
+        Map<String, String> savedParams = templateInfo.getParams();
+        Map<Object, Object> platformParams = new HashMap<>();
+
+        for (String key : savedParams.keySet()) {
+            content = content.replace(key, savedParams.get(key));
+        }
+
+        if (webhookPlatform.isDiscord()) {
+            platformParams.put("content", content);
+        } else {
+            platformParams.put("text", content);
+        }
+
+        client.post()
+              .uri(toUrl)
+              .body(platformParams)
               .retrieve()
               .toBodilessEntity();
     }

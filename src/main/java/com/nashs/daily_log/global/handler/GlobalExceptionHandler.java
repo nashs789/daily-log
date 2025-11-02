@@ -1,6 +1,6 @@
 package com.nashs.daily_log.global.handler;
 
-import com.nashs.daily_log.domain.notify.service.NotifyService;
+import com.nashs.daily_log.domain.webhook.service.WebhookService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class GlobalExceptionHandler {
-    private final NotifyService notifier;
+    private final WebhookService notifier;
 
     @ExceptionHandler(NoResourceFoundException.class)
     public org.springframework.http.ResponseEntity<Void> noRes(NoResourceFoundException ex) {

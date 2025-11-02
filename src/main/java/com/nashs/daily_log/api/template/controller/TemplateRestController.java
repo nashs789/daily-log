@@ -52,12 +52,12 @@ public class TemplateRestController {
         ));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{templateId}")
     public ResponseEntity<Void> deleteTemplate(
-            @PathVariable Long id,
+            @PathVariable Long templateId,
             LifeLogUser lifeLogUser
     ) {
-        templateService.deleteTemplate(lifeLogUser, id);
+        templateService.deleteTemplate(lifeLogUser, templateId);
 
         return ResponseEntity.noContent()
                              .build();

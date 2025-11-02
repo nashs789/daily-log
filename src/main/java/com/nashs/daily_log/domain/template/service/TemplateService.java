@@ -25,6 +25,8 @@ public class TemplateService {
         templateRepository.updateTemplate(templateInfo);
     }
 
+
+
     public List<TemplateInfo> findAllTemplate(LifeLogUser lifeLogUser) {
         return templateRepository.findAllTemplate(lifeLogUser);
     }
@@ -33,17 +35,19 @@ public class TemplateService {
         return templateRepository.saveTemplate(templateInfo);
     }
 
-    public void deleteTemplate(LifeLogUser lifeLogUser, Long id) {
-        checkUserOwnTemplate(lifeLogUser, id);
+    public void deleteTemplate(LifeLogUser lifeLogUser, Long templateId) {
+        checkUserOwnTemplate(lifeLogUser, templateId);
 
-        templateRepository.deleteTemplate(id);
+        templateRepository.deleteTemplate(templateId);
     }
 
-    private void checkUserOwnTemplate(LifeLogUser lifeLogUser, Long id) {
+    public TemplateInfo checkUserOwnTemplate(LifeLogUser lifeLogUser, Long id) {
         TemplateInfo findTemplate = templateRepository.findTemplate(id);
 
         if (!lifeLogUser.sub().equals(findTemplate.getUserInfo().getSub())) {
             throw new TemplateDomainException(NOT_TEMPLATE_OWNER);
         }
+
+        return findTemplate;
     }
 }

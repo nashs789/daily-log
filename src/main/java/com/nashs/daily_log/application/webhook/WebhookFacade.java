@@ -1,0 +1,25 @@
+package com.nashs.daily_log.application.webhook;
+
+import com.nashs.daily_log.domain.auth.info.LifeLogUser;
+import com.nashs.daily_log.domain.template.info.TemplateInfo;
+import com.nashs.daily_log.domain.template.service.TemplateService;
+import com.nashs.daily_log.domain.webhook.enums.WebhookPlatform;
+import com.nashs.daily_log.domain.webhook.service.WebhookService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class WebhookFacade {
+
+    private final TemplateService templateService;
+    private final WebhookService webhookService;
+
+    public void sendMessageToPlatform(LifeLogUser lifeLogUser, Long templateId, WebhookPlatform webhookPlatform) {
+        TemplateInfo templateInfo = templateService.checkUserOwnTemplate(lifeLogUser, templateId);
+
+        webhookService.sendTemplateToPlatform(templateInfo, webhookPlatform);
+    }
+}

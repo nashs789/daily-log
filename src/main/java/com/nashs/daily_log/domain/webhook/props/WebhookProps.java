@@ -1,4 +1,4 @@
-package com.nashs.daily_log.domain.notify.props;
+package com.nashs.daily_log.domain.webhook.props;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import java.util.Objects;
 @Getter
 @Component
 @ConfigurationProperties(prefix = "notify")
-public class NotifyProps {
+public class WebhookProps {
     @Setter
     private boolean enabled  = true;
     private final Slack slack = new Slack();

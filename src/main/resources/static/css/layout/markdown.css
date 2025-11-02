@@ -191,7 +191,5 @@
     margin-left:auto;
 }
 
-.mdtpl__btn--primary{ background:#2563eb; color:#fff; border-color:#1e40af; }
 .mdtpl__btn--danger{  background:#fef2f2; color:#b91c1c; border-color:#fecaca; }
-.mdtpl__btn--primary:hover,
 .mdtpl__btn--danger:hover{ filter:brightness(.96); }

@@ -25,7 +25,6 @@
             ajaxOptions.contentType = contentType;
         }
 
-        console.log(ajaxOptions)
         return $.ajax(ajaxOptions)
                 .fail(function (xhr) {
                     console.error('API ERROR:', method, url, xhr);

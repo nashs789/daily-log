@@ -128,3 +128,12 @@ body.menu-open .backdrop {
 @media (min-width:1024px) {
     body.menu-open .content { margin-left: var(--sidebar-w); }
 }
+
+.webhook-panel { margin-top: 12px; padding: 12px; border: 1px solid #eee; border-radius: 8px; background: #fff; }
+.webhook-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+.webhook-row label { width: 140px; color: #666; }
+.webhook-input { flex: 1 1 320px; height: 36px; padding: 0 10px; border: 1px solid #ddd; border-radius: 8px; }
+@media (max-width: 768px){
+    .webhook-row label { width: 100%; }
+    .webhook-input { flex: 1 1 100%; }
+}

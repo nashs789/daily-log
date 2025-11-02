@@ -19,12 +19,16 @@ public interface TemplateJpaRepository extends JpaRepository<Template, Long> {
            SET t.title = :title
              , t.rawContent = :rawContent
              , t.params = :params
+             , t.discord = :discord
+             , t.slack = :slack
          WHERE t.id = :id
     """)
     void updateTemplate(
             @Param("id") Long id,
             @Param("title") String title,
             @Param("rawContent") String rawContent,
-            @Param("params") Map<String, String> params
+            @Param("params") Map<String, String> params,
+            @Param("discord") String discord,
+            @Param("slack") String slack
     );
 }

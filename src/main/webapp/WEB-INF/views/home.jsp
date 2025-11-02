@@ -28,7 +28,6 @@
                 </select>
                 <button id="tplSave" class="mdtpl__btn">저장</button>
                 <button id="tplDelete" class="mdtpl__btn mdtpl__btn--danger">삭제</button>
-                <button id="tplSendToggle" class="mdtpl__btn mdtpl__btn--primary">전송</button>
             </div>
 
             <div class="mdtpl__grid">
@@ -53,6 +52,19 @@
                     </div>
                     <div id="preview" class="mdtpl__preview markdown-body">
 
+                    </div>
+                </div>
+                <div class="webhook-panel">
+                    <div class="webhook-row">
+                        <label for="slackWebhook">Slack Webhook</label>
+                        <input id="slackWebhook" class="webhook-input" placeholder="https://hooks.slack.com/services/XXXXX/XXXXX/XXXXX" />
+                        <button id="sendSlack" class="mdtpl__btn">슬랙 전송</button>
+                    </div>
+
+                    <div class="webhook-row">
+                        <label for="discordWebhook">Discord Webhook</label>
+                        <input id="discordWebhook" class="webhook-input" placeholder="https://discord.com/api/webhooks/XXXXX/XXXXX" />
+                        <button id="sendDiscord" class="mdtpl__btn">디스코드 전송</button>
                     </div>
                 </div>
             </div>
@@ -125,6 +137,8 @@
 
         $tplName.val(id ? template.title : '');
         $tplText.val(id ? template.rawContent : defaultTemplate);
+        $('#discordWebhook').val(id ? template.discord : '');
+        $('#slackWebhook').val(id ? template.slack : '');
         $tplSave.text(id ? '수정' : '저장');
 
         setupParams();
@@ -144,6 +158,14 @@
         }
 
         const content = $tplText.val() || '';
+        const discordUrl = $('#discordWebhook').val();
+        const slackUrl = $('#slackWebhook').val();
+
+        if (!isDiscordUrl(discordUrl) || !isSlackUrl(slackUrl)) {
+            alert('유효한 Webhook URL이 아닙니다.');
+            return;
+        }
+
         const opts = {
             method: id ? 'PATCH' : 'PUT',
             params: {
@@ -151,7 +173,9 @@
                 title: name,
                 content: JSON.stringify(content),
                 rawContent: content,
-                params: currentParamValues()
+                params: currentParamValues(),
+                discord: discordUrl,
+                slack: slackUrl
             }
         };
 
@@ -179,6 +203,37 @@
             });
     });
 
+    $('#sendSlack').on('click', async function(){
+        const url = $('#slackWebhook').val().trim();
+
+        if (!isSlackUrl(url)) {
+            alert('유효한 Slack Webhook URL이 아닙니다.'); return;
+        }
+
+        try {
+            await sendTo('SLACK');
+            alert('슬랙 전송 완료');
+        } catch (e) {
+            alert('슬랙 전송 실패'); console.error(e);
+        }
+    });
+
+    $('#sendDiscord').on('click', async function(){
+        const url = $('#discordWebhook').val().trim();
+
+        if (!isDiscordUrl(url)) {
+            alert('유효한 Discord Webhook URL이 아닙니다.');
+            return;
+        }
+
+        try {
+            await sendTo('DISCORD');
+            alert('디스코드 전송 완료');
+        } catch (e) {
+            alert('디스코드 전송 실패'); console.error(e);
+        }
+    });
+
     function init() {
         const user = '${lifeLogUser}';
 
@@ -190,6 +245,19 @@
 
         render();
         setupParams();
+        setupWebhook();
+    }
+
+    async function sendTo(platform){
+        const id = $tplLoad.val();
+        const opts = {
+            params: {
+                templateId: id,
+                webhookPlatform: platform
+            }
+        }
+
+        return callApi(`${lifelog.app.base}/api/webhook/send`, opts);
     }
 
     async function loadTemplateList() {

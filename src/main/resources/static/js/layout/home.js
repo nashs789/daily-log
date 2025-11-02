@@ -104,6 +104,11 @@ function setupParams() {
         });
 }
 
+function setupWebhook() {
+    $('#discordWebhook').val('');
+    $('#slackWebhook').val('');
+}
+
 function refreshSelect(templateList) {
     $tplLoad.find('option:not(:first)').remove();
 
@@ -111,4 +116,12 @@ function refreshSelect(templateList) {
         templateMap.set(String(template.id), template)
         $tplLoad.append('<option value="' + template.id + '">' +template.title + '</option>');
     });
+}
+
+function isSlackUrl(u){
+    return /^https:\/\/hooks\.slack\.com\/services\/.+/.test(u);
+}
+
+function isDiscordUrl(u){
+    return /^https:\/\/(discord(app)?\.com)\/api\/webhooks\/.+/.test(u);
 }

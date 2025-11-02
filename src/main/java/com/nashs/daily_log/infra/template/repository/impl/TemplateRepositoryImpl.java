@@ -48,13 +48,15 @@ public class TemplateRepositoryImpl implements TemplateRepository {
                 templateInfo.getId(),
                 templateInfo.getTitle(),
                 templateInfo.getRawContent(),
-                templateInfo.getParams()
+                templateInfo.getParams(),
+                templateInfo.getDiscord(),
+                templateInfo.getSlack()
         );
     }
 
     @Override
-    public void deleteTemplate(Long id) {
-        Template template = templateJpaRepository.findById(id)
+    public void deleteTemplate(Long templateId) {
+        Template template = templateJpaRepository.findById(templateId)
                                                  .orElseThrow(() -> new TemplateInfraException(NO_SUCH_TEMPLATE));
 
         templateJpaRepository.delete(template);
