@@ -141,6 +141,7 @@
         $('#slackWebhook').val(id ? template.slack : '');
         $tplSave.text(id ? '수정' : '저장');
 
+        render();
         setupParams();
         render();
     });
