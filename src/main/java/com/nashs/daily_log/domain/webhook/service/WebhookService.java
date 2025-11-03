@@ -1,7 +1,7 @@
 package com.nashs.daily_log.domain.webhook.service;
 
-import com.nashs.daily_log.domain.template.info.TemplateInfo;
-import com.nashs.daily_log.domain.webhook.enums.WebhookPlatform;
+import com.nashs.daily_log.domain.webhook.info.WebhookInfo;
+import com.nashs.daily_log.domain.webhook.info.WebhookInfo.WebhookPlatform;
 import com.nashs.daily_log.domain.webhook.props.WebhookProps;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -81,17 +81,18 @@ public class WebhookService {
               .toBodilessEntity();
     }
 
-    public void sendTemplateToPlatform(TemplateInfo templateInfo, WebhookPlatform webhookPlatform) {
-        String toUrl = webhookPlatform.isDiscord() ? templateInfo.getDiscord() : templateInfo.getSlack();
-        String content = templateInfo.getRawContent();
-        Map<String, String> savedParams = templateInfo.getParams();
+    public void sendTemplateToPlatform(WebhookInfo webhookInfo) {
+        WebhookPlatform platform = webhookInfo.getWebhookPlatform();
+        String toUrl = platform.isDiscord() ? webhookInfo.getDiscord() : webhookInfo.getSlack();
+        String content = webhookInfo.getRawContent();
+        Map<String, String> savedParams = webhookInfo.getParams();
         Map<Object, Object> platformParams = new HashMap<>();
 
         for (String key : savedParams.keySet()) {
             content = content.replace(key, savedParams.getOrDefault(key, ""));
         }
 
-        if (webhookPlatform.isDiscord()) {
+        if (platform.isDiscord()) {
             platformParams.put("content", content);
         } else {
             platformParams.put("text", content);

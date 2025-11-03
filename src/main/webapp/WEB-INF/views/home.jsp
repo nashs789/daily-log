@@ -250,10 +250,13 @@
     }
 
     async function sendTo(platform){
-        const id = $tplLoad.val();
+        const content = $tplText.val() || '';
         const opts = {
             params: {
-                templateId: id,
+                discord: $('#discordWebhook').val().trim(),
+                slack: $('#slackWebhook').val().trim(),
+                rawContent: content,
+                params: currentParamValues(),
                 webhookPlatform: platform
             }
         }
