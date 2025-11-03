@@ -125,3 +125,14 @@ function isSlackUrl(u){
 function isDiscordUrl(u){
     return /^https:\/\/(discord(app)?\.com)\/api\/webhooks\/.+/.test(u);
 }
+
+function getContent() {
+    return $tplText.val() || '';
+}
+
+function getPlatformUrl() {
+    return {
+        discord: $('#discordWebhook').val().trim(),
+        slack: $('#slackWebhook').val().trim()
+    }
+}

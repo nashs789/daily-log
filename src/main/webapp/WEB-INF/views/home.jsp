@@ -158,11 +158,10 @@
             return;
         }
 
-        const content = $tplText.val() || '';
-        const discordUrl = $('#discordWebhook').val();
-        const slackUrl = $('#slackWebhook').val();
+        const content = getContent();
+        const { discord, slack } = getPlatformUrl();
 
-        if ((discordUrl && !isDiscordUrl(discordUrl)) || (slackUrl && !isSlackUrl(slackUrl))) {
+        if ((discord && !isDiscordUrl(discord)) || (slack && !isSlackUrl(slack))) {
             alert('유효한 Webhook URL이 아닙니다.');
             return;
         }
@@ -175,8 +174,8 @@
                 content: JSON.stringify(content),
                 rawContent: content,
                 params: currentParamValues(),
-                discord: discordUrl,
-                slack: slackUrl
+                discord: discord,
+                slack: slack
             }
         };
 
@@ -250,11 +249,12 @@
     }
 
     async function sendTo(platform){
-        const content = $tplText.val() || '';
+        const content = getContent();
+        const { discord, slack } = getPlatformUrl();
         const opts = {
             params: {
-                discord: $('#discordWebhook').val().trim(),
-                slack: $('#slackWebhook').val().trim(),
+                discord: discord,
+                slack: slack,
                 rawContent: content,
                 params: currentParamValues(),
                 webhookPlatform: platform
