@@ -213,9 +213,7 @@
         try {
             await sendTo('SLACK');
             alert('슬랙 전송 완료');
-        } catch (e) {
-            alert('슬랙 전송 실패'); console.error(e);
-        }
+        } catch (e) {}
     });
 
     $('#sendDiscord').on('click', async function(){
@@ -229,9 +227,7 @@
         try {
             await sendTo('DISCORD');
             alert('디스코드 전송 완료');
-        } catch (e) {
-            alert('디스코드 전송 실패'); console.error(e);
-        }
+        } catch (e) {}
     });
 
     function init() {

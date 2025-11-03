@@ -25,7 +25,7 @@ public class WebhookProps {
     @Setter
     public static class Messenger {
         private boolean enabled;
-        private URI webhook;
+        private String webhook;
 
         public boolean isNotEnabled() {
             return !enabled;

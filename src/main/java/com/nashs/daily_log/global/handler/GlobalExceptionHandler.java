@@ -13,40 +13,38 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.util.Map;
-
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class GlobalExceptionHandler {
+
     private final WebhookService notifier;
 
+    public record GlobalErrorResponse(HttpStatus status, String msg) {}
+
     @ExceptionHandler(NoResourceFoundException.class)
-    public org.springframework.http.ResponseEntity<Void> noRes(NoResourceFoundException ex) {
-        return org.springframework.http.ResponseEntity.notFound()
-                                                      .build();
+    public ResponseEntity<Void> noRes(NoResourceFoundException ex, HttpServletRequest req) {
+        return ResponseEntity.notFound()
+                             .build();
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<?> handleRSE(ResponseStatusException e) {
-        if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            return ResponseEntity.status(401)
-                                 .body(Map.of(
-                                         "error", "unauthorized",
-                                         "message", "Login required"
-                                 ));
-        }
-        return ResponseEntity.status(e.getStatusCode())
-                             .body(Map.of(
-                                     "error","error",
-                                     "message", e.getReason())
-                             );
+    public ResponseEntity<GlobalErrorResponse> handleRSE(ResponseStatusException ex, HttpServletRequest req) {
+        HttpStatus status = ex.getStatusCode() == HttpStatus.UNAUTHORIZED
+                          ? HttpStatus.UNAUTHORIZED
+                          : HttpStatus.INTERNAL_SERVER_ERROR;
+        notifier.sendExceptionAsync(ex, req);
+
+        return ResponseEntity.status(status)
+                             .body(new GlobalErrorResponse(status, ex.getReason()));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleAny(Exception ex, HttpServletRequest req) {
+    public ResponseEntity<GlobalErrorResponse> handleAny(Exception ex, HttpServletRequest req) {
         notifier.sendExceptionAsync(ex, req);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Hello");
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(new GlobalErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()));
     }
 }

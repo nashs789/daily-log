@@ -27,7 +27,9 @@
 
         return $.ajax(ajaxOptions)
                 .fail(function (xhr) {
-                    console.error('API ERROR:', method, url, xhr);
+                    if (xhr.responseJSON) {
+                        alert(xhr.responseJSON.msg);
+                    }
                 });
     }
 

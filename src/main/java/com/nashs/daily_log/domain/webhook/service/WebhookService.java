@@ -1,5 +1,6 @@
 package com.nashs.daily_log.domain.webhook.service;
 
+import com.nashs.daily_log.domain.webhook.exception.WebhookException;
 import com.nashs.daily_log.domain.webhook.info.WebhookInfo;
 import com.nashs.daily_log.domain.webhook.info.WebhookInfo.WebhookPlatform;
 import com.nashs.daily_log.domain.webhook.props.WebhookProps;
@@ -17,6 +18,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.nashs.daily_log.domain.webhook.exception.WebhookException.WebhookExceptionCode.URL_NOT_VALID;
 import static com.nashs.daily_log.domain.webhook.props.WebhookProps.Discord;
 import static com.nashs.daily_log.domain.webhook.props.WebhookProps.Slack;
 
@@ -55,30 +57,28 @@ public class WebhookService {
         }
     }
 
-    public void sendErrorToSlack(final String title, final String msg) {
+    private void sendErrorToSlack(final String title, final String msg) {
         Slack slack = props.getSlack();
 
         if (slack.isNotEnabled() || slack.hasNotWebhookUri()) return;
 
-        client.post()
-              .uri(slack.getWebhook())
-              .body(Map.of(
-                      "text", "*" + title + "*\n```" + msg + "```"
-              ))
-              .retrieve()
-              .toBodilessEntity();
+        checkSlackUrl(slack.getWebhook());
+        sendMessage(
+                slack.getWebhook(),
+                Map.of("text", "*" + title + "*\n```" + msg + "```")
+        );
     }
 
-    public void sendErrorToDiscord(final String msg) {
+    private void sendErrorToDiscord(final String msg) {
         Discord discord = props.getDiscord();
 
         if (discord.isNotEnabled() || discord.hasNotWebhookUri()) return;
 
-        client.post()
-              .uri(props.getDiscord().getWebhook())
-              .body(Map.of("content", "```\n" + msg + "\n```"))
-              .retrieve()
-              .toBodilessEntity();
+        checkDiscordUrl(discord.getWebhook());
+        sendMessage(
+                props.getDiscord().getWebhook(),
+                Map.of("content", "```\n" + msg + "\n```")
+        );
     }
 
     public void sendTemplateToPlatform(WebhookInfo webhookInfo) {
@@ -93,14 +93,32 @@ public class WebhookService {
         }
 
         if (platform.isDiscord()) {
+            checkDiscordUrl(toUrl);
             platformParams.put("content", content);
         } else {
+            checkSlackUrl(toUrl);
             platformParams.put("text", content);
         }
 
+        sendMessage(toUrl, platformParams);
+    }
+
+    private void checkDiscordUrl(String url) {
+        if (!DISCORD.matcher(url).matches()) {
+            throw new WebhookException(URL_NOT_VALID);
+        }
+    }
+
+    private void checkSlackUrl(String url) {
+        if (!SLACK.matcher(url).matches()) {
+            throw new WebhookException(URL_NOT_VALID);
+        }
+    }
+
+    private void sendMessage(String url, Map<Object, Object> params) {
         client.post()
-              .uri(toUrl)
-              .body(platformParams)
+              .uri(url)
+              .body(params)
               .retrieve()
               .toBodilessEntity();
     }
