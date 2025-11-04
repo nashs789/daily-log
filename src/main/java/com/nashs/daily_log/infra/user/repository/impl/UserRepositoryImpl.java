@@ -7,10 +7,12 @@ import com.nashs.daily_log.infra.user.entity.User;
 import com.nashs.daily_log.infra.user.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.nashs.daily_log.infra.user.exception.UserInfraException.UserInfraExceptionCode.NO_SUCH_USER;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 

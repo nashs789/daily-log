@@ -3,12 +3,13 @@ package com.nashs.daily_log.infra.template.repository.impl;
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.template.info.TemplateInfo;
 import com.nashs.daily_log.domain.template.repository.TemplateRepository;
-import com.nashs.daily_log.infra.template.exception.TemplateInfraException;
-import com.nashs.daily_log.infra.user.entity.User;
 import com.nashs.daily_log.infra.template.entity.Template;
+import com.nashs.daily_log.infra.template.exception.TemplateInfraException;
 import com.nashs.daily_log.infra.template.repository.TemplateJpaRepository;
+import com.nashs.daily_log.infra.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import static com.nashs.daily_log.infra.template.exception.TemplateInfraExceptio
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class TemplateRepositoryImpl implements TemplateRepository {
 
     private final TemplateJpaRepository templateJpaRepository;

@@ -1,10 +1,9 @@
-package com.nashs.daily_log.infra.auth.repository.impl;
+package com.nashs.daily_log.infra.user.repository.impl;
 
 import com.nashs.daily_log.ContainerTest;
 import com.nashs.daily_log.infra.user.exception.UserInfraException;
 import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.infra.user.entity.User;
-import com.nashs.daily_log.infra.user.repository.impl.UserRepositoryImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test")
-@Sql(scripts = "/testdata/user/user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "/testdata/user/user_cleanup.sql",   executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "/test-data/user/user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/test-data/user/user_cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class UserRepositoryImplTest extends ContainerTest {
 
     @Autowired
@@ -32,8 +31,8 @@ class UserRepositoryImplTest extends ContainerTest {
         // given & when & then
         assertTrue(
                 userRepository.isRegisteredUser("user1")
-                && userRepository.isRegisteredUser("user2")
-                && userRepository.isRegisteredUser("user3")
+                        && userRepository.isRegisteredUser("user2")
+                        && userRepository.isRegisteredUser("user3")
         );
     }
 

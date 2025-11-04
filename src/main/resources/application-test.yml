@@ -46,6 +46,7 @@ url:
   jsp: test
   css: test
   image: test
+  js: test
 
 auth:
   cookie:
@@ -59,6 +60,6 @@ auth:
 
 jwt:
   issuer: lifelog
-  secret: ${JWT_SECRET}
+  secret: "7ThrtestGJp2xhtest492test9k5utest9+Cptest4g="
   access-exp-minutes: 15
   refresh-exp-days: 14

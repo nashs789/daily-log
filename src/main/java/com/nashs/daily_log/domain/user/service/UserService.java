@@ -2,10 +2,12 @@ package com.nashs.daily_log.domain.user.service;
 
 import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.domain.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
