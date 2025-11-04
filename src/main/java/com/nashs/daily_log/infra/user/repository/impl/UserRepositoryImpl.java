@@ -1,9 +1,9 @@
 package com.nashs.daily_log.infra.user.repository.impl;
 
-import com.nashs.daily_log.infra.user.exception.UserInfraException;
 import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.domain.user.repository.UserRepository;
 import com.nashs.daily_log.infra.user.entity.User;
+import com.nashs.daily_log.infra.user.exception.UserInfraException;
 import com.nashs.daily_log.infra.user.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,8 +20,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean isRegisteredUser(final String sub) {
-        return userJpaRepository.findBySub(sub)
-                                .isPresent();
+        return userJpaRepository.existsById(sub);
     }
 
     @Override

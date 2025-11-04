@@ -30,7 +30,7 @@ class UserRepositoryImplTest extends ContainerTest {
     private UserRepositoryImpl userRepository;
 
     @Test
-    @DisplayName("이미 가입한 유저인지 확인")
+    @DisplayName("이미 가입한 유저 확인")
     void isRegisteredUser() {
         // given & when & then
         assertTrue(
@@ -41,7 +41,7 @@ class UserRepositoryImplTest extends ContainerTest {
     }
 
     @Test
-    @DisplayName("가입하지 않은 유저인지 확인")
+    @DisplayName("가입하지 않은 유저 확인")
     void isNotRegisteredUser() {
         // given
         final String NOT_EXISTED_USER_SUB = "user4";
@@ -83,10 +83,10 @@ class UserRepositoryImplTest extends ContainerTest {
     @Test
     @DisplayName("가입하지 않은 유저 조회")
     void findNotRegisteredUser() {
-        // when
+        // given
         final String NOT_EXISTED_USER_SUB = "user999-test-no-info";
 
-        // given & then
+        // when & then
         assertThatThrownBy(() -> userRepository.findBySub(NOT_EXISTED_USER_SUB))
                 .isInstanceOf(UserInfraException.class)
                 .extracting("status")
