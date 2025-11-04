@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Collections;
@@ -28,14 +29,16 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
                 "/test-data/user/user.sql",
                 "/test-data/template/template.sql"
         },
-        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD,
+        config = @SqlConfig(encoding = "UTF-8")
 )
 @Sql(
         scripts = {
                 "/test-data/user/user_cleanup.sql",
                 "/test-data/template/template_cleanup.sql"
         },
-        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD,
+        config = @SqlConfig(encoding = "UTF-8")
 )
 class TemplateRepositoryImplTest extends ContainerTest {
 
