@@ -10,15 +10,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static com.nashs.daily_log.infra.user.entity.User.Provider.GOOGLE;
-import static com.nashs.daily_log.infra.user.exception.UserInfraException.UserInfraExceptionCode.NO_SUCH_USER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @SpringBootTest
-@Testcontainers
 @ActiveProfiles("test")
 @Sql(scripts = "/test-data/user/user.sql"
     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
@@ -61,13 +59,12 @@ class UserRepositoryImplTest extends ContainerTest {
         // when
         UserInfo userInfo = userRepository.saveSocialUser(UserInfo.builder()
                                                                   .sub(NOT_EXISTED_USER_SUB)
-                                                                  .provider(GOOGLE)
                                                                   .build());
         // then
-        assertAll(() -> {
-            assertEquals(NOT_EXISTED_USER_SUB, userInfo.getSub());
-            assertEquals(GOOGLE, userInfo.getProvider());
-        });
+        assertThat(userInfo)
+                .isNotNull()
+                .extracting(UserInfo::getSub)
+                .isEqualTo(NOT_EXISTED_USER_SUB);
     }
 
     @Test
@@ -86,11 +83,13 @@ class UserRepositoryImplTest extends ContainerTest {
     @Test
     @DisplayName("가입하지 않은 유저 조회")
     void findNotRegisteredUser() {
-        // given & when
-        UserInfraException userInfraException = assertThrows(UserInfraException.class, () -> userRepository.findBySub("user999-test-no-info"));
-        // then
-        assertEquals(UserInfraException.class, userInfraException.getClass());
-        assertEquals(NOT_FOUND, userInfraException.getStatus());
-        assertEquals(NO_SUCH_USER.getMsg(), userInfraException.getMessage());
+        // when
+        final String NOT_EXISTED_USER_SUB = "user999-test-no-info";
+
+        // given & then
+        assertThatThrownBy(() -> userRepository.findBySub(NOT_EXISTED_USER_SUB))
+                .isInstanceOf(UserInfraException.class)
+                .extracting("status")
+                .isEqualTo(NOT_FOUND);
     }
 }

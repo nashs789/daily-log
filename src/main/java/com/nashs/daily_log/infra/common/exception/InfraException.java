@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class InfraException extends RuntimeException {
 
-    private HttpStatus status;
+    private final HttpStatus status;
 
     public InfraException(final HttpStatus status, final String msg) {
         super(msg);

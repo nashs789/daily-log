@@ -12,17 +12,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @SpringBootTest
-@Testcontainers
 @ActiveProfiles("test")
 @Sql(
         scripts = {
@@ -59,11 +58,10 @@ class TemplateRepositoryImplTest extends ContainerTest {
         TemplateInfo template = templateRepository.findTemplate(TEMPLATE_ID);
 
         // then
-        assertAll(() -> {
-            assertNotNull(template);
-            assertEquals(TEMPLATE_ID, template.getId());
-            assertEquals(USER_SUB, template.getUserInfo().getSub());
-        });
+        assertThat(template)
+                .isNotNull()
+                .extracting(TemplateInfo::getId, t -> t.getUserInfo().getSub())
+                .containsExactly(TEMPLATE_ID, USER_SUB);
     }
 
     @Test
@@ -72,14 +70,11 @@ class TemplateRepositoryImplTest extends ContainerTest {
         // given
         final Long NOT_EXIST_TEMPLATE_ID = 999_999_999L;
 
-        // when
-        TemplateInfraException templateInfraException = assertThrows(TemplateInfraException.class, () -> {
-            templateRepository.findTemplate(NOT_EXIST_TEMPLATE_ID);
-        });
-
-        // then
-        assertEquals(TemplateInfraException.class, templateInfraException.getClass());
-        assertEquals(NOT_FOUND, templateInfraException.getStatus());
+        // when & then
+        assertThatThrownBy(() -> templateRepository.findTemplate(NOT_EXIST_TEMPLATE_ID))
+                .isInstanceOf(TemplateInfraException.class)
+                .extracting("status")
+                .isEqualTo(NOT_FOUND);
     }
 
     @Test
