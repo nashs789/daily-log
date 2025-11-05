@@ -44,6 +44,7 @@ class UserRepositoryImplUnitTest {
         assertTrue(res);
         verify(userJpaRepository)
                 .existsById(USER_SUB);
+        verifyNoMoreInteractions(userJpaRepository);
     }
 
     @Test
@@ -62,6 +63,7 @@ class UserRepositoryImplUnitTest {
         assertFalse(res);
         verify(userJpaRepository)
                 .existsById(USER_SUB);
+        verifyNoMoreInteractions(userJpaRepository);
     }
 
     @Test
@@ -82,9 +84,11 @@ class UserRepositoryImplUnitTest {
         UserInfo savedUserInfo = userRepository.saveSocialUser(userInfo);
 
         // then
+        assertNotNull(savedUserInfo);
         assertEquals(user.getSub(), savedUserInfo.getSub());
         assertEquals(user.getEmail(), savedUserInfo.getEmail());
         verify(userJpaRepository).save(any(User.class));
+        verifyNoMoreInteractions(userJpaRepository);
     }
 
     @Test
@@ -103,8 +107,10 @@ class UserRepositoryImplUnitTest {
         UserInfo userInfo = userRepository.findBySub(USER_SUB);
 
         // then
+        assertNotNull(userInfo);
         assertEquals(user.getSub(), userInfo.getSub());
         verify(userJpaRepository).findBySub(USER_SUB);
+        verifyNoMoreInteractions(userJpaRepository);
     }
 
     @Test
@@ -121,5 +127,6 @@ class UserRepositoryImplUnitTest {
         assertThatThrownBy(() -> userRepository.findBySub(NOT_EXISTED_USER_SUB))
                 .isInstanceOf(UserInfraException.class);
         verify(userJpaRepository).findBySub(NOT_EXISTED_USER_SUB);
+        verifyNoMoreInteractions(userJpaRepository);
     }
 }
