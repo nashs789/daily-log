@@ -143,7 +143,7 @@ class TemplateRepositoryImplTest extends ContainerTest {
     }
 
     @Test
-    @DisplayName("템플릿 삭제")
+    @DisplayName("템플릿 정상 삭제")
     void deleteTemplate() {
         // given
         final Long TEMPLATE_ID = 1L;
@@ -157,5 +157,18 @@ class TemplateRepositoryImplTest extends ContainerTest {
         assertThrows(TemplateInfraException.class, () -> {
             templateRepository.findTemplate(TEMPLATE_ID);
         });
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 템플릿 삭제 시도")
+    void deleteNotOwnedTemplate() {
+        // given
+        final Long NOT_EXIST_TEMPLATE_ID = 999_999_999L;
+
+        // when & then
+        assertThatThrownBy(() -> templateRepository.deleteTemplate(NOT_EXIST_TEMPLATE_ID))
+                .isInstanceOf(TemplateInfraException.class)
+                .extracting("status")
+                .isEqualTo(NOT_FOUND);
     }
 }
