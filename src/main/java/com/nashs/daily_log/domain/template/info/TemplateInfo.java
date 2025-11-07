@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -18,6 +19,10 @@ public class TemplateInfo {
     private String discord;
     private String slack;
     private Map<String, String> params;
+
+    public UserInfo getUserInfo() {
+        return Objects.nonNull(userInfo) ? userInfo : null;
+    }
 
     public TemplateInfo setupUser(LifeLogUser lifeLogUser) {
         userInfo = lifeLogUser.toUserInfo();

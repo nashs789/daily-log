@@ -10,6 +10,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Getter
 @ToString
@@ -65,6 +66,10 @@ public class Template extends Timestamp {
     }
 
     public static Template fromInfo(TemplateInfo info) {
+        if (Objects.isNull(info)) {
+            return null;
+        }
+
         return Template.builder()
                        .user(User.fromInfo(info.getUserInfo()))
                        .title(info.getTitle())

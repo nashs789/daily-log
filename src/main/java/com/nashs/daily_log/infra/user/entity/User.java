@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @ToString
@@ -55,7 +57,9 @@ public class User extends Timestamp {
     }
 
     public static User fromInfo(UserInfo userInfo) {
-        return User.builder()
+        return Objects.isNull(userInfo)
+             ? null
+             : User.builder()
                    .sub(userInfo.getSub())
                    .build();
     }
