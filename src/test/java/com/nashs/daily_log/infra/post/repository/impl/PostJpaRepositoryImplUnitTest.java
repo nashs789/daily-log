@@ -192,8 +192,7 @@ class PostJpaRepositoryImplUnitTest {
                 anyLong(),
                 any(),
                 anyString(),
-                anyString(),
-                any(PostStatus.class)
+                anyString()
         )).thenReturn(1);
 
         // when
@@ -205,8 +204,7 @@ class PostJpaRepositoryImplUnitTest {
                 anyLong(),
                 any(),
                 eq(TITLE),
-                eq(CONTENT),
-                eq(NORMAL)
+                eq(CONTENT)
         );
         verifyNoMoreInteractions(postJpaRepository);
     }

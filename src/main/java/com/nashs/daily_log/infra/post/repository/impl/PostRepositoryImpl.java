@@ -60,8 +60,7 @@ public class PostRepositoryImpl implements PostRepository {
                 postInfo.getId(),
                 Template.fromInfo(postInfo.getTemplateInfo()),
                 postInfo.getTitle(),
-                postInfo.getContent(),
-                postInfo.getStatus()
+                postInfo.getContent()
         ) > 0;
     }
 

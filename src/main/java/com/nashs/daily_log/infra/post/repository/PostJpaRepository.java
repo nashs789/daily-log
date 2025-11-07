@@ -29,15 +29,13 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
            SET p.template = :template
              , p.title = :title
              , p.content = :content
-             , p.status = :status
          WHERE p.id = :id
     """)
     int updatePostById(
             @Param("id") Long id,
             @Param("template") Template template,
             @Param("title") String title,
-            @Param("content") String content,
-            @Param("status") PostStatus status
+            @Param("content") String content
     );
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
