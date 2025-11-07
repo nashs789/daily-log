@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostJpaRepository extends JpaRepository<Post, Long> {
 
@@ -18,7 +19,7 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
           FROM Post p
          WHERE p.id = :id
     """)
-    Post findPostById(@Param("id") Long id);
+    Optional<Post> findPostById(@Param("id") Long id);
 
     List<Post> findByUser(User user);
 

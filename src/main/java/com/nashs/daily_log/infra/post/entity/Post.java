@@ -10,6 +10,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.Objects;
 
+import static com.nashs.daily_log.infra.post.entity.Post.PostStatus.NORMAL;
+
 @Getter
 @ToString
 @Entity
@@ -35,7 +37,7 @@ public class Post extends Timestamp {
     @JoinColumn(
             name = "user_id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "fk_template_user")
+            foreignKey = @ForeignKey(name = "fk_post_user")
     )
     private User user;
 
@@ -46,11 +48,13 @@ public class Post extends Timestamp {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Lob
+    @Column(name = "content", columnDefinition = "text")
     private String content;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private PostStatus status;
+    @Column(name = "status", columnDefinition = "varchar(20) default 'NORMAL'")
+    private PostStatus status = NORMAL;
 
     public PostInfo toInfo() {
         return PostInfo.builder()
@@ -70,7 +74,6 @@ public class Post extends Timestamp {
                    .template(Template.fromInfo(info.getTemplateInfo()))
                    .title(info.getTitle())
                    .content(info.getContent())
-                   .status(info.getStatus())
                    .build();
     }
 }

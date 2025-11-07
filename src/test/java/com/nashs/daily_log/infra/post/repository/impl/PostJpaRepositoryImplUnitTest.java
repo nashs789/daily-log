@@ -4,6 +4,7 @@ import com.nashs.daily_log.domain.post.info.PostInfo;
 import com.nashs.daily_log.domain.template.info.TemplateInfo;
 import com.nashs.daily_log.infra.post.entity.Post;
 import com.nashs.daily_log.infra.post.entity.Post.PostStatus;
+import com.nashs.daily_log.infra.post.exception.PostInfraException;
 import com.nashs.daily_log.infra.post.repository.PostJpaRepository;
 import com.nashs.daily_log.infra.template.entity.Template;
 import com.nashs.daily_log.infra.user.entity.User;
@@ -15,10 +16,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.nashs.daily_log.infra.post.entity.Post.PostStatus.DELETED;
 import static com.nashs.daily_log.infra.post.entity.Post.PostStatus.NORMAL;
+import static com.nashs.daily_log.infra.post.exception.PostInfraException.PostInfraExceptionCode.NO_SUCH_POST;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -33,7 +37,7 @@ class PostJpaRepositoryImplUnitTest {
 
     @Test
     @DisplayName("Unit: 단일 게시글 조회")
-    void findPostByUser() {
+    void findPostById() {
         // given
         final Long POST_ID = 1L;
         Post post = Post.builder()
@@ -42,7 +46,7 @@ class PostJpaRepositoryImplUnitTest {
                         .build();
 
         when(postJpaRepository.findPostById(anyLong()))
-                .thenReturn(post);
+                .thenReturn(Optional.of(post));
 
         // when
         PostInfo postInfo = postRepository.findPostById(POST_ID);
@@ -53,6 +57,23 @@ class PostJpaRepositoryImplUnitTest {
                 .extracting(PostInfo::getId)
                 .isEqualTo(POST_ID);
         verify(postJpaRepository).findPostById(POST_ID);
+        verifyNoMoreInteractions(postJpaRepository);
+    }
+
+    @Test
+    @DisplayName("Unit: 존재하지 않는 게시글 조회")
+    void findNoSuchPostById() {
+        // given
+        final Long NOT_EXISTED_POST_ID = 999_999_999L;
+
+        doThrow(new PostInfraException(NO_SUCH_POST))
+                .when(postJpaRepository)
+                .findPostById(NOT_EXISTED_POST_ID);
+
+        // when & then
+        assertThatThrownBy(() -> postRepository.findPostById(NOT_EXISTED_POST_ID))
+                .isInstanceOf(PostInfraException.class);
+        verify(postJpaRepository).findPostById(NOT_EXISTED_POST_ID);
         verifyNoMoreInteractions(postJpaRepository);
     }
 

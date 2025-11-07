@@ -25,8 +25,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @ActiveProfiles("test")
 @Sql(
         scripts = {
-                "/test-data/user/user.sql",
-                "/test-data/template/template.sql"
+                "/test-data/user/user_insert.sql",
+                "/test-data/template/template_insert.sql"
         },
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD,
         config = @SqlConfig(encoding = "UTF-8")
