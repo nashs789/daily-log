@@ -26,7 +26,15 @@ public class Post extends Timestamp {
     public enum PostStatus {
         NORMAL,
         DELETED,
-        HIDDEN
+        HIDDEN;
+
+        public boolean isNormal() {
+            return this == NORMAL;
+        }
+
+        public boolean isDelete() {
+            return this == DELETED;
+        }
     }
 
     @Id
