@@ -22,7 +22,7 @@ public class TemplateService {
     public void updateTemplate(LifeLogUser lifeLogUser, TemplateInfo templateInfo) throws TemplateDomainException {
         checkUserOwnTemplate(lifeLogUser, templateInfo.getId());
 
-        templateRepository.updateTemplate(templateInfo);
+        int res = templateRepository.updateTemplate(templateInfo);
     }
 
 

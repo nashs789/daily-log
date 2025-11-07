@@ -119,15 +119,12 @@ class TemplateRepositoryImplUnitTest {
         User user = User.builder()
                         .sub(USER_SUB)
                         .build();
-        Template template = Template.builder()
-                                    .user(user)
-                                    .build();
         TemplateInfo templateInfo = TemplateInfo.builder()
                                                 .userInfo(user.toInfo())
                                                 .build();
 
         when(templateJpaRepository.save(any(Template.class)))
-                .thenReturn(template);
+                .thenAnswer(invocation -> invocation.getArgument(0, Template.class));
 
         // when
         TemplateInfo savedTemplateInfo = templateRepository.saveTemplate(templateInfo);

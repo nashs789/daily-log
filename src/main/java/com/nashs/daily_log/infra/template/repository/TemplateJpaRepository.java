@@ -23,7 +23,7 @@ public interface TemplateJpaRepository extends JpaRepository<Template, Long> {
              , t.slack = :slack
          WHERE t.id = :id
     """)
-    void updateTemplate(
+    int updateTemplate(
             @Param("id") Long id,
             @Param("title") String title,
             @Param("rawContent") String rawContent,

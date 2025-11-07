@@ -45,8 +45,8 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     }
 
     @Override
-    public void updateTemplate(TemplateInfo templateInfo) {
-        templateJpaRepository.updateTemplate(
+    public int updateTemplate(TemplateInfo templateInfo) {
+        return templateJpaRepository.updateTemplate(
                 templateInfo.getId(),
                 templateInfo.getTitle(),
                 templateInfo.getRawContent(),
