@@ -99,7 +99,7 @@ class PostJpaRepositoryImplUnitTest {
                     .build()
         );
 
-        when(postJpaRepository.findAll()).thenReturn(posts);
+        when(postJpaRepository.findAllByOrderByIdDesc()).thenReturn(posts);
 
         // when
         List<PostInfo> allPost = postRepository.findAllPost();
@@ -109,7 +109,7 @@ class PostJpaRepositoryImplUnitTest {
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(posts.size());
-        verify(postJpaRepository).findAll();
+        verify(postJpaRepository).findAllByOrderByIdDesc();
         verifyNoMoreInteractions(postJpaRepository);
     }
 
