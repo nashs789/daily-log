@@ -31,10 +31,10 @@
 
                 <c:if test="${not empty lifeLogUser}">
                     <div class="post-search__tabs">
-                        <a href="${lifelog.app.base}/post" class="post-tab post-tab--active">
+                        <a href="${lifelog.app.base}/post" class="post-tab">
                             전체 게시글
                         </a>
-                        <a href="${lifelog.app.base}/post/myPost" class="post-tab">
+                        <a href="${lifelog.app.base}/post/myPost" class="post-tab post-tab--active">
                             내 게시글
                         </a>
                     </div>

@@ -130,7 +130,7 @@ class PostJpaRepositoryImplUnitTest {
                     .build()
         );
 
-        when(postJpaRepository.findByUser(any(User.class)))
+        when(postJpaRepository.findByUserOrderByIdDesc(any(User.class)))
                 .thenReturn(posts);
 
         // when
@@ -141,7 +141,7 @@ class PostJpaRepositoryImplUnitTest {
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(posts.size());
-        verify(postJpaRepository).findByUser(any(User.class));
+        verify(postJpaRepository).findByUserOrderByIdDesc(any(User.class));
         verifyNoMoreInteractions(postJpaRepository);
     }
 

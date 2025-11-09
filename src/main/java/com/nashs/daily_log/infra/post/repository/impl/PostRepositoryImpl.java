@@ -40,9 +40,9 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<PostInfo> findMyAllPost(String userSub) {
-        return postJpaRepository.findByUser(User.builder()
-                                                .sub(userSub)
-                                                .build())
+        return postJpaRepository.findByUserOrderByIdDesc(User.builder()
+                                                               .sub(userSub)
+                                                               .build())
                                 .stream()
                                 .map(Post::toInfo)
                                 .toList();

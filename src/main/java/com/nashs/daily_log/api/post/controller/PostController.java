@@ -1,7 +1,7 @@
 package com.nashs.daily_log.api.post.controller;
 
+import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.post.service.PostService;
-import com.nashs.daily_log.domain.template.service.TemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(("/post"))
 public class PostController {
 
-    private final TemplateService templateService;
     private final PostService postService;
 
     @GetMapping
@@ -24,6 +23,18 @@ public class PostController {
         mv.addObject("postList", postService.findAllPost());
 
         mv.setViewName("post/post");
+
+        return mv;
+    }
+
+    @GetMapping("/myPost")
+    public ModelAndView myPostPage(
+            ModelAndView mv,
+            LifeLogUser lifeLogUser
+    ) {
+        mv.addObject("postList", postService.findMyAllPost(lifeLogUser));
+
+        mv.setViewName("post/myPost");
 
         return mv;
     }
@@ -50,7 +61,6 @@ public class PostController {
             @PathVariable Long postId,
             ModelAndView mv
     ) {
-        log.info("post = {}", postService.findPostById(postId));
         mv.addObject("post", postService.findPostById(postId));
 
         mv.setViewName("post/postEdit");

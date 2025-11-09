@@ -23,7 +23,7 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
 
     List<Post> findAllByOrderByIdDesc();
 
-    List<Post> findByUser(User user);
+    List<Post> findByUserOrderByIdDesc(User user);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = """
