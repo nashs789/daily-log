@@ -41,9 +41,7 @@
             </header>
 
             <div class="post-detail__body">
-                <article class="post-detail__content markdown-body">
-                    <p>Hello World!!!</p>
-                </article>
+                <article class="post-detail__content markdown-body">${post.content}</article>
 
                 <aside class="post-detail__template">
                     <div class="template-card">
