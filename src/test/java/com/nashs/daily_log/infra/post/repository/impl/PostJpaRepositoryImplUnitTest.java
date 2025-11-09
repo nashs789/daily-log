@@ -14,6 +14,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -98,18 +102,23 @@ class PostJpaRepositoryImplUnitTest {
                     .template(Template.builder().user(user3).build())
                     .build()
         );
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Post> page = new PageImpl<>(posts, pageable, posts.size());
 
-        when(postJpaRepository.findAllByOrderByIdDesc()).thenReturn(posts);
+        when(postJpaRepository.findAllByStatusOrderByIdDesc(
+                any(PostStatus.class),
+                any(Pageable.class)))
+                .thenReturn(page);
 
         // when
-        List<PostInfo> allPost = postRepository.findAllPost();
+        Page<PostInfo> allPost = postRepository.findAllPost(pageable);
 
         // then
         assertThat(allPost)
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(posts.size());
-        verify(postJpaRepository).findAllByOrderByIdDesc();
+        verify(postJpaRepository).findAllByStatusOrderByIdDesc(any(), any());
         verifyNoMoreInteractions(postJpaRepository);
     }
 

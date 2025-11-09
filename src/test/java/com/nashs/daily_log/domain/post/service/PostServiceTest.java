@@ -9,6 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -47,11 +50,14 @@ class PostServiceTest extends ContainerTest {
     @Test
     @DisplayName("일반 게시글 제외한 리스트 조회")
     void findAllNormalPost() {
-        // given & when
-        List<PostInfo> allPost = postService.findAllPost();
+        // given
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // when
+        Page<PostInfo> allPost = postService.findAllPost(pageable);
 
         // then
-        assertThat(allPost)
+        assertThat(allPost.getContent())
                 .isNotNull()
                 .isNotEmpty()
                 .extracting(PostInfo::getStatus)
@@ -82,10 +88,11 @@ class PostServiceTest extends ContainerTest {
     void tryUpdateNotOwnedPost() {
         // given
         final String USER_SUB = "user1";
+        Pageable pageable = PageRequest.of(0, 10);
         LifeLogUser lifeLogUser = LifeLogUser.builder()
                                              .sub(USER_SUB)
                                              .build();
-        PostInfo postInfo = postService.findAllPost()
+        PostInfo postInfo = postService.findAllPost(pageable)
                                        .stream()
                                        .filter(e -> "user2".equals(e.getUserInfo()
                                                                     .getSub()))
@@ -104,10 +111,11 @@ class PostServiceTest extends ContainerTest {
     void tryDeleteNotOwnedPost() {
         // given
         final String USER_SUB = "user1";
+        Pageable pageable = PageRequest.of(0, 10);
         LifeLogUser lifeLogUser = LifeLogUser.builder()
                                              .sub(USER_SUB)
                                              .build();
-        Long postId = postService.findAllPost()
+        Long postId = postService.findAllPost(pageable)
                                  .stream()
                                  .filter(e -> "user2".equals(e.getUserInfo().getSub()))
                                  .findFirst()

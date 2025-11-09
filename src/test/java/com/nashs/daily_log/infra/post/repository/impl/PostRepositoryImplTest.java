@@ -9,6 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -80,14 +83,17 @@ class PostRepositoryImplTest extends ContainerTest {
     @Test
     @DisplayName("모든 게시글 조회")
     void findAllPost() {
-        // given & when
-        List<PostInfo> allPost = postRepository.findAllPost();
+        // given
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // when
+        Page<PostInfo> allPost = postRepository.findAllPost(pageable);
 
         // then
         assertThat(allPost)
                 .isNotNull()
                 .isNotEmpty()
-                .hasSize(8);
+                .hasSize(6);
     }
 
     @Test
@@ -147,7 +153,6 @@ class PostRepositoryImplTest extends ContainerTest {
     void updatePostById() {
         // given
         final Long POST_ID = 1L;
-        System.out.println(postRepository.findAllPost());
         final String AFTER_TITLE = "new title";
         final String AFTER_CONTENT = "new content";
         PostInfo beforePostInfo = postRepository.findPostById(POST_ID);

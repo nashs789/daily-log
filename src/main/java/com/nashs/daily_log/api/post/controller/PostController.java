@@ -4,10 +4,14 @@ import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
@@ -19,8 +23,14 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public ModelAndView postPage(ModelAndView mv) {
-        mv.addObject("postList", postService.findAllPost());
+    public ModelAndView postPage(
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            ModelAndView mv
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        mv.addObject("postList", postService.findAllPost(pageable));
 
         mv.setViewName("post/post");
 

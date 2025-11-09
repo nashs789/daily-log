@@ -11,6 +11,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -37,16 +41,16 @@ class PostServiceUnitTest {
         List<PostInfo> returnPost = List.of(
                 PostInfo.builder().status(NORMAL).build(),
                 PostInfo.builder().status(NORMAL).build(),
-                PostInfo.builder().status(DELETED).build(),
-                PostInfo.builder().status(NORMAL).build(),
-                PostInfo.builder().status(HIDDEN).build()
+                PostInfo.builder().status(NORMAL).build()
         );
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<PostInfo> page = new PageImpl<>(returnPost, pageable, returnPost.size());
 
-        when(postRepository.findAllPost())
-                .thenReturn(returnPost);
+        when(postRepository.findAllPost(pageable))
+                .thenReturn(page);
 
         // when
-        List<PostInfo> allPost = postService.findAllPost();
+        Page<PostInfo> allPost = postService.findAllPost(pageable);
 
         // then
         int expectedSize = (int) returnPost.stream()
@@ -57,7 +61,7 @@ class PostServiceUnitTest {
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(expectedSize);
-        verify(postRepository).findAllPost();
+        verify(postRepository).findAllPost(pageable);
         verifyNoMoreInteractions(postRepository);
     }
 

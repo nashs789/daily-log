@@ -77,7 +77,7 @@ class UserRepositoryImplUnitTest {
                         .email("test@email.com")
                         .build();
 
-        when(userJpaRepository.save(any(User.class)))
+        when(userJpaRepository.save(any()))
                 .thenReturn(user);
 
         // when
@@ -87,7 +87,7 @@ class UserRepositoryImplUnitTest {
         assertNotNull(savedUserInfo);
         assertEquals(user.getSub(), savedUserInfo.getSub());
         assertEquals(user.getEmail(), savedUserInfo.getEmail());
-        verify(userJpaRepository).save(any(User.class));
+        verify(userJpaRepository).save(any());
         verifyNoMoreInteractions(userJpaRepository);
     }
 

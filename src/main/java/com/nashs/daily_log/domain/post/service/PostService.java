@@ -6,6 +6,8 @@ import com.nashs.daily_log.domain.post.info.PostInfo;
 import com.nashs.daily_log.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,11 +26,8 @@ public class PostService {
         return postRepository.findPostById(postId);
     }
 
-    public List<PostInfo> findAllPost() {
-        return postRepository.findAllPost()
-                             .stream()
-                             .filter(e -> e.getStatus().isNormal())
-                             .toList();
+    public Page<PostInfo> findAllPost(Pageable pageable) {
+        return postRepository.findAllPost(pageable);
     }
 
     public List<PostInfo> findMyAllPost(LifeLogUser lifeLogUser) {

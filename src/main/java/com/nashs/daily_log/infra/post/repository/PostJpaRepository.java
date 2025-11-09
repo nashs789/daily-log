@@ -4,6 +4,8 @@ import com.nashs.daily_log.infra.post.entity.Post;
 import com.nashs.daily_log.infra.post.entity.Post.PostStatus;
 import com.nashs.daily_log.infra.template.entity.Template;
 import com.nashs.daily_log.infra.user.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,7 +23,7 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
     """)
     Optional<Post> findPostById(@Param("id") Long id);
 
-    List<Post> findAllByOrderByIdDesc();
+    Page<Post> findAllByStatusOrderByIdDesc(PostStatus postStatus, Pageable pageable);
 
     List<Post> findByUserOrderByIdDesc(User user);
 
