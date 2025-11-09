@@ -1,12 +1,11 @@
 package com.nashs.daily_log.api.post.controller;
 
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
+import com.nashs.daily_log.domain.common.utils.PageUtils;
+import com.nashs.daily_log.domain.post.info.PostInfo;
 import com.nashs.daily_log.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,9 +27,12 @@ public class PostController {
             @RequestParam(name = "size", defaultValue = "10") int size,
             ModelAndView mv
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        PageUtils<PostInfo> pageUtils = new PageUtils<>(page, size);
 
-        mv.addObject("postList", postService.findAllPost(pageable));
+        pageUtils.setupContent(postService.findAllPost(pageUtils.getPageable()));
+
+        mv.addObject("postList", pageUtils.getContent());
+        mv.addObject("page", pageUtils);
 
         mv.setViewName("post/post");
 
