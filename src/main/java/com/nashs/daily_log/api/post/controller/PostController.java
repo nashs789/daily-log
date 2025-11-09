@@ -1,12 +1,12 @@
 package com.nashs.daily_log.api.post.controller;
 
-import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.post.service.PostService;
 import com.nashs.daily_log.domain.template.service.TemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,8 +28,20 @@ public class PostController {
         return mv;
     }
 
+    @GetMapping("/postDetail/{postId}")
+    public ModelAndView postDetailPage(
+            @PathVariable Long postId,
+            ModelAndView mv
+    ) {
+        mv.addObject("post", postService.findPostById(postId));
+
+        mv.setViewName("post/postDetail");
+
+        return mv;
+    }
+
     @GetMapping("/write")
-    public String writePage(ModelAndView mv) {
+    public String writePage() {
         return "post/write";
     }
 }

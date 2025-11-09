@@ -63,7 +63,9 @@
                                 <tr class="post-row">
                                     <td class="post-col__id">${post.id}</td>
                                     <td class="post-col__title">
-                                        <span class="post-title">${post.title}</span>
+                                        <a class="post-title-link" href="${lifelog.app.base}/post/postDetail/${post.id}">
+                                            <span class="post-title">${post.title}</span>
+                                        </a>
                                     </td>
                                     <td class="post-col__author">${post.userInfo.username}</td>
                                     <td class="post-col__date">
