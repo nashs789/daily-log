@@ -128,6 +128,7 @@ class PostJpaRepositoryImplUnitTest {
         // given
         final String USER_SUB = "user";
         User user = User.builder().build();
+        Pageable pageable = PageRequest.of(0, 10);
         List<Post> posts = List.of(
                 Post.builder()
                     .user(user)
@@ -138,19 +139,20 @@ class PostJpaRepositoryImplUnitTest {
                     .template(Template.builder().user(user).build())
                     .build()
         );
+        Page<Post> page = new PageImpl<>(posts, pageable, posts.size());
 
-        when(postJpaRepository.findByUserOrderByIdDesc(any(User.class)))
-                .thenReturn(posts);
+        when(postJpaRepository.findByUserAndStatusOrderByIdDesc(any(User.class), any(PostStatus.class), any()))
+                .thenReturn(page);
 
         // when
-        List<PostInfo> myAllPost = postRepository.findMyAllPost(USER_SUB);
+        Page<PostInfo> myAllPost = postRepository.findMyAllPost(pageable, USER_SUB);
 
         // then
         assertThat(myAllPost)
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(posts.size());
-        verify(postJpaRepository).findByUserOrderByIdDesc(any(User.class));
+        verify(postJpaRepository).findByUserAndStatusOrderByIdDesc(any(User.class), any(PostStatus.class), any());
         verifyNoMoreInteractions(postJpaRepository);
     }
 

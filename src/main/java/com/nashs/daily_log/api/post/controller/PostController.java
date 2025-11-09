@@ -41,10 +41,17 @@ public class PostController {
 
     @GetMapping("/myPost")
     public ModelAndView myPostPage(
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
             ModelAndView mv,
             LifeLogUser lifeLogUser
     ) {
-        mv.addObject("postList", postService.findMyAllPost(lifeLogUser));
+        PageUtils<PostInfo> pageUtils = new PageUtils<>(page, size);
+
+        pageUtils.setupContent(postService.findMyAllPost(lifeLogUser, pageUtils.getPageable()));
+
+        mv.addObject("postList", pageUtils.getContent());
+        mv.addObject("page", pageUtils);
 
         mv.setViewName("post/myPost");
 

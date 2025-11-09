@@ -30,11 +30,8 @@ public class PostService {
         return postRepository.findAllPost(pageable);
     }
 
-    public List<PostInfo> findMyAllPost(LifeLogUser lifeLogUser) {
-        return postRepository.findMyAllPost(lifeLogUser.sub())
-                             .stream()
-                             .filter(e -> e.getStatus().isNormal())
-                             .toList();
+    public Page<PostInfo> findMyAllPost(LifeLogUser lifeLogUser, Pageable pageable) {
+        return postRepository.findMyAllPost(pageable, lifeLogUser.sub());
     }
 
     public PostInfo savePost(PostInfo postInfo) {

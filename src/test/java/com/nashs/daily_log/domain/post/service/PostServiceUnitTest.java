@@ -73,20 +73,20 @@ class PostServiceUnitTest {
         LifeLogUser lifeLogUser = LifeLogUser.builder()
                                              .sub(USER_SUB)
                                              .build();
+        Pageable pageable = PageRequest.of(0, 10);
         List<PostInfo> returnPost = List.of(
                 PostInfo.builder().status(NORMAL).build(),
                 PostInfo.builder().status(NORMAL).build(),
-                PostInfo.builder().status(DELETED).build(),
                 PostInfo.builder().status(NORMAL).build(),
-                PostInfo.builder().status(HIDDEN).build(),
                 PostInfo.builder().status(NORMAL).build()
         );
+        Page<PostInfo> page = new PageImpl<>(returnPost, pageable, returnPost.size());
 
-        when(postRepository.findMyAllPost(anyString()))
-                .thenReturn(returnPost);
+        when(postRepository.findMyAllPost(any(), anyString()))
+                .thenReturn(page);
 
         // when
-        List<PostInfo> myAllPost = postService.findMyAllPost(lifeLogUser);
+        Page<PostInfo> myAllPost = postService.findMyAllPost(lifeLogUser, pageable);
 
         // then
         int expectedSize = (int) returnPost.stream()
@@ -97,7 +97,7 @@ class PostServiceUnitTest {
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(expectedSize);
-        verify(postRepository).findMyAllPost(anyString());
+        verify(postRepository).findMyAllPost(any(), anyString());
         verifyNoMoreInteractions(postRepository);
     }
 

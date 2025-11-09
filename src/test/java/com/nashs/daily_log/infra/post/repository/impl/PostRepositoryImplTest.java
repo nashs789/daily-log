@@ -101,15 +101,16 @@ class PostRepositoryImplTest extends ContainerTest {
     void findMyAllPost() {
         // given
         final String USER_SUB = "user1";
+        Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        List<PostInfo> myAllPost = postRepository.findMyAllPost(USER_SUB);
+        Page<PostInfo> myAllPost = postRepository.findMyAllPost(pageable, USER_SUB);
 
         // then
-        assertThat(myAllPost)
+        assertThat(myAllPost.getContent())
                 .isNotNull()
                 .isNotEmpty()
-                .hasSize(5);
+                .hasSize(3);
     }
 
     @Test

@@ -68,12 +68,13 @@ class PostServiceTest extends ContainerTest {
     @DisplayName("나의 일반 게시글 제외한 리스트 조회")
     void findMyAllNormalPost() {
         // given
+        Pageable pageable = PageRequest.of(0, 10);
         LifeLogUser lifeLogUser = LifeLogUser.builder()
                                              .sub("user1")
                                              .build();
 
         // when
-        List<PostInfo> myAllPost = postService.findMyAllPost(lifeLogUser);
+        Page<PostInfo> myAllPost = postService.findMyAllPost(lifeLogUser, pageable);
 
         // then
         assertThat(myAllPost)

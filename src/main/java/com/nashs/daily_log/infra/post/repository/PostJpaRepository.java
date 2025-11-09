@@ -25,7 +25,7 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findAllByStatusOrderByIdDesc(PostStatus postStatus, Pageable pageable);
 
-    List<Post> findByUserOrderByIdDesc(User user);
+    Page<Post> findByUserAndStatusOrderByIdDesc(User user, PostStatus postStatus, Pageable pageable);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = """

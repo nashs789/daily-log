@@ -5,13 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface PostRepository {
     PostInfo findPostById(Long postId);
     Page<PostInfo> findAllPost(Pageable pageable);
-    List<PostInfo> findMyAllPost(String userSub);
+    Page<PostInfo> findMyAllPost(Pageable pageable, String userSub);
     PostInfo savePost(PostInfo postInfo);
     boolean updatePostById(PostInfo postInfo);
     boolean deletePostById(PostInfo postInfo);
