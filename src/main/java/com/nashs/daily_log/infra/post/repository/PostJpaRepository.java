@@ -21,6 +21,8 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
     """)
     Optional<Post> findPostById(@Param("id") Long id);
 
+    List<Post> findAllByOrderByIdDesc();
+
     List<Post> findByUser(User user);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)

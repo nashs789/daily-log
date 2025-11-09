@@ -32,7 +32,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<PostInfo> findAllPost() {
-        return postJpaRepository.findAll()
+        return postJpaRepository.findAllByOrderByIdDesc()
                                 .stream()
                                 .map(Post::toInfo)
                                 .toList();
