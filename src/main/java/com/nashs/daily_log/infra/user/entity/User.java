@@ -57,9 +57,11 @@ public class User extends Timestamp {
     }
 
     public static User fromInfo(UserInfo userInfo) {
-        return Objects.isNull(userInfo)
-             ? null
-             : User.builder()
+        if (Objects.isNull(userInfo)) {
+            return null;
+        }
+
+        return User.builder()
                    .sub(userInfo.getSub())
                    .build();
     }

@@ -23,14 +23,14 @@ public class ValidationExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ValidErrorResponse> handle(MethodArgumentNotValidException ex) {
-        return ResponseEntity.ok(
-                new ValidErrorResponse("VALIDATION ERROR",
-                                       "입력값을 확인하세요.",
-                                       ex.getBindingResult()
-                                         .getFieldErrors()
-                                         .stream()
-                                         .map(fe -> new FieldError(fe.getField(), fe.getDefaultMessage()))
-                                         .toList())
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ValidErrorResponse("VALIDATION ERROR",
+                                                          "입력값을 확인하세요.",
+                                                          ex.getBindingResult()
+                                                            .getFieldErrors()
+                                                            .stream()
+                                                            .map(fe -> new FieldError(fe.getField(), fe.getDefaultMessage()))
+                                                            .toList())
         );
     }
 }

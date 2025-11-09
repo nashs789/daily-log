@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.nashs.daily_log.domain.template.exception.TemplateDomainException.TemplateDomainExceptionCode.NOT_TEMPLATE_OWNER;
 
@@ -25,8 +26,6 @@ public class TemplateService {
         templateRepository.updateTemplate(templateInfo);
     }
 
-
-
     public List<TemplateInfo> findAllTemplate(LifeLogUser lifeLogUser) {
         return templateRepository.findAllTemplate(lifeLogUser);
     }
@@ -42,6 +41,10 @@ public class TemplateService {
     }
 
     public TemplateInfo checkUserOwnTemplate(LifeLogUser lifeLogUser, Long id) {
+        if (Objects.isNull(id)) {
+            return null;
+        }
+
         TemplateInfo findTemplate = templateRepository.findTemplate(id);
 
         if (!lifeLogUser.sub().equals(findTemplate.getUserInfo().getSub())) {

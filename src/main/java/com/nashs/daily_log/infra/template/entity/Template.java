@@ -71,6 +71,7 @@ public class Template extends Timestamp {
         }
 
         return Template.builder()
+                       .id(info.getId())
                        .user(User.fromInfo(info.getUserInfo()))
                        .title(info.getTitle())
                        .content(info.getContent())

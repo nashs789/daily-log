@@ -1,3 +1,5 @@
+const templateMap = new Map();
+
 // ----- 유틸: 템플릿에서 파라미터 토큰 추출 (중복 제거, 등장 순 유지)
 function extractTokens(text) {
     const m = text.match(/\$[a-zA-Z0-9?]+/g) || [];
@@ -78,7 +80,9 @@ function render(opts = {}) {
 
     const html = marked.parse(filled, { breaks: true, gfm: true });
     const safe = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+
     $preview.html(safe);
+
     return { filled, safe };
 }
 

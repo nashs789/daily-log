@@ -92,7 +92,6 @@
     const $tplSave     = $('#tplSave');
     const $tplLoad     = $('#tplLoad');
     const $copyRendered= $('#copyRendered');
-    const templateMap = new Map();
     const defaultTemplate = `# 오늘 할일
 - $1
 - $2

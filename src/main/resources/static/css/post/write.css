@@ -1,0 +1,142 @@
+.post-write {
+    background:#fff;
+    border:1px solid #eee;
+    border-radius:12px;
+    padding:16px;
+    box-sizing:border-box;
+}
+
+/* ===== 상단 헤더: 제목 + 템플릿 + 액션버튼 ===== */
+.post-write__header{
+    display:grid;
+    grid-template-columns: minmax(0,2fr) minmax(0,2fr) auto;
+    gap:16px;
+    align-items:flex-end;
+    margin-bottom:16px;
+}
+
+.post-write__label{
+    display:block;
+    font-size:12px;
+    color:#666;
+    margin-bottom:4px;
+}
+
+.post-write__title-input{
+    width:100%;
+    height:40px;
+    padding:0 10px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    box-sizing:border-box;
+}
+
+.post-write__tpl-row{
+    display:flex;
+    gap:8px;
+}
+
+.post-write__tpl-select{
+    flex:1;
+    min-width:0;
+    height:40px;
+    padding:0 10px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    box-sizing:border-box;
+}
+
+.post-write__actions{
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+}
+
+/* 버튼 공통 */
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:80px;
+    height:40px;
+    padding:0 14px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    background:#f8f9fb;
+    font-size:14px;
+    cursor:pointer;
+}
+.btn--primary{
+    border-color:#2563eb;
+    background:#2563eb;
+    color:#fff;
+}
+.btn--ghost{
+    background:#fff;
+}
+.btn--comment{
+    height:36px;
+    padding:0 12px;
+}
+
+/* ===== 중단: 에디터 + 미리보기 ===== */
+.post-write__editor{
+    display:grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap:16px;
+    margin-bottom:24px;
+}
+
+.editor-pane,
+.preview-pane{
+    border:1px solid #eee;
+    border-radius:8px;
+    background:#fafafa;
+    display:flex;
+    flex-direction:column;
+    min-height:260px;
+}
+
+.editor-pane__toolbar,
+.preview-pane__header{
+    padding:8px 12px;
+    border-bottom:1px solid #eee;
+    font-size:13px;
+    color:#555;
+}
+
+.editor-pane__textarea{
+    flex:1;
+    border:0;
+    resize:vertical;
+    padding:10px 12px;
+    background:#fff;
+    font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    box-sizing:border-box;
+}
+
+.preview-pane__body{
+    background: #f9fafb;
+    flex:1;
+    padding:10px 12px;
+    overflow:auto;
+}
+
+/* 미리보기 숨김 */
+.preview-pane--hidden{
+    display:none;
+}
+
+.preview-pane__body blockquote {
+    margin: 12px 0;
+    padding: 8px 12px;
+    border-left: 3px solid #9ca3af;   /* 좀 더 차분한 회색 */
+    background: #f3f4f6;              /* 살짝 어두운 그레이 */
+    border-radius: 6px;
+    color: #4b5563;
+}
+
+/* 블록 인용 안의 p 여백 정리 */
+.preview-pane__body blockquote p {
+    margin: 0;
+}

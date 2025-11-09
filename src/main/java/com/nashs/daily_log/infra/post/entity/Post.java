@@ -72,6 +72,8 @@ public class Post extends Timestamp {
                        .title(title)
                        .content(content)
                        .status(status)
+                       .created(getCreated())
+                       .modified(getModified())
                        .build();
     }
 
