@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -18,16 +20,22 @@ public class PostFacade {
     private final TemplateService templateService;
 
     public PostInfo savePost(LifeLogUser lifeLogUser, PostInfo postInfo) {
-        TemplateInfo templateInfo = templateService.checkUserOwnTemplate(
-                lifeLogUser, postInfo.getTemplateInfo().getId()
+        TemplateInfo templateInfo = postInfo.getTemplateInfo();
+        Long templateId = Objects.nonNull(templateInfo) ? templateInfo.getId() : null;
+
+        templateService.checkUserOwnTemplate(
+                lifeLogUser, templateId
         );
 
         return postService.savePost(postInfo);
     }
 
     public void updatePost(LifeLogUser lifeLogUser, PostInfo postInfo) {
-        TemplateInfo templateInfo = templateService.checkUserOwnTemplate(
-                lifeLogUser, postInfo.getTemplateInfo().getId()
+        TemplateInfo templateInfo = postInfo.getTemplateInfo();
+        Long templateId = Objects.nonNull(templateInfo) ? templateInfo.getId() : null;
+
+        templateService.checkUserOwnTemplate(
+                lifeLogUser, templateId
         );
 
         postService.updatePostById(lifeLogUser, postInfo);

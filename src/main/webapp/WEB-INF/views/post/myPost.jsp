@@ -88,19 +88,15 @@
         <section class="post-list__bottom">
             <ul class="pagination">
                 <li class="page-item">
-                    <a href="#" class="page-link">이전</a>
+                    <a href="${lifelog.app.base}/post/myPost?page=${page.getPrevPage()}" class="page-link">이전</a>
                 </li>
-                <li class="page-item active">
-                    <a href="#" class="page-link">1</a>
-                </li>
+                <c:forEach var="no" begin="${page.getMinPage()}" end="${page.getMaxPage()}">
+                    <li class="page-item <c:if test="${page.currentPage eq no}">active</c:if>">
+                        <a href="${lifelog.app.base}/post/myPost?page=${no}" class="page-link">${no}</a>
+                    </li>
+                </c:forEach>
                 <li class="page-item">
-                    <a href="#" class="page-link">2</a>
-                </li>
-                <li class="page-item">
-                    <a href="#" class="page-link">3</a>
-                </li>
-                <li class="page-item">
-                    <a href="#" class="page-link">다음</a>
+                    <a href="${lifelog.app.base}/post/myPost?page=${page.getNextPage()}" class="page-link">다음</a>
                 </li>
             </ul>
 

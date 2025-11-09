@@ -5,7 +5,6 @@ import com.nashs.daily_log.api.post.response.PostResponse;
 import com.nashs.daily_log.application.post.PostFacade;
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.post.info.PostInfo;
-import com.nashs.daily_log.domain.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class PostRestController {
 
     private final PostFacade postFacade;
-    private final PostService postService;
 
     @PutMapping
     public ResponseEntity<PostResponse> savePost(

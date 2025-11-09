@@ -13,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static com.nashs.daily_log.infra.post.entity.Post.PostStatus.DELETED;
 import static com.nashs.daily_log.infra.post.entity.Post.PostStatus.NORMAL;
 import static com.nashs.daily_log.infra.post.exception.PostInfraException.PostInfraExceptionCode.NO_SUCH_POST;
