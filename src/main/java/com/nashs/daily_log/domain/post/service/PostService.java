@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.nashs.daily_log.domain.post.exception.PostDomainException.PostDomainExceptionCode.FAIL_UPDATE_POST;
 import static com.nashs.daily_log.domain.post.exception.PostDomainException.PostDomainExceptionCode.NOT_POST_OWNER;
 
 @Slf4j
@@ -41,16 +42,18 @@ public class PostService {
         return postRepository.savePost(postInfo);
     }
 
-    public boolean updatePostById(LifeLogUser lifeLogUser, Long postId) {
-        PostInfo postInfo = checkIsOwner(lifeLogUser, postId);
+    public void updatePostById(LifeLogUser lifeLogUser, PostInfo postInfo) {
+        checkIsOwner(lifeLogUser, postInfo.getId());
 
-        return postRepository.updatePostById(postInfo);
+        if (!postRepository.updatePostById(postInfo)) {
+            throw new PostDomainException(FAIL_UPDATE_POST);
+        }
     }
 
     public boolean deletePostById(LifeLogUser lifeLogUser, Long postId) {
-        PostInfo postInfo = checkIsOwner(lifeLogUser, postId);
+        checkIsOwner(lifeLogUser, postId);
 
-        return postRepository.deletePostById(postInfo);
+        return postRepository.deletePostById(null);
     }
 
     /**
@@ -59,14 +62,12 @@ public class PostService {
      * @param postId 게시글 아이디
      * @return 게시글 Info 객체
      */
-    private PostInfo checkIsOwner(LifeLogUser lifeLogUser, Long postId) {
+    private void checkIsOwner(LifeLogUser lifeLogUser, Long postId) {
         PostInfo postInfo = findPostById(postId);
         String postOwner = postInfo.getUserInfo().getSub();
 
         if (!postOwner.equals(lifeLogUser.sub())) {
             throw new PostDomainException(NOT_POST_OWNER);
         }
-
-        return postInfo;
     }
 }

@@ -63,7 +63,7 @@
                                 <tr class="post-row">
                                     <td class="post-col__id">${post.id}</td>
                                     <td class="post-col__title">
-                                        <a class="post-title-link" href="${lifelog.app.base}/post/postDetail/${post.id}">
+                                        <a class="post-title-link" href="${lifelog.app.base}/post/${post.id}">
                                             <span class="post-title">${post.title}</span>
                                         </a>
                                     </td>
@@ -101,7 +101,7 @@
 
             <div class="post-list__actions">
                 <c:if test="${not empty lifeLogUser}">
-                    <a href="${lifelog.app.base}/post/write" class="btn-write">글쓰기</a>
+                    <a href="${lifelog.app.base}/post/postWrite" class="btn-write">글쓰기</a>
                 </c:if>
             </div>
         </section>

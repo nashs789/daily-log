@@ -85,15 +85,15 @@ class PostServiceTest extends ContainerTest {
         LifeLogUser lifeLogUser = LifeLogUser.builder()
                                              .sub(USER_SUB)
                                              .build();
-        Long postId = postService.findAllPost()
-                             .stream()
-                             .filter(e -> "user2".equals(e.getUserInfo().getSub()))
-                             .findFirst()
-                             .orElseThrow()
-                             .getId();
+        PostInfo postInfo = postService.findAllPost()
+                                       .stream()
+                                       .filter(e -> "user2".equals(e.getUserInfo()
+                                                                    .getSub()))
+                                       .findFirst()
+                                       .orElseGet(() -> PostInfo.builder().build());
 
         // when & then
-        assertThatThrownBy(() -> postService.updatePostById(lifeLogUser, postId))
+        assertThatThrownBy(() -> postService.updatePostById(lifeLogUser, postInfo))
                 .isInstanceOf(PostDomainException.class)
                 .extracting("status")
                 .isEqualTo(BAD_REQUEST);

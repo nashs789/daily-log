@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>글쓰기 - LifeLog</title>
   <link rel="stylesheet" href="${lifelog.app.css}/layout/home.css"/>
-  <link rel="stylesheet" href="${lifelog.app.css}/post/write.css"/>
+  <link rel="stylesheet" href="${lifelog.app.css}/post/postWrite.css"/>
 </head>
 
 <body>
@@ -26,7 +26,8 @@
           <input id="postTitle"
                  type="text"
                  class="post-write__title-input"
-                 placeholder="제목을 입력하세요"/>
+                 placeholder="제목을 입력하세요"
+                 value="${post.title}"/>
         </div>
 
         <div class="post-write__tpl-wrap">
@@ -39,7 +40,7 @@
         </div>
 
         <div class="post-write__actions">
-          <button type="button" id="btnSubmitPost" class="btn btn--primary">게시글 등록</button>
+          <button type="button" id="btnSubmitPost" class="btn btn--primary">게시글 수정</button>
         </div>
       </div>
 
@@ -50,7 +51,7 @@
           </div>
           <textarea id="postContent"
                     class="editor-pane__textarea"
-                    placeholder="내용을 마크다운 또는 일반 텍스트로 작성하세요."></textarea>
+                    placeholder="내용을 마크다운 또는 일반 텍스트로 작성하세요.">${post.content}</textarea>
         </section>
 
         <section class="preview-pane" id="previewPane">
@@ -97,8 +98,9 @@
 
     $savePost.on('click', function() {
         const params = {
-            method: 'PUT',
+            method: 'PATCH',
             params: {
+                postId: '${post.id}',
                 title: $('#postTitle').val(),
                 content: $('#postContent').val(),
                 templateId: $tplLoad.val()
@@ -127,7 +129,9 @@
     async function loadTemplateList() {
         await callApi("${lifelog.app.base}/api/template", {method: 'GET'})
                 .then(list => {
-                  refreshSelect(list);
+                    refreshSelect(list);
+                    $tplLoad.val('${post.templateInfo.id}').change();
+                    renderPreview();
                 });
     }
 </script>

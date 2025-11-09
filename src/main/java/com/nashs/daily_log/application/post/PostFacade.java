@@ -17,9 +17,19 @@ public class PostFacade {
     private final PostService postService;
     private final TemplateService templateService;
 
-    public PostInfo savePost(LifeLogUser lifeLogUser, PostInfo postInfo, Long templateId) {
-        TemplateInfo templateInfo = templateService.checkUserOwnTemplate(lifeLogUser, templateId);
+    public PostInfo savePost(LifeLogUser lifeLogUser, PostInfo postInfo) {
+        TemplateInfo templateInfo = templateService.checkUserOwnTemplate(
+                lifeLogUser, postInfo.getTemplateInfo().getId()
+        );
 
         return postService.savePost(postInfo);
+    }
+
+    public void updatePost(LifeLogUser lifeLogUser, PostInfo postInfo) {
+        TemplateInfo templateInfo = templateService.checkUserOwnTemplate(
+                lifeLogUser, postInfo.getTemplateInfo().getId()
+        );
+
+        postService.updatePostById(lifeLogUser, postInfo);
     }
 }

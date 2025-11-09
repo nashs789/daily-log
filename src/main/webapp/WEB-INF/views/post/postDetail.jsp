@@ -24,7 +24,13 @@
     <main class="content">
         <section class="post-detail">
             <header class="post-detail__header">
-                <h1 class="post-detail__title">${post.title}️</h1>
+                <div class="post-detail__title-row">
+                    <h1 class="post-detail__title">${post.title}</h1>
+                    <div class="post-detail__actions">
+                        <a href="${lifelog.app.base}/post/${post.id}/edit" class="btn btn--ghost">수정</a>
+                    </div>
+                </div>
+
                 <div class="post-detail__meta">
                     <span class="post-detail__author">작성자: ${post.userInfo.username}</span>
                     <span class="post-detail__dot">·</span>

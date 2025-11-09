@@ -28,7 +28,7 @@ public class PostController {
         return mv;
     }
 
-    @GetMapping("/postDetail/{postId}")
+    @GetMapping("/{postId}")
     public ModelAndView postDetailPage(
             @PathVariable Long postId,
             ModelAndView mv
@@ -40,8 +40,21 @@ public class PostController {
         return mv;
     }
 
-    @GetMapping("/write")
+    @GetMapping("/postWrite")
     public String writePage() {
-        return "post/write";
+        return "post/postWrite";
+    }
+
+    @GetMapping("/{postId}/edit")
+    public ModelAndView editPage(
+            @PathVariable Long postId,
+            ModelAndView mv
+    ) {
+        log.info("post = {}", postService.findPostById(postId));
+        mv.addObject("post", postService.findPostById(postId));
+
+        mv.setViewName("post/postEdit");
+
+        return mv;
     }
 }

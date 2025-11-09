@@ -36,10 +36,13 @@ public class LoggingFilter implements Filter {
     // TODO - 로깅 debug 로 고민 해보자(1)
     private void logRequest(ContentCachingRequestWrapper req) {
         String body = getBody(req.getContentAsByteArray(), req.getCharacterEncoding());
-        log.info("HTTP Request - Method: {}, URI: {}, Body: {}",
-                 req.getMethod(),
-                 req.getRequestURI(),
-                 body);
+        String url = req.getRequestURI();
+
+        if (url.contains("/css") || url.contains("/js") || url.contains("/jquery") || url.contains("/.well-known")) {
+            return;
+        }
+
+        log.info("HTTP Request - Method: {}, URI: {}, Body: {}", req.getMethod(), url, body);
     }
 
     // TODO - 로깅 debug 로 고민 해보자(2)

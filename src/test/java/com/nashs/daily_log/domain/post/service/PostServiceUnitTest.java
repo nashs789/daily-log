@@ -115,7 +115,7 @@ class PostServiceUnitTest {
 
         // when
         PostDomainException ex = assertThrows(PostDomainException.class, () ->
-                postService.updatePostById(lifeLogUser, 1L)
+                postService.updatePostById(lifeLogUser, PostInfo.builder().id(1L).build())
         );
 
         // then
