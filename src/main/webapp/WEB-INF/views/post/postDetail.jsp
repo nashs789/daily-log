@@ -26,9 +26,12 @@
             <header class="post-detail__header">
                 <div class="post-detail__title-row">
                     <h1 class="post-detail__title">${post.title}</h1>
-                    <div class="post-detail__actions">
-                        <a href="${lifelog.app.base}/post/${post.id}/edit" class="btn btn--ghost">수정</a>
-                    </div>
+                    <c:if test="${not empty lifeLogUser}">
+                        <div class="post-detail__actions">
+                            <button type="button" class="btn btn--danger" id="btnDelete" data-post-id="${post.id}">삭제</button>
+                            <a href="${lifelog.app.base}/post/${post.id}/edit" class="btn btn--ghost">수정</a>
+                        </div>
+                    </c:if>
                 </div>
 
                 <div class="post-detail__meta">
@@ -206,6 +209,21 @@
     $(document).on('click', '[data-reply-cancel]', function () {
         const $comment = $(this).closest('.comment');
         $comment.find('.reply-form').addClass('is-hidden');
+    });
+
+    $('#btnDelete').on('click', function() {
+        if (!confirm('정말 이 게시글을 삭제할까요?')) return;
+
+        const postId = $(this).data('post-id');
+        const params = {
+            method: 'DELETE'
+        }
+
+        callApi('${lifelog.app.base}/api/post/${postId}', params)
+            .then(res => {
+                alert('삭제 되었습니다.');
+                location.href = "/post";
+            });
     });
 
     $('#templateCopyBtn').on('click', function () {

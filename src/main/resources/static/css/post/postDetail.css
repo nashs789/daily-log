@@ -470,3 +470,39 @@
     white-space: pre-wrap;
 }
 
+/* 기본 버튼이 있다면 그대로 두고, 추가로 삭제 전용 스타일만 정의 */
+.btn--danger {
+    background: #f44336;      /* 진한 빨간색 */
+    color: #fff;
+    border: 1px solid #d32f2f;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .15s ease, transform .1s ease, box-shadow .15s ease;
+}
+
+.btn--danger:hover {
+    background: #d32f2f;
+    box-shadow: 0 2px 6px rgba(244, 67, 54, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn--danger:active {
+    background: #b71c1c;
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.btn--danger:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.post-detail__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
