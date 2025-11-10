@@ -17,8 +17,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static com.nashs.daily_log.infra.post.entity.Post.PostStatus.DELETED;
 import static com.nashs.daily_log.infra.post.entity.Post.PostStatus.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -179,10 +177,9 @@ class PostRepositoryImplTest extends ContainerTest {
     void deletePostById() {
         // given
         final Long POST_ID = 1L;
-        PostInfo post = postRepository.findPostById(POST_ID);
 
         // when
-        boolean res = postRepository.deletePostById(post);
+        boolean res = postRepository.deletePostById(POST_ID);
         PostInfo deletedPost = postRepository.findPostById(POST_ID);
 
         // then

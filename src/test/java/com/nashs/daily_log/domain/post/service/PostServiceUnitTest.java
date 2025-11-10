@@ -154,6 +154,6 @@ class PostServiceUnitTest {
         assertEquals(BAD_REQUEST, ex.getStatus());
         verify(postRepository).findPostById(anyLong());
         verifyNoMoreInteractions(postRepository);
-        verify(postRepository, never()).deletePostById(any(PostInfo.class));
+        verify(postRepository, never()).deletePostById(anyLong());
     }
 }

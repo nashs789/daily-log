@@ -12,5 +12,5 @@ public interface PostRepository {
     Page<PostInfo> findMyAllPost(Pageable pageable, String userSub);
     PostInfo savePost(PostInfo postInfo);
     boolean updatePostById(PostInfo postInfo);
-    boolean deletePostById(PostInfo postInfo);
+    boolean deletePostById(Long postInfo);
 }

@@ -224,16 +224,11 @@ class PostJpaRepositoryImplUnitTest {
     @DisplayName("Unit: 게시글 삭제")
     void deletePostById() {
         // given
-        PostInfo postInfo = PostInfo.builder()
-                                    .id(1L)
-                                    .status(DELETED)
-                                    .build();
-
         when(postJpaRepository.deletePostById(anyLong(), any(PostStatus.class)))
                 .thenReturn(1);
 
         // when
-        boolean res = postRepository.deletePostById(postInfo);
+        boolean res = postRepository.deletePostById(1L);
 
         // then
         assertTrue(res);

@@ -62,10 +62,7 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public boolean deletePostById(PostInfo postInfo) {
-        return postJpaRepository.deletePostById(
-                postInfo.getId(),
-                DELETED
-        ) > 0;
+    public boolean deletePostById(Long postId) {
+        return postJpaRepository.deletePostById(postId, DELETED) > 0;
     }
 }

@@ -49,7 +49,7 @@ public class PostService {
     public boolean deletePostById(LifeLogUser lifeLogUser, Long postId) {
         checkIsOwner(lifeLogUser, postId);
 
-        return postRepository.deletePostById(null);
+        return postRepository.deletePostById(postId);
     }
 
     /**
