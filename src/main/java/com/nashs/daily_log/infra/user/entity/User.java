@@ -56,6 +56,10 @@ public class User extends Timestamp {
                        .build();
     }
 
+    public static User ref(String userId) {
+        return User.builder().sub(userId).build();
+    }
+
     public static User fromInfo(UserInfo userInfo) {
         if (Objects.isNull(userInfo)) {
             return null;

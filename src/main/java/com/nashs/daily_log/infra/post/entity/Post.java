@@ -77,6 +77,10 @@ public class Post extends Timestamp {
                        .build();
     }
 
+    public static Post ref(Long postId) {
+        return Post.builder().id(postId).build();
+    }
+
     public static Post fromInfo(PostInfo info) {
         return Post.builder()
                    .id(info.getId())
