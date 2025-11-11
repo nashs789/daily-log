@@ -11,7 +11,7 @@ public class CommentInfo {
     private Long id;
     private UserInfo userInfo;
     private PostInfo postInfo;
-    private CommentInfo parent;
+    private Long parent;
     private String content;
     private CommentStatus status;
 }

@@ -133,9 +133,10 @@ class CommentRepositoryImplUnitTest {
         final Long PARENT_ID = 10L;
         final String USER = "user";
         LifeLogUser lifeLogUser = LifeLogUser.builder().sub(USER).build();
-        CommentInfo commentInfo = CommentInfo.builder()
-                                             .build();
         User user = User.ref(lifeLogUser.sub());
+        CommentInfo commentInfo = CommentInfo.builder()
+                                             .userInfo(user.toInfo())
+                                             .build();
         Post post = Post.builder()
                         .id(POST_ID)
                         .user(user)
@@ -162,7 +163,7 @@ class CommentRepositoryImplUnitTest {
                 .isNotNull();
         assertEquals(POST_ID, savedCommentInfo.getPostInfo().getId());
         assertEquals(USER, savedCommentInfo.getUserInfo().getSub());
-        assertEquals(PARENT_ID, savedCommentInfo.getParent().getId());
+        assertEquals(PARENT_ID, savedCommentInfo.getParent());
         verify(commentJpaRepository).save(any(Comment.class));
         verifyNoMoreInteractions(commentJpaRepository);
     }

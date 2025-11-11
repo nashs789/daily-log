@@ -43,7 +43,7 @@ public class CommentRepositoryImpl {
     public CommentInfo saveCommentOnPost(LifeLogUser lifeLogUser, Long postId, CommentInfo commentInfo) {
         return commentJpaRepository.save(Comment.builder()
                                                 .user(User.ref(lifeLogUser.sub()))
-                                                .post(Post.ref(postId))
+                                                .post(Post.ref(postId, lifeLogUser.sub()))
                                                 .content(commentInfo.getContent())
                                                 .build())
                                    .toInfo();
@@ -51,7 +51,11 @@ public class CommentRepositoryImpl {
 
     public CommentInfo saveCommentOnComment(LifeLogUser lifeLogUser, Long postId, CommentInfo commentInfo) {
         return commentJpaRepository.save(Comment.builder()
-                                                 .build())
+                                                .user(User.ref(lifeLogUser.sub()))
+                                                .post(Post.ref(postId, lifeLogUser.sub()))
+                                                .content(commentInfo.getContent())
+                                                .parent(Comment.ref(commentInfo.getParent()))
+                                                .build())
                                    .toInfo();
     }
 

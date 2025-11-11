@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.Objects;
 
+import static com.nashs.daily_log.infra.post.entity.Comment.CommentStatus.*;
+
 @Getter
 @Entity
 @SuperBuilder
@@ -49,22 +51,25 @@ public class Comment extends Timestamp {
     @Column(columnDefinition = "text", nullable = false)
     private String content;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "varchar(20) default 'NORMAL'")
-    private CommentStatus status;
+    private CommentStatus status = NORMAL;
 
     public CommentInfo toInfo() {
         return CommentInfo.builder()
                           .id(id)
                           .userInfo(user.toInfo())
                           .postInfo(post.toInfo())
-                          .parent(Objects.nonNull(parent) ? parent.toInfo() : null)
+                          .parent(Objects.nonNull(parent) ? parent.getId() : null)
                           .content(content)
                           .status(status)
                           .build();
     }
 
     public static Comment ref(Long commentId) {
-        return Comment.builder().id(commentId).build();
+        return Comment.builder()
+                      .id(commentId)
+                      .build();
     }
 }

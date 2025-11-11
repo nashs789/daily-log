@@ -13,6 +13,10 @@ public record LifeLogUser(
         String picture,
         List<String> roles
 ) {
+    public static LifeLogUser ref(String sub) {
+        return LifeLogUser.builder().sub(sub).build();
+    }
+
     public UserInfo toUserInfo() {
         return UserInfo.builder()
                        .sub(sub)
