@@ -95,8 +95,7 @@ class PostServiceTest extends ContainerTest {
                                              .build();
         PostInfo postInfo = postService.findAllPost(pageable)
                                        .stream()
-                                       .filter(e -> "user2".equals(e.getUserInfo()
-                                                                    .getSub()))
+                                       .filter(e -> "user2".equals(e.getUserInfo().getSub()))
                                        .findFirst()
                                        .orElseGet(() -> PostInfo.builder().build());
 

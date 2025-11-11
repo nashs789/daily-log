@@ -2,8 +2,10 @@ package com.nashs.daily_log.infra.post.repository.impl;
 
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.post.info.CommentInfo;
+import com.nashs.daily_log.domain.post.repository.CommentRepository;
 import com.nashs.daily_log.infra.post.entity.Comment;
 import com.nashs.daily_log.infra.post.entity.Post;
+import com.nashs.daily_log.infra.post.exception.CommentInfraException;
 import com.nashs.daily_log.infra.post.repository.CommentJpaRepository;
 import com.nashs.daily_log.infra.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -16,19 +18,29 @@ import java.util.List;
 
 import static com.nashs.daily_log.infra.post.entity.Comment.CommentStatus.DELETED;
 import static com.nashs.daily_log.infra.post.entity.Comment.CommentStatus.UPDATED;
+import static com.nashs.daily_log.infra.post.exception.CommentInfraException.CommentInfraExceptionCode.NO_SUCH_COMMENT;
 
 @Repository
 @RequiredArgsConstructor
 @Transactional
-public class CommentRepositoryImpl {
+public class CommentRepositoryImpl implements CommentRepository {
 
     private final CommentJpaRepository commentJpaRepository;
 
+    @Override
+    public CommentInfo findById(Long commentId) {
+        return commentJpaRepository.findById(commentId)
+                                   .orElseThrow(() -> new CommentInfraException(NO_SUCH_COMMENT))
+                                   .toInfo();
+    }
+
+    @Override
     public Page<CommentInfo> findCommentOnPostWithoutReply(Long postId, Pageable pageable) {
         return commentJpaRepository.findCommentByPostIdAndStatusNotAndParentIsNullOrderByIdDesc(postId, DELETED, pageable)
                                    .map(Comment::toInfo);
     }
 
+    @Override
     public List<CommentInfo> findReplyOnComment(Long postId, List<CommentInfo> parent) {
         List<Long> parentIds = parent.stream()
                                      .map(CommentInfo::getId)
@@ -40,6 +52,7 @@ public class CommentRepositoryImpl {
                                    .toList();
     }
 
+    @Override
     public CommentInfo saveCommentOnPost(LifeLogUser lifeLogUser, Long postId, CommentInfo commentInfo) {
         return commentJpaRepository.save(Comment.builder()
                                                 .user(User.ref(lifeLogUser.sub()))
@@ -49,6 +62,7 @@ public class CommentRepositoryImpl {
                                    .toInfo();
     }
 
+    @Override
     public CommentInfo saveCommentOnComment(LifeLogUser lifeLogUser, Long postId, CommentInfo commentInfo) {
         return commentJpaRepository.save(Comment.builder()
                                                 .user(User.ref(lifeLogUser.sub()))
@@ -59,10 +73,12 @@ public class CommentRepositoryImpl {
                                    .toInfo();
     }
 
+    @Override
     public boolean updateCommentOnPost(CommentInfo commentInfo) {
         return commentJpaRepository.updateCommentOnPost(commentInfo.getId(), commentInfo.getContent(), UPDATED) > 0;
     }
 
+    @Override
     public boolean deleteCommentOnPost(Long commentId) {
         return commentJpaRepository.deleteComment(commentId, DELETED) > 0;
     }

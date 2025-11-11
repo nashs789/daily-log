@@ -5,6 +5,7 @@ import com.nashs.daily_log.domain.post.info.CommentInfo;
 import com.nashs.daily_log.infra.post.entity.Comment;
 import com.nashs.daily_log.infra.post.entity.Comment.CommentStatus;
 import com.nashs.daily_log.infra.post.entity.Post;
+import com.nashs.daily_log.infra.post.exception.CommentInfraException;
 import com.nashs.daily_log.infra.post.repository.CommentJpaRepository;
 import com.nashs.daily_log.infra.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
@@ -19,10 +20,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
+import static com.nashs.daily_log.infra.post.exception.CommentInfraException.CommentInfraExceptionCode.NO_SUCH_COMMENT;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +36,48 @@ class CommentRepositoryImplUnitTest {
 
     @InjectMocks
     private CommentRepositoryImpl commentRepository;
+
+    @Test
+    @DisplayName("Unit: 단일 댓글 조회")
+    void findCommentById() {
+        // given
+        final Long COMMENT_ID = 1L;
+        final String USER_SUB = "user";
+        Comment comment = Comment.builder()
+                                 .id(COMMENT_ID)
+                                 .user(User.ref(USER_SUB))
+                                 .post(Post.ref(1L, USER_SUB))
+                                 .build();
+
+        when(commentJpaRepository.findById(anyLong()))
+                .thenReturn(Optional.of(comment));
+
+        // when
+        CommentInfo commentInfo = commentRepository.findById(COMMENT_ID);
+
+        // then
+        assertThat(commentInfo)
+                .isNotNull()
+                .extracting(CommentInfo::getId)
+                .isEqualTo(COMMENT_ID);
+    }
+
+    @Test
+    @DisplayName("Unit: 존재하지 않는 댓글 조회")
+    void findNotExistedCommentById() {
+        // given
+        final Long NOT_EXISTED_COMMENT_ID = 999_999_999L;
+
+        doThrow(new CommentInfraException(NO_SUCH_COMMENT))
+                .when(commentJpaRepository)
+                .findById(anyLong());
+
+        // when & then
+        assertThatThrownBy(() -> commentRepository.findById(NOT_EXISTED_COMMENT_ID))
+                .isInstanceOf(CommentInfraException.class);
+        verify(commentJpaRepository).findById(anyLong());
+        verifyNoMoreInteractions(commentJpaRepository);
+    }
 
     @Test
     @DisplayName("Unit: 게시글에 작성된 댓글 조회")

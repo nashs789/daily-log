@@ -108,18 +108,21 @@ class PostServiceUnitTest {
         LifeLogUser lifeLogUser = LifeLogUser.builder()
                                              .sub("user1")
                                              .build();
+        PostInfo savedPostInfo = PostInfo.builder()
+                                         .userInfo(UserInfo.builder()
+                                                           .sub("user2")
+                                                           .build())
+                                         .build();
         PostInfo postInfo = PostInfo.builder()
-                                    .userInfo(UserInfo.builder()
-                                                      .sub("user2")
-                                                      .build())
+                                    .id(1L)
                                     .build();
 
         when(postRepository.findPostById(anyLong()))
-                .thenReturn(postInfo);
+                .thenReturn(savedPostInfo);
 
         // when
         PostDomainException ex = assertThrows(PostDomainException.class, () ->
-                postService.updatePostById(lifeLogUser, PostInfo.builder().id(1L).build())
+                postService.updatePostById(lifeLogUser, postInfo)
         );
 
         // then

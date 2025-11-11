@@ -5,6 +5,7 @@ import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.post.info.CommentInfo;
 import com.nashs.daily_log.domain.post.info.PostInfo;
 import com.nashs.daily_log.domain.user.info.UserInfo;
+import com.nashs.daily_log.infra.post.exception.CommentInfraException;
 import com.nashs.daily_log.infra.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import java.util.List;
 import static com.nashs.daily_log.infra.post.entity.Comment.CommentStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -49,6 +51,40 @@ class CommentRepositoryImplTest extends ContainerTest {
 
     @Autowired
     private CommentRepositoryImpl commentRepository;
+
+    @Test
+    @DisplayName("단일 댓글 조회")
+    void findCommentById() {
+        // given
+        final Long COMMENT_ID = 1L;
+
+        // when
+        CommentInfo commentInfo = commentRepository.findById(COMMENT_ID);
+
+        // then
+        assertThat(commentInfo)
+                .isNotNull()
+                .extracting(CommentInfo::getId)
+                .isEqualTo(COMMENT_ID);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 댓글 조회")
+    void findNotExistedCommentById() {
+        // given
+        final Long NOT_EXISTED_COMMENT_ID = 999_999_999L;
+
+        // when
+        CommentInfraException ex = assertThrows(CommentInfraException.class, () -> {
+            commentRepository.findById(NOT_EXISTED_COMMENT_ID);
+        });
+
+        // then
+        assertThat(ex)
+                .isInstanceOf(CommentInfraException.class)
+                .extracting(CommentInfraException::getStatus)
+                .isEqualTo(NOT_FOUND);
+    }
 
     @Test
     @DisplayName("게시글에 작성된 댓글 조회")
