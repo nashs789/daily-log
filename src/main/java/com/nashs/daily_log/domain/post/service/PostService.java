@@ -10,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import static com.nashs.daily_log.domain.post.exception.PostDomainException.PostDomainExceptionCode.FAIL_UPDATE_POST;
 import static com.nashs.daily_log.domain.post.exception.PostDomainException.PostDomainExceptionCode.NOT_POST_OWNER;
 
@@ -39,7 +37,7 @@ public class PostService {
     }
 
     public void updatePostById(LifeLogUser lifeLogUser, PostInfo postInfo) {
-        checkIsOwner(lifeLogUser, postInfo.getId());
+        checkIsPostOwner(lifeLogUser, postInfo.getId());
 
         if (!postRepository.updatePostById(postInfo)) {
             throw new PostDomainException(FAIL_UPDATE_POST);
@@ -47,7 +45,7 @@ public class PostService {
     }
 
     public boolean deletePostById(LifeLogUser lifeLogUser, Long postId) {
-        checkIsOwner(lifeLogUser, postId);
+        checkIsPostOwner(lifeLogUser, postId);
 
         return postRepository.deletePostById(postId);
     }
@@ -56,9 +54,8 @@ public class PostService {
      * 요청을 보낸 주체가 게시글의 소유주인지 확인
      * @param lifeLogUser 현재 로그인 유저
      * @param postId 게시글 아이디
-     * @return 게시글 Info 객체
      */
-    private void checkIsOwner(LifeLogUser lifeLogUser, Long postId) {
+    private void checkIsPostOwner(LifeLogUser lifeLogUser, Long postId) {
         PostInfo postInfo = findPostById(postId);
         String postOwner = postInfo.getUserInfo().getSub();
 
