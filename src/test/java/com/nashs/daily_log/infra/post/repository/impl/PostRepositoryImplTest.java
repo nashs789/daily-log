@@ -119,9 +119,7 @@ class PostRepositoryImplTest extends ContainerTest {
         final String USER_SUB = "user1";
         final String TITLE = "new post";
         final String CONTENT = "new post content";
-        UserInfo userInfo = UserInfo.builder()
-                                    .sub(USER_SUB)
-                                    .build();
+        UserInfo userInfo = UserInfo.ref(USER_SUB);
         PostInfo postInfo = PostInfo.builder()
                                     .userInfo(userInfo)
                                     .templateInfo(TemplateInfo.builder()

@@ -70,8 +70,6 @@ class UserRepositoryImplUnitTest {
     @DisplayName("Unit: 신규 유저 저장")
     void saveUser() {
         // given
-        UserInfo userInfo = UserInfo.builder()
-                                    .build();
         User user = User.builder()
                         .sub("user1")
                         .email("test@email.com")
@@ -81,7 +79,8 @@ class UserRepositoryImplUnitTest {
                 .thenReturn(user);
 
         // when
-        UserInfo savedUserInfo = userRepository.saveSocialUser(userInfo);
+        UserInfo savedUserInfo = userRepository.saveSocialUser(UserInfo.builder()
+                                                                       .build());
 
         // then
         assertNotNull(savedUserInfo);
@@ -96,9 +95,7 @@ class UserRepositoryImplUnitTest {
     void findUserBySub() {
         // given
         final String USER_SUB = "user1";
-        User user = User.builder()
-                        .sub(USER_SUB)
-                        .build();
+        User user = User.ref(USER_SUB);
 
         when(userJpaRepository.findBySub(USER_SUB))
                 .thenReturn(Optional.of(user));

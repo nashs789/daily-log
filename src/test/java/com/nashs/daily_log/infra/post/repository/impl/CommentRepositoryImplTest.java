@@ -146,10 +146,8 @@ class CommentRepositoryImplTest extends ContainerTest {
         // given
         final Long POST_ID = 1L;
         final String USER_SUB = "user1";
-        LifeLogUser lifeLogUser = LifeLogUser.builder()
-                                             .sub(USER_SUB)
-                                             .build();
-        UserInfo userInfo = User.ref(lifeLogUser.sub())
+        LifeLogUser lifeLogUser = LifeLogUser.ref(USER_SUB);
+        UserInfo userInfo = User.ref(USER_SUB)
                                 .toInfo();
         PostInfo postInfo = PostInfo.builder()
                                     .id(POST_ID)
@@ -183,9 +181,7 @@ class CommentRepositoryImplTest extends ContainerTest {
         final Long COMMENT_ID = 1L;
         final Long POST_ID = 1L;
         final String USER_SUB = "user1";
-        LifeLogUser lifeLogUser = LifeLogUser.builder()
-                                             .sub(USER_SUB)
-                                             .build();
+        LifeLogUser lifeLogUser = LifeLogUser.ref(USER_SUB);
         UserInfo userInfo = User.ref(lifeLogUser.sub())
                                 .toInfo();
         PostInfo postInfo = PostInfo.builder()
@@ -264,10 +260,6 @@ class CommentRepositoryImplTest extends ContainerTest {
                                                    .findFirst()
                                                    .orElseThrow();
         Long commentId = commentInfo.getId();
-
-        for (CommentInfo info : commentRepository.findCommentOnPostWithoutReply(POST_ID, pageable)) {
-            System.out.println(info);
-        }
 
         // when
         boolean res = commentRepository.deleteCommentOnPost(commentId);

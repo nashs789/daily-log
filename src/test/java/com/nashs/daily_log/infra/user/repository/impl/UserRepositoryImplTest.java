@@ -57,9 +57,7 @@ class UserRepositoryImplTest extends ContainerTest {
         final String NOT_EXISTED_USER_SUB = "user4";
 
         // when
-        UserInfo userInfo = userRepository.saveSocialUser(UserInfo.builder()
-                                                                  .sub(NOT_EXISTED_USER_SUB)
-                                                                  .build());
+        UserInfo userInfo = userRepository.saveSocialUser(UserInfo.ref(NOT_EXISTED_USER_SUB));
         // then
         assertThat(userInfo)
                 .isNotNull()

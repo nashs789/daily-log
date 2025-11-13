@@ -142,14 +142,11 @@ class CommentRepositoryImplUnitTest {
         // given
         final Long POST_ID = 1L;
         final String USER = "user";
-        LifeLogUser lifeLogUser = LifeLogUser.builder().sub(USER).build();
+        LifeLogUser lifeLogUser = LifeLogUser.ref(USER);
         CommentInfo commentInfo = CommentInfo.builder()
                                              .build();
-        User user = User.ref(lifeLogUser.sub());
-        Post post = Post.builder()
-                        .id(POST_ID)
-                        .user(user)
-                        .build();
+        User user = User.ref(USER);
+        Post post = Post.ref(POST_ID, USER);
         Comment savedComment = Comment.builder()
                                       .user(user)
                                       .post(post)
@@ -177,15 +174,12 @@ class CommentRepositoryImplUnitTest {
         final Long POST_ID = 1L;
         final Long PARENT_ID = 10L;
         final String USER = "user";
-        LifeLogUser lifeLogUser = LifeLogUser.builder().sub(USER).build();
-        User user = User.ref(lifeLogUser.sub());
+        LifeLogUser lifeLogUser = LifeLogUser.ref(USER);
+        User user = User.ref(USER);
         CommentInfo commentInfo = CommentInfo.builder()
                                              .userInfo(user.toInfo())
                                              .build();
-        Post post = Post.builder()
-                        .id(POST_ID)
-                        .user(user)
-                        .build();
+        Post post = Post.ref(POST_ID, USER);
         Comment parent = Comment.builder()
                                 .id(PARENT_ID)
                                 .user(user)

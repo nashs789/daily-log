@@ -52,17 +52,10 @@ public class Template extends Timestamp {
     @Column(name = "params", columnDefinition = "jsonb", nullable = false)
     private Map<String, String> params;
 
-    public TemplateInfo toInfo() {
-        return TemplateInfo.builder()
-                           .id(id)
-                           .userInfo(user.toInfo())
-                           .title(title)
-                           .content(content)
-                           .rawContent(rawContent)
-                           .discord(discord)
-                           .slack(slack)
-                           .params(params)
-                           .build();
+    public static Template ref(Long templateId) {
+        return Template.builder()
+                       .id(templateId)
+                       .build();
     }
 
     public static Template fromInfo(TemplateInfo info) {
@@ -80,5 +73,18 @@ public class Template extends Timestamp {
                        .slack(info.getSlack())
                        .params(info.getParams())
                        .build();
+    }
+
+    public TemplateInfo toInfo() {
+        return TemplateInfo.builder()
+                           .id(id)
+                           .userInfo(user.toInfo())
+                           .title(title)
+                           .content(content)
+                           .rawContent(rawContent)
+                           .discord(discord)
+                           .slack(slack)
+                           .params(params)
+                           .build();
     }
 }

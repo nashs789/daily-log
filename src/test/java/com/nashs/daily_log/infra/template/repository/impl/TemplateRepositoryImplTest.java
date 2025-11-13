@@ -102,9 +102,7 @@ class TemplateRepositoryImplTest extends ContainerTest {
         // given
         final String USER_SUB = "user1";
         TemplateInfo templateInfo = TemplateInfo.builder()
-                                                .userInfo(UserInfo.builder()
-                                                                  .sub(USER_SUB)
-                                                                  .build())
+                                                .userInfo(UserInfo.ref(USER_SUB))
                                                 .title("test title for not null condition")
                                                 .content("test content for not null condition")
                                                 .rawContent("test rawContent for not null condition")

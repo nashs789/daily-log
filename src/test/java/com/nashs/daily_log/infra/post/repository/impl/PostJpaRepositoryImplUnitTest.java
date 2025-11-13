@@ -161,9 +161,7 @@ class PostJpaRepositoryImplUnitTest {
     void savePost() {
         // given
         final String USER_SUB = "user";
-        User user = User.builder()
-                        .sub(USER_SUB)
-                        .build();
+        User user = User.ref(USER_SUB);
         PostInfo postInfo = PostInfo.builder()
                                     .userInfo(user.toInfo())
                                     .templateInfo(TemplateInfo.builder()

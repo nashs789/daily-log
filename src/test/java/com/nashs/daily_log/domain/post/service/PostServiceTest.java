@@ -67,9 +67,7 @@ class PostServiceTest extends ContainerTest {
     void findMyAllNormalPost() {
         // given
         Pageable pageable = PageRequest.of(0, 10);
-        LifeLogUser lifeLogUser = LifeLogUser.builder()
-                                             .sub("user1")
-                                             .build();
+        LifeLogUser lifeLogUser = LifeLogUser.ref("user1");
 
         // when
         Page<PostInfo> myAllPost = postService.findMyAllPost(lifeLogUser, pageable);
@@ -86,14 +84,13 @@ class PostServiceTest extends ContainerTest {
     @DisplayName("본인 게시글 아닌 게시글 수정 시도")
     void tryUpdateNotOwnedPost() {
         // given
-        final String USER_SUB = "user1";
+        final String LOGIN_USER = "user1";
+        final String POST_OWNER = "user2";
         Pageable pageable = PageRequest.of(0, 10);
-        LifeLogUser lifeLogUser = LifeLogUser.builder()
-                                             .sub(USER_SUB)
-                                             .build();
+        LifeLogUser lifeLogUser = LifeLogUser.ref(LOGIN_USER);
         PostInfo postInfo = postService.findAllPost(pageable)
                                        .stream()
-                                       .filter(e -> "user2".equals(e.getUserInfo().getSub()))
+                                       .filter(e -> POST_OWNER.equals(e.getUserInfo().getSub()))
                                        .findFirst()
                                        .orElseGet(() -> PostInfo.builder().build());
 
@@ -108,14 +105,15 @@ class PostServiceTest extends ContainerTest {
     @DisplayName("본인 게시글 아닌 게시글 삭제 시도")
     void tryDeleteNotOwnedPost() {
         // given
-        final String USER_SUB = "user1";
+        final String LOGIN_USER = "user1";
+        final String POST_OWNER = "user2";
         Pageable pageable = PageRequest.of(0, 10);
         LifeLogUser lifeLogUser = LifeLogUser.builder()
-                                             .sub(USER_SUB)
+                                             .sub(LOGIN_USER)
                                              .build();
         Long postId = postService.findAllPost(pageable)
                                  .stream()
-                                 .filter(e -> "user2".equals(e.getUserInfo().getSub()))
+                                 .filter(e -> POST_OWNER.equals(e.getUserInfo().getSub()))
                                  .findFirst()
                                  .orElseThrow()
                                  .getId();

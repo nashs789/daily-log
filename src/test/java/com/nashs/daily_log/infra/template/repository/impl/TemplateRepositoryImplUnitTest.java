@@ -81,12 +81,8 @@ class TemplateRepositoryImplUnitTest {
     void findAllTemplate() {
         // given
         final String USER_SUB = "user1";
-        User user = User.builder()
-                        .sub(USER_SUB)
-                        .build();
-        LifeLogUser lifeLogUser = LifeLogUser.builder()
-                                      .sub(USER_SUB)
-                                      .build();
+        User user = User.ref(USER_SUB);
+        LifeLogUser lifeLogUser = LifeLogUser.ref(USER_SUB);
         List<Template> returnTemplate = List.of(
                 Template.builder()
                         .user(user)
@@ -117,9 +113,7 @@ class TemplateRepositoryImplUnitTest {
     void saveTemplate() {
         // given
         final String USER_SUB = "user1";
-        User user = User.builder()
-                        .sub(USER_SUB)
-                        .build();
+        User user = User.ref(USER_SUB);
         TemplateInfo templateInfo = TemplateInfo.builder()
                                                 .userInfo(user.toInfo())
                                                 .build();
@@ -174,9 +168,7 @@ class TemplateRepositoryImplUnitTest {
     void deleteTemplate() {
         // given
         final Long TEMPLATE_ID = 1L;
-        Template template = Template.builder()
-                                    .id(TEMPLATE_ID)
-                                    .build();
+        Template template = Template.ref(TEMPLATE_ID);
 
         when(templateJpaRepository.findById(TEMPLATE_ID))
                 .thenReturn(Optional.of(template));
