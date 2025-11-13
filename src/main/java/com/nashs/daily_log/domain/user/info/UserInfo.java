@@ -17,6 +17,12 @@ public class UserInfo {
     private String username;
     private String picture;
 
+    public static UserInfo ref(String sub) {
+        return UserInfo.builder()
+                       .sub(sub)
+                       .build();
+    }
+
     public LifeLogUser toLifeLogUser() {
         return LifeLogUser.builder()
                           .sub(sub)
