@@ -9,11 +9,13 @@ import java.util.List;
 
 @Getter
 public class PageUtils<T> {
+    private static final int DEFAULT_PAGE_SIZE = 10;
+
     private Page<T> page;
     private final Pageable pageable;
 
-    public PageUtils(int page, int size) {
-        pageable = PageRequest.of(Math.max(page - 1, 0), size);
+    public PageUtils(int page) {
+        pageable = PageRequest.of(Math.max(page - 1, 0), DEFAULT_PAGE_SIZE);
     }
 
     public void setupContent(Page<T> page) {

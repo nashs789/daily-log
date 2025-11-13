@@ -64,6 +64,8 @@ public class Comment extends Timestamp {
                           .parent(Objects.nonNull(parent) ? parent.getId() : null)
                           .content(content)
                           .status(status)
+                          .created(getCreated())
+                          .modified(getModified())
                           .build();
     }
 

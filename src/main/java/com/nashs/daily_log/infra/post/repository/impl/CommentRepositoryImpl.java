@@ -53,20 +53,24 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public CommentInfo saveCommentOnPost(LifeLogUser lifeLogUser, Long postId, CommentInfo commentInfo) {
+    public CommentInfo saveCommentOnPost(CommentInfo commentInfo) {
+        final String userSub = commentInfo.getUserInfo().getSub();
+
         return commentJpaRepository.save(Comment.builder()
-                                                .user(User.ref(lifeLogUser.sub()))
-                                                .post(Post.ref(postId, lifeLogUser.sub()))
+                                                .user(User.ref(userSub))
+                                                .post(Post.ref(commentInfo.getPostInfo().getId(), userSub))
                                                 .content(commentInfo.getContent())
                                                 .build())
                                    .toInfo();
     }
 
     @Override
-    public CommentInfo saveCommentOnComment(LifeLogUser lifeLogUser, Long postId, CommentInfo commentInfo) {
+    public CommentInfo saveCommentOnComment(CommentInfo commentInfo) {
+        final String userSub = commentInfo.getUserInfo().getSub();
+
         return commentJpaRepository.save(Comment.builder()
-                                                .user(User.ref(lifeLogUser.sub()))
-                                                .post(Post.ref(postId, lifeLogUser.sub()))
+                                                .user(User.ref(userSub))
+                                                .post(Post.ref(commentInfo.getPostInfo().getId(), userSub))
                                                 .content(commentInfo.getContent())
                                                 .parent(Comment.ref(commentInfo.getParent()))
                                                 .build())

@@ -29,6 +29,14 @@ public class CommentService {
         return CommentOnPostInfo.of(commentWithoutReply, reply);
     }
 
+    public CommentInfo saveCommentOnPost(CommentInfo commentInfo) {
+        return commentRepository.saveCommentOnPost(commentInfo);
+    }
+
+    public CommentInfo saveReplyOnComment(CommentInfo commentInfo) {
+        return commentRepository.saveCommentOnComment(commentInfo);
+    }
+
     public boolean updateCommentOnPost(LifeLogUser lifeLogUser, CommentInfo commentInfo) {
         checkIsCommentOwner(lifeLogUser, commentInfo);
 

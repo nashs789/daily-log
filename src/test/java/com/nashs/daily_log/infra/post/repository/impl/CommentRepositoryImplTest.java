@@ -146,7 +146,6 @@ class CommentRepositoryImplTest extends ContainerTest {
         // given
         final Long POST_ID = 1L;
         final String USER_SUB = "user1";
-        LifeLogUser lifeLogUser = LifeLogUser.ref(USER_SUB);
         UserInfo userInfo = User.ref(USER_SUB)
                                 .toInfo();
         PostInfo postInfo = PostInfo.builder()
@@ -161,7 +160,7 @@ class CommentRepositoryImplTest extends ContainerTest {
                                              .build();
 
         // when
-        CommentInfo savedCommentOnPost = commentRepository.saveCommentOnPost(lifeLogUser, POST_ID, commentInfo);
+        CommentInfo savedCommentOnPost = commentRepository.saveCommentOnPost(commentInfo);
 
         // then
         assertThat(savedCommentOnPost)
@@ -196,7 +195,7 @@ class CommentRepositoryImplTest extends ContainerTest {
                                                .build();
 
         // when
-        CommentInfo savedCommentOnPost = commentRepository.saveCommentOnComment(lifeLogUser, POST_ID, commentOnPost);
+        CommentInfo savedCommentOnPost = commentRepository.saveCommentOnComment(commentOnPost);
 
         // then
         assertThat(savedCommentOnPost)

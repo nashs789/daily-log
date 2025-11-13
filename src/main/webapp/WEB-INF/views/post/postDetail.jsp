@@ -68,131 +68,69 @@
             <section class="post-detail__comments">
                 <h2 class="comments__title">댓글 3</h2>
                 <div class="comment-form">
-                    <textarea class="comment-form__textarea"
+                    <textarea id="comment_textarea"
+                              class="comment-form__textarea"
                               rows="3"
                               placeholder="댓글을 입력하세요. (마크다운 미지원)"></textarea>
                     <div class="comment-form__actions">
                         <span class="comment-form__hint">욕설, 비방 등은 제재될 수 있습니다.</span>
-                        <button type="button" class="comment-form__submit">댓글 등록</button>
+                        <button type="button" id="comment_save_btn" class="comment-form__submit">댓글 등록</button>
                     </div>
                 </div>
 
                 <ul class="comment-list">
-                    <li class="comment">
-                        <div class="comment__header">
-                            <span class="comment__author">Jerry</span>
-                            <span class="comment__dot">·</span>
-                            <span class="comment__date">2025.11.09 10:12</span>
-                        </div>
-                        <div class="comment__body">첫 댓글입니다! 러닝 초보인데 거리/페이스 참고할게요 🙌</div>
-                        <div class="comment__footer">
-                            <button type="button"
-                                    class="comment__reply-btn"
-                                    data-reply-toggle>답글</button>
-
-                            <div class="comment__actions">
-                                <button type="button"
-                                        class="comment__action-btn"
-                                        data-comment-action="edit">수정</button>
-                                <button type="button"
-                                        class="comment__action-btn"
-                                        data-comment-action="delete">삭제</button>
-                                <button type="button"
-                                        class="comment__action-btn comment__action-btn--danger"
-                                        data-comment-action="report">신고</button>
+                    <c:forEach var="comment" items="${comment}">
+                        <li class="comment" data-comment-id="${comment.id}">
+                            <div class="comment__header">
+                                <span class="comment__author">${comment.userInfo.username}</span>
+                                <span class="comment__dot">·</span>
+                                <span class="comment__date"><fmt:formatDate value="${comment.getCreatedTypeDate()}" pattern="yyyy.MM.dd HH:MM" /></span>
                             </div>
-                        </div>
-
-                        <!-- 대댓글 작성폼 (초기엔 숨김) -->
-                        <div class="reply-form is-hidden">
-                            <textarea class="reply-form__textarea"
-                                      rows="2"
-                                      placeholder="답글을 입력하세요."></textarea>
-                            <div class="reply-form__actions">
-                                <button type="button"
-                                        class="reply-form__cancel"
-                                        data-reply-cancel>취소</button>
-                                <button type="button"
-                                        class="reply-form__submit">답글 등록</button>
-                            </div>
-                        </div>
-
-                        <!-- 대댓글 리스트 -->
-                        <ul class="reply-list">
-                            <li class="reply">
-                                <div class="reply__header">
-                                    <span class="reply__author">인복</span>
-                                    <span class="reply__dot">·</span>
-                                    <span class="reply__date">2025.11.09 11:05</span>
+                            <div class="comment__body">${comment.content}</div>
+                            <div class="comment__footer">
+                                <button type="button" class="comment__reply-btn" data-reply-toggle>답글</button>
+                                <div class="comment__actions">
+                                    <button type="button" class="comment__action-btn" data-comment-action="edit">수정</button>
+                                    <button type="button" class="comment__action-btn" data-comment-action="delete">삭제</button>
+                                    <button type="button" class="comment__action-btn comment__action-btn--danger" data-comment-action="report">신고</button>
                                 </div>
-                                <div class="reply__body">감사합니다! 천천히 거리 늘려가시면 금방 적응하실 거예요 💪</div>
-                                <div class="reply__footer">
-                                    <div class="reply__actions">
-                                        <button type="button"
-                                                class="reply__action-btn"
-                                                data-comment-action="edit">수정</button>
-                                        <button type="button"
-                                                class="reply__action-btn"
-                                                data-comment-action="delete">삭제</button>
-                                        <button type="button"
-                                                class="reply__action-btn reply__action-btn--danger"
-                                                data-comment-action="report">신고</button>
+                            </div>
+                            <div class="reply-form is-hidden">
+                                <textarea class="reply-form__textarea" rows="2" placeholder="답글을 입력하세요."></textarea>
+                                <div class="reply-form__actions">
+                                    <button type="button" class="reply-form__cancel" data-reply-cancel>취소</button>
+                                    <button type="button" class="reply-form__submit" data-reply-submit>답글 등록</button>
+                                </div>
+                            </div>
+                        </li>
+                        <c:forEach var="re" items="${reply[comment.id]}">
+                            <ul class="reply-list">
+                                <li class="reply">
+                                    <div class="reply__header">
+                                        <span class="reply__author">${re.userInfo.username}</span>
+                                        <span class="reply__dot">·</span>
+                                        <span class="reply__date"><fmt:formatDate value="${re.getCreatedTypeDate()}" pattern="yyyy.MM.dd HH:MM" /></span>
                                     </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- 댓글 2 (대댓글 없는 경우) -->
-                    <li class="comment">
-                        <div class="comment__header">
-                            <span class="comment__author">Runner</span>
-                            <span class="comment__dot">·</span>
-                            <span class="comment__date">2025.11.09 12:30</span>
-                        </div>
-                        <div class="comment__body">한내천 코스 좋죠! 저도 자주 뛰어요.</div>
-                        <div class="comment__footer">
-                            <button type="button"
-                                    class="comment__reply-btn"
-                                    data-reply-toggle>답글</button>
-
-                            <div class="comment__actions">
-                                <button type="button"
-                                        class="comment__action-btn"
-                                        data-comment-action="edit">수정</button>
-                                <button type="button"
-                                        class="comment__action-btn"
-                                        data-comment-action="delete">삭제</button>
-                                <button type="button"
-                                        class="comment__action-btn comment__action-btn--danger"
-                                        data-comment-action="report">신고</button>
-                            </div>
-                        </div>
-
-                        <div class="reply-form is-hidden">
-                            <textarea class="reply-form__textarea"
-                                      rows="2"
-                                      placeholder="답글을 입력하세요."></textarea>
-                            <div class="reply-form__actions">
-                                <button type="button"
-                                        class="reply-form__cancel"
-                                        data-reply-cancel>취소</button>
-                                <button type="button"
-                                        class="reply-form__submit">답글 등록</button>
-                            </div>
-                        </div>
-
-                        <ul class="reply-list"><!-- 아직 대댓글 없음 --></ul>
-                    </li>
+                                    <div class="reply__body">${re.content}</div>
+                                    <div class="reply__footer">
+                                        <div class="reply__actions">
+                                            <button type="button" class="reply__action-btn" data-comment-action="edit">수정</button>
+                                            <button type="button" class="reply__action-btn" data-comment-action="delete">삭제</button>
+                                            <button type="button" class="reply__action-btn reply__action-btn--danger" data-comment-action="report">신고</button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </c:forEach>
+                    </c:forEach>
                 </ul>
             </section>
-
         </section>
     </main>
 </div>
-
-<!-- 푸터 -->
 <jsp:include page="${lifelog.app.jsp}/layout/footer.jsp"/>
+</body>
+</html>
 
 <script src="${lifelog.app.script.marked}"></script>
 <script src="${lifelog.app.script.safeGuard}"></script>
@@ -200,14 +138,15 @@
 <script src="${lifelog.app.js}/common/common.js"></script>
 
 <script>
-    // ===== 답글 토글 =====
     $(document).on('click', '[data-reply-toggle]', function () {
         const $comment = $(this).closest('.comment');
+
         $comment.find('.reply-form').toggleClass('is-hidden');
     });
 
     $(document).on('click', '[data-reply-cancel]', function () {
         const $comment = $(this).closest('.comment');
+
         $comment.find('.reply-form').addClass('is-hidden');
     });
 
@@ -258,26 +197,81 @@
         }
     });
 
-    // ===== 댓글/대댓글: 수정·삭제·신고 버튼 클릭 핸들러 (현재는 알림만) =====
     $(document).on('click', '[data-comment-action]', function () {
         const action = $(this).data('comment-action'); // edit | delete | report
         const $commentBlock = $(this).closest('.comment, .reply');
 
         if (action === 'edit') {
             alert('수정 기능은 나중에 구현 예정입니다.');
-            // TODO: 편집모드 토글, textarea로 바꾸기 등
         } else if (action === 'delete') {
             if (confirm('정말 삭제하시겠어요?')) {
-                alert('삭제 기능은 나중에 API 연동 후 구현할 예정입니다.');
-                // TODO: DELETE API 호출 + DOM에서 remove
             }
         } else if (action === 'report') {
             if (confirm('이 댓글을 신고하시겠어요?')) {
                 alert('신고 기능은 나중에 API 연동 후 구현할 예정입니다.');
-                // TODO: 신고 API 호출
             }
         }
     });
+
+    $(document).on('click', '[data-reply-submit]', function () {
+        const { $form, $textarea, parentId } = getReplyContext(this);
+        const content = ($textarea.val() || '').trim();
+
+        if (!parentId) {
+            alert('부모 댓글 ID를 확인할 수 없습니다.');
+            return;
+        }
+
+        if (!content) {
+            alert('내용을 입력하세요.');
+            $textarea.focus();
+            return;
+        }
+
+        const params = {
+            method: 'PUT',
+            params: {
+                parentId: parentId,
+                postId: '${postId}',
+                content: content
+            }
+        }
+
+        callApi('${lifelog.app.base}/api/comment/reply', params)
+            .then(res => {
+                alert('저장 되었습니다.');
+                location.reload();
+            });
+    });
+
+    $('#comment_save_btn').on('click', function() {
+        const comment = $('#comment_textarea').val();
+        const params = {
+            method: 'PUT',
+            params: {
+                postId: '${postId}',
+                content: comment
+            }
+        }
+
+        callApi('${lifelog.app.base}/api/comment', params)
+            .then(res => {
+                alert('저장 되었습니다.');
+                location.reload();
+            });
+    });
+
+    function getReplyContext(targetEl) {
+        const $form = $(targetEl).closest('.reply-form');
+        // 부모 댓글 범위
+        const $scope = $form.closest('[data-comment-id]');
+
+        return {
+            $form,
+            $textarea: $form.find('.reply-form__textarea'),
+            parentId: Number($scope.data('commentId')),
+        };
+    }
 
     function renderPreview() {
         var raw = $('#templateRaw').text().trim();
@@ -291,5 +285,3 @@
 
     renderPreview();
 </script>
-</body>
-</html>

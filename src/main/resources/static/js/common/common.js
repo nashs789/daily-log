@@ -28,7 +28,7 @@
         return $.ajax(ajaxOptions)
                 .fail(function (xhr) {
                     if (xhr.responseJSON) {
-                        alert(xhr.responseJSON.msg);
+                        alert('요청에 실패하였습니다.');
                     }
                 });
     }

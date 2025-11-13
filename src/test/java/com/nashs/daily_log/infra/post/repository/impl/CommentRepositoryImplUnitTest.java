@@ -1,6 +1,5 @@
 package com.nashs.daily_log.infra.post.repository.impl;
 
-import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.post.info.CommentInfo;
 import com.nashs.daily_log.infra.post.entity.Comment;
 import com.nashs.daily_log.infra.post.entity.Comment.CommentStatus;
@@ -25,7 +24,8 @@ import java.util.Optional;
 import static com.nashs.daily_log.infra.post.exception.CommentInfraException.CommentInfraExceptionCode.NO_SUCH_COMMENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -142,11 +142,12 @@ class CommentRepositoryImplUnitTest {
         // given
         final Long POST_ID = 1L;
         final String USER = "user";
-        LifeLogUser lifeLogUser = LifeLogUser.ref(USER);
-        CommentInfo commentInfo = CommentInfo.builder()
-                                             .build();
         User user = User.ref(USER);
         Post post = Post.ref(POST_ID, USER);
+        CommentInfo commentInfo = CommentInfo.builder()
+                                             .userInfo(user.toInfo())
+                                             .postInfo(post.toInfo())
+                                             .build();
         Comment savedComment = Comment.builder()
                                       .user(user)
                                       .post(post)
@@ -156,7 +157,7 @@ class CommentRepositoryImplUnitTest {
                 .thenReturn(savedComment);
 
         // when
-        CommentInfo savedCommentInfo = commentRepository.saveCommentOnPost(lifeLogUser, POST_ID, commentInfo);
+        CommentInfo savedCommentInfo = commentRepository.saveCommentOnPost(commentInfo);
 
         // then
         assertThat(savedCommentInfo)
@@ -174,12 +175,12 @@ class CommentRepositoryImplUnitTest {
         final Long POST_ID = 1L;
         final Long PARENT_ID = 10L;
         final String USER = "user";
-        LifeLogUser lifeLogUser = LifeLogUser.ref(USER);
         User user = User.ref(USER);
+        Post post = Post.ref(POST_ID, USER);
         CommentInfo commentInfo = CommentInfo.builder()
                                              .userInfo(user.toInfo())
+                                             .postInfo(post.toInfo())
                                              .build();
-        Post post = Post.ref(POST_ID, USER);
         Comment parent = Comment.builder()
                                 .id(PARENT_ID)
                                 .user(user)
@@ -195,7 +196,7 @@ class CommentRepositoryImplUnitTest {
                 .thenReturn(savedComment);
 
         // when
-        CommentInfo savedCommentInfo = commentRepository.saveCommentOnComment(lifeLogUser, POST_ID, commentInfo);
+        CommentInfo savedCommentInfo = commentRepository.saveCommentOnComment(commentInfo);
 
         // then
         assertThat(savedCommentInfo)

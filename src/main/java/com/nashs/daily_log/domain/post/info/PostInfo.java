@@ -4,6 +4,7 @@ import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.common.utils.DateUtils;
 import com.nashs.daily_log.domain.template.info.TemplateInfo;
 import com.nashs.daily_log.domain.user.info.UserInfo;
+import com.nashs.daily_log.infra.post.entity.Post;
 import com.nashs.daily_log.infra.post.entity.Post.PostStatus;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,12 @@ public class PostInfo {
     private PostStatus status;
     private LocalDateTime created;
     private LocalDateTime modified;
+
+    public static PostInfo ref(Long postId) {
+        return PostInfo.builder()
+                       .id(postId)
+                       .build();
+    }
 
     public TemplateInfo getTemplateInfo() {
         return Objects.nonNull(templateInfo) ? templateInfo : null;

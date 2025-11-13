@@ -2,7 +2,10 @@ package com.nashs.daily_log.api.post.controller;
 
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.common.utils.PageUtils;
+import com.nashs.daily_log.domain.post.info.CommentInfo;
+import com.nashs.daily_log.domain.post.info.CommentOnPostInfo;
 import com.nashs.daily_log.domain.post.info.PostInfo;
+import com.nashs.daily_log.domain.post.service.CommentService;
 import com.nashs.daily_log.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +23,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping
     public ModelAndView postPage(
             @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size,
             ModelAndView mv
     ) {
-        PageUtils<PostInfo> pageUtils = new PageUtils<>(page, size);
+        PageUtils<PostInfo> pageUtils = new PageUtils<>(page);
 
         pageUtils.setupContent(postService.findAllPost(pageUtils.getPageable()));
 
@@ -42,11 +45,10 @@ public class PostController {
     @GetMapping("/myPost")
     public ModelAndView myPostPage(
             @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size,
             ModelAndView mv,
             LifeLogUser lifeLogUser
     ) {
-        PageUtils<PostInfo> pageUtils = new PageUtils<>(page, size);
+        PageUtils<PostInfo> pageUtils = new PageUtils<>(page);
 
         pageUtils.setupContent(postService.findMyAllPost(lifeLogUser, pageUtils.getPageable()));
 
@@ -61,9 +63,19 @@ public class PostController {
     @GetMapping("/{postId}")
     public ModelAndView postDetailPage(
             @PathVariable Long postId,
+            @RequestParam(name = "page", defaultValue = "1") int page,
             ModelAndView mv
     ) {
+        PageUtils<CommentInfo> pageUtils = new PageUtils<>(page);
+
+        CommentOnPostInfo allCommentOnPost = commentService.findAllCommentOnPost(postId, pageUtils.getPageable());
+
+        pageUtils.setupContent(allCommentOnPost.getComment());
+
         mv.addObject("post", postService.findPostById(postId));
+        mv.addObject("comment", allCommentOnPost.getCommentList());
+        mv.addObject("reply", allCommentOnPost.getReply());
+        mv.addObject("page", pageUtils);
 
         mv.setViewName("post/postDetail");
 
