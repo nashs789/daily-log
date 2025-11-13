@@ -82,10 +82,9 @@ class TemplateRepositoryImplTest extends ContainerTest {
     void findAllTemplate() {
         // given
         final String USER_SUB = "user1";
-        UserInfo userInfo = userRepository.findBySub(USER_SUB);
 
         // when
-        List<TemplateInfo> allTemplate = templateRepository.findAllTemplate(userInfo.toLifeLogUser());
+        List<TemplateInfo> allTemplate = templateRepository.findAllTemplate(USER_SUB);
 
         // then
         assertNotNull(allTemplate);

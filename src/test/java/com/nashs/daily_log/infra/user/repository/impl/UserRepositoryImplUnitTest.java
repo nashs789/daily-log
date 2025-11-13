@@ -97,7 +97,7 @@ class UserRepositoryImplUnitTest {
         final String USER_SUB = "user1";
         User user = User.ref(USER_SUB);
 
-        when(userJpaRepository.findBySub(USER_SUB))
+        when(userJpaRepository.findById(USER_SUB))
                 .thenReturn(Optional.of(user));
 
         // when
@@ -106,7 +106,7 @@ class UserRepositoryImplUnitTest {
         // then
         assertNotNull(userInfo);
         assertEquals(user.getSub(), userInfo.getSub());
-        verify(userJpaRepository).findBySub(USER_SUB);
+        verify(userJpaRepository).findById(USER_SUB);
         verifyNoMoreInteractions(userJpaRepository);
     }
 
@@ -118,12 +118,12 @@ class UserRepositoryImplUnitTest {
 
         doThrow(new UserInfraException(NO_SUCH_USER))
                 .when(userJpaRepository)
-                .findBySub(NOT_EXISTED_USER_SUB);
+                .findById(NOT_EXISTED_USER_SUB);
 
         // when & then
         assertThatThrownBy(() -> userRepository.findBySub(NOT_EXISTED_USER_SUB))
                 .isInstanceOf(UserInfraException.class);
-        verify(userJpaRepository).findBySub(NOT_EXISTED_USER_SUB);
+        verify(userJpaRepository).findById(NOT_EXISTED_USER_SUB);
         verifyNoMoreInteractions(userJpaRepository);
     }
 }

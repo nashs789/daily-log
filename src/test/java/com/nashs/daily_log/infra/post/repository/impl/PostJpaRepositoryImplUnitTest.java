@@ -49,7 +49,7 @@ class PostJpaRepositoryImplUnitTest {
                         .user(User.builder().build())
                         .build();
 
-        when(postJpaRepository.findPostById(anyLong()))
+        when(postJpaRepository.findById(anyLong()))
                 .thenReturn(Optional.of(post));
 
         // when
@@ -60,7 +60,7 @@ class PostJpaRepositoryImplUnitTest {
                 .isNotNull()
                 .extracting(PostInfo::getId)
                 .isEqualTo(POST_ID);
-        verify(postJpaRepository).findPostById(POST_ID);
+        verify(postJpaRepository).findById(POST_ID);
         verifyNoMoreInteractions(postJpaRepository);
     }
 
@@ -72,12 +72,12 @@ class PostJpaRepositoryImplUnitTest {
 
         doThrow(new PostInfraException(NO_SUCH_POST))
                 .when(postJpaRepository)
-                .findPostById(NOT_EXISTED_POST_ID);
+                .findById(NOT_EXISTED_POST_ID);
 
         // when & then
         assertThatThrownBy(() -> postRepository.findPostById(NOT_EXISTED_POST_ID))
                 .isInstanceOf(PostInfraException.class);
-        verify(postJpaRepository).findPostById(NOT_EXISTED_POST_ID);
+        verify(postJpaRepository).findById(NOT_EXISTED_POST_ID);
         verifyNoMoreInteractions(postJpaRepository);
     }
 

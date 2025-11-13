@@ -38,7 +38,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public UserInfo findBySub(final String sub) {
-        return userJpaRepository.findBySub(sub)
+        return userJpaRepository.findById(sub)
                                 .orElseThrow(() -> new UserInfraException(NO_SUCH_USER))
                                 .toInfo();
     }

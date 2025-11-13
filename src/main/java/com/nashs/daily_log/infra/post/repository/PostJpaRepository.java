@@ -11,17 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-import java.util.Optional;
-
 public interface PostJpaRepository extends JpaRepository<Post, Long> {
-
-    @Query(value = """
-        SELECT p
-          FROM Post p
-         WHERE p.id = :id
-    """)
-    Optional<Post> findPostById(@Param("id") Long id);
 
     Page<Post> findAllByStatusOrderByIdDesc(PostStatus postStatus, Pageable pageable);
 

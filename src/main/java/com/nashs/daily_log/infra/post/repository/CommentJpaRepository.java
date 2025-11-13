@@ -10,11 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CommentJpaRepository extends JpaRepository<Comment, Long> {
 
-    Optional<Comment> findOneById(Long id);
     Page<Comment> findCommentByPostIdAndStatusNotAndParentIsNullOrderByIdDesc(Long postId, CommentStatus status, Pageable pageable);
     List<Comment> findCommentByPostIdAndParentIdInAndStatusNotOrderByIdDesc(Long postId, List<Long> parentIds, CommentStatus status);
 

@@ -27,7 +27,7 @@ public class TemplateService {
     }
 
     public List<TemplateInfo> findAllTemplate(LifeLogUser lifeLogUser) {
-        return templateRepository.findAllTemplate(lifeLogUser);
+        return templateRepository.findAllTemplate(lifeLogUser.sub());
     }
 
     public TemplateInfo saveTemplate(TemplateInfo templateInfo) {

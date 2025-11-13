@@ -1,6 +1,5 @@
 package com.nashs.daily_log.infra.template.repository.impl;
 
-import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.template.info.TemplateInfo;
 import com.nashs.daily_log.domain.user.info.UserInfo;
 import com.nashs.daily_log.infra.template.entity.Template;
@@ -82,7 +81,6 @@ class TemplateRepositoryImplUnitTest {
         // given
         final String USER_SUB = "user1";
         User user = User.ref(USER_SUB);
-        LifeLogUser lifeLogUser = LifeLogUser.ref(USER_SUB);
         List<Template> returnTemplate = List.of(
                 Template.builder()
                         .user(user)
@@ -99,7 +97,7 @@ class TemplateRepositoryImplUnitTest {
                 .thenReturn(returnTemplate);
 
         // when
-        List<TemplateInfo> allTemplate = templateRepository.findAllTemplate(lifeLogUser);
+        List<TemplateInfo> allTemplate = templateRepository.findAllTemplate(USER_SUB);
 
         // then
         assertThat(allTemplate)

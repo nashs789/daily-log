@@ -26,7 +26,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public PostInfo findPostById(Long postId) {
-        return postJpaRepository.findPostById(postId)
+        return postJpaRepository.findById(postId)
                                 .orElseThrow(() -> new PostInfraException(NO_SUCH_POST))
                                 .toInfo();
     }

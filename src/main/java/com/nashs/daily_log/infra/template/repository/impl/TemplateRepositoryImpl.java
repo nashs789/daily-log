@@ -1,6 +1,5 @@
 package com.nashs.daily_log.infra.template.repository.impl;
 
-import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.template.info.TemplateInfo;
 import com.nashs.daily_log.domain.template.repository.TemplateRepository;
 import com.nashs.daily_log.infra.template.entity.Template;
@@ -31,8 +30,8 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     }
 
     @Override
-    public List<TemplateInfo> findAllTemplate(LifeLogUser lifeLogUser) {
-        return templateJpaRepository.findAllByUser(User.fromLifeLogUser(lifeLogUser))
+    public List<TemplateInfo> findAllTemplate(String userSub) {
+        return templateJpaRepository.findAllByUser(User.ref(userSub))
                                     .stream()
                                     .map(Template::toInfo)
                                     .toList();
