@@ -90,9 +90,9 @@
                             <div class="comment__footer">
                                 <button type="button" class="comment__reply-btn" data-reply-toggle>답글</button>
                                 <div class="comment__actions">
-                                    <button type="button" class="comment__action-btn" data-comment-action="edit">수정</button>
-                                    <button type="button" class="comment__action-btn" data-comment-action="delete">삭제</button>
-                                    <button type="button" class="comment__action-btn comment__action-btn--danger" data-comment-action="report">신고</button>
+                                    <button type="button" class="comment__action-btn" data-comment-edit>수정</button>
+                                    <button type="button" class="comment__action-btn" data-comment-delete>삭제</button>
+                                    <button type="button" class="comment__action-btn comment__action-btn--danger" data-comment-report>신고</button>
                                 </div>
                             </div>
                             <div class="reply-form is-hidden">
@@ -114,9 +114,9 @@
                                     <div class="reply__body">${re.content}</div>
                                     <div class="reply__footer">
                                         <div class="reply__actions">
-                                            <button type="button" class="reply__action-btn" data-comment-action="edit">수정</button>
-                                            <button type="button" class="reply__action-btn" data-comment-action="delete">삭제</button>
-                                            <button type="button" class="reply__action-btn reply__action-btn--danger" data-comment-action="report">신고</button>
+                                            <button type="button" class="reply__action-btn" data-reply-edit>수정</button>
+                                            <button type="button" class="reply__action-btn" data-reply-delete="delete">삭제</button>
+                                            <button type="button" class="reply__action-btn reply__action-btn--danger" data-reply-report>신고</button>
                                         </div>
                                     </div>
                                 </li>
@@ -136,6 +136,7 @@
 <script src="${lifelog.app.script.safeGuard}"></script>
 
 <script src="${lifelog.app.js}/common/common.js"></script>
+<script src="${lifelog.app.js}/post/postDetail.js"></script>
 
 <script>
     $(document).on('click', '[data-reply-toggle]', function () {
@@ -197,24 +198,12 @@
         }
     });
 
-    $(document).on('click', '[data-comment-action]', function () {
-        const action = $(this).data('comment-action'); // edit | delete | report
-        const $commentBlock = $(this).closest('.comment, .reply');
-
-        if (action === 'edit') {
-            alert('수정 기능은 나중에 구현 예정입니다.');
-        } else if (action === 'delete') {
-            if (confirm('정말 삭제하시겠어요?')) {
-            }
-        } else if (action === 'report') {
-            if (confirm('이 댓글을 신고하시겠어요?')) {
-                alert('신고 기능은 나중에 API 연동 후 구현할 예정입니다.');
-            }
-        }
+    $(document).on('click', '[data-comment-delete]', function () {
+        console.log(this);
     });
 
     $(document).on('click', '[data-reply-submit]', function () {
-        const { $form, $textarea, parentId } = getReplyContext(this);
+        const { $form, $textarea, parentId } = getCommentContext(this);
         const content = ($textarea.val() || '').trim();
 
         if (!parentId) {
@@ -260,28 +249,6 @@
                 location.reload();
             });
     });
-
-    function getReplyContext(targetEl) {
-        const $form = $(targetEl).closest('.reply-form');
-        // 부모 댓글 범위
-        const $scope = $form.closest('[data-comment-id]');
-
-        return {
-            $form,
-            $textarea: $form.find('.reply-form__textarea'),
-            parentId: Number($scope.data('commentId')),
-        };
-    }
-
-    function renderPreview() {
-        var raw = $('#templateRaw').text().trim();
-        if (!raw) return;
-
-        var html = marked.parse(raw, { breaks: true, gfm: true });
-        var safe = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
-
-        $('#templatePreviewBody').html(safe);
-    }
 
     renderPreview();
 </script>

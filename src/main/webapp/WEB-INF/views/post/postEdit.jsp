@@ -75,6 +75,7 @@
 <script src="${lifelog.app.script.safeGuard}"></script>
 
 <script src="${lifelog.app.js}/layout/home.js"></script>
+<script src="${lifelog.app.js}/post/postEdit.js"></script>
 <script src="${lifelog.app.js}/common/common.js"></script>
 
 <script>
@@ -113,18 +114,6 @@
                     location.href = "/post";
                 });
     });
-
-    function init() {
-        loadTemplateList();
-    }
-
-    function renderPreview() {
-        const src  = $content.val() || '';
-        const html = marked.parse(src, { breaks: true, gfm: true });
-        const safe = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
-
-        $preview.html(safe);
-    }
 
     async function loadTemplateList() {
         await callApi("${lifelog.app.base}/api/template", {method: 'GET'})
