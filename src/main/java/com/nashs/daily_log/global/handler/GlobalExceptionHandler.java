@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,8 +20,6 @@ public class GlobalExceptionHandler {
 
     private final WebhookService notifier;
 
-    public record GlobalErrorResponse(HttpStatus status, String msg) {}
-
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<Void> noRes(NoResourceFoundException ex, HttpServletRequest req) {
         return ResponseEntity.notFound()
@@ -30,21 +27,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<GlobalErrorResponse> handleRSE(ResponseStatusException ex, HttpServletRequest req) {
-        HttpStatus status = ex.getStatusCode() == HttpStatus.UNAUTHORIZED
-                          ? HttpStatus.UNAUTHORIZED
-                          : HttpStatus.INTERNAL_SERVER_ERROR;
+    public ResponseEntity<Void> handleRSE(ResponseStatusException ex, HttpServletRequest req) {
         notifier.sendExceptionAsync(ex, req);
 
-        return ResponseEntity.status(status)
-                             .body(new GlobalErrorResponse(status, ex.getReason()));
+        return ResponseEntity.notFound()
+                             .build();
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<GlobalErrorResponse> handleAny(Exception ex, HttpServletRequest req) {
+    public ResponseEntity<Void> handleAny(Exception ex, HttpServletRequest req) {
         notifier.sendExceptionAsync(ex, req);
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body(new GlobalErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()));
+        return ResponseEntity.notFound()
+                             .build();
     }
 }

@@ -6,14 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 public class CommentDomainException extends DomainException {
 
     @Getter
     @RequiredArgsConstructor
     public enum CommentDomainExceptionCode {
-        NOT_COMMENT_OWNER(BAD_REQUEST, "게시글 소유주가 아닙니다.")
+        NOT_COMMENT_OWNER(BAD_REQUEST, "댓글 소유주가 아닙니다.")
         ;
 
         private final HttpStatus status;

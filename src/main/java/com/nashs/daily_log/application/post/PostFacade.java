@@ -39,9 +39,7 @@ public class PostFacade {
         TemplateInfo templateInfo = postInfo.getTemplateInfo();
         Long templateId = Objects.nonNull(templateInfo) ? templateInfo.getId() : null;
 
-        templateService.checkUserOwnTemplate(
-                lifeLogUser, templateId
-        );
+        templateService.checkUserOwnTemplate(lifeLogUser, templateId);
 
         return postService.savePost(postInfo);
     }

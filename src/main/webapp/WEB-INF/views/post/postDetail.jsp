@@ -24,7 +24,7 @@
             <header class="post-detail__header">
                 <div class="post-detail__title-row">
                     <h1 class="post-detail__title">${post.title}</h1>
-                    <c:if test="${not empty lifeLogUser}">
+                    <c:if test="${not empty lifeLogUser and lifeLogUser.name() eq post.userInfo.username}">
                         <div class="post-detail__actions">
                             <button type="button" class="btn btn--danger" id="btnDelete" data-post-id="${post.id}">삭제</button>
                             <a href="${lifelog.app.base}/post/${post.id}/edit" class="btn btn--ghost">수정</a>
@@ -90,7 +90,9 @@
                                 <button type="button" class="comment__reply-btn" data-reply-toggle>답글</button>
                                 <div class="comment__actions">
                                     <%--<button type="button" class="comment__action-btn" data-comment-edit>수정</button>--%>
-                                    <button type="button" class="comment__action-btn" data-comment-delete>삭제</button>
+                                    <c:if test="${not empty lifeLogUser and lifeLogUser.name() eq comment.userInfo.username}">
+                                        <button type="button" class="comment__action-btn" data-comment-delete>삭제</button>
+                                    </c:if>
                                     <%--<button type="button" class="comment__action-btn comment__action-btn--danger" data-comment-report>신고</button>--%>
                                 </div>
                             </div>
@@ -157,7 +159,8 @@
         if (!confirm('정말 이 게시글을 삭제할까요?')) return;
 
         const params = {
-            method: 'DELETE'
+            method: 'DELETE',
+            dataType: 'text'
         }
 
         callApi('${lifelog.app.base}/api/post/${postId}', params)

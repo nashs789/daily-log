@@ -30,6 +30,10 @@
                 .fail(function (xhr) {
                     if (xhr.responseJSON) {
                         alert('요청에 실패하였습니다.');
+                    } else if (xhr.responseText) {
+                        const res = JSON.parse(xhr.responseText);
+
+                        alert(res.msg);
                     }
                 });
     }

@@ -41,6 +41,7 @@ dependencies {
 	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
 	implementation 'org.webjars:jquery:3.7.1'
 	implementation "com.vladmihalcea:hibernate-types-60:2.21.1"
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
