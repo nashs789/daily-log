@@ -69,7 +69,7 @@
                                     <td class="post-col__id">${post.id}</td>
                                     <td class="post-col__title">
                                         <a class="post-title-link" href="${lifelog.app.base}/post/${post.id}">
-                                            <span class="post-title">${post.title}</span>
+                                            <span class="post-title">${post.title} (${post.totalComment})</span>
                                         </a>
                                     </td>
                                     <td class="post-col__author">${post.userInfo.username}</td>

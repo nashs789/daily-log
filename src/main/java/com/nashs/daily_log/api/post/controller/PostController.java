@@ -1,5 +1,6 @@
 package com.nashs.daily_log.api.post.controller;
 
+import com.nashs.daily_log.application.post.PostFacade;
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.common.utils.PageUtils;
 import com.nashs.daily_log.domain.post.info.CommentInfo;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class PostController {
 
     private final PostService postService;
+    private final PostFacade postFacade;
     private final CommentService commentService;
 
     @GetMapping
@@ -32,7 +34,7 @@ public class PostController {
     ) {
         PageUtils<PostInfo> pageUtils = new PageUtils<>(page);
 
-        pageUtils.setupContent(postService.findAllPost(pageUtils.getPageable()));
+        pageUtils.setupContent(postFacade.findAllPost(pageUtils.getPageable()));
 
         mv.addObject("postList", pageUtils.getContent());
         mv.addObject("page", pageUtils);
@@ -76,6 +78,7 @@ public class PostController {
         mv.addObject("comment", allCommentOnPost.getCommentList());
         mv.addObject("reply", allCommentOnPost.getReply());
         mv.addObject("page", pageUtils);
+        mv.addObject("commentCount", commentService.countCommentOnPost(postId));
 
         mv.setViewName("post/postDetail");
 

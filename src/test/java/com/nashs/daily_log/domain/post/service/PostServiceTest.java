@@ -46,7 +46,7 @@ class PostServiceTest extends ContainerTest {
     private PostService postService;
 
     @Test
-    @DisplayName("일반 게시글 제외한 리스트 조회")
+    @DisplayName("게시글 리스트 조회")
     void findAllNormalPost() {
         // given
         Pageable pageable = PageRequest.of(0, 10);
@@ -63,7 +63,7 @@ class PostServiceTest extends ContainerTest {
     }
 
     @Test
-    @DisplayName("나의 일반 게시글 제외한 리스트 조회")
+    @DisplayName("나의 게시글 리스트 조회")
     void findMyAllNormalPost() {
         // given
         Pageable pageable = PageRequest.of(0, 10);

@@ -64,7 +64,7 @@
             </div>
 
             <section class="post-detail__comments">
-                <h2 class="comments__title">댓글 3</h2>
+                <h2 class="comments__title">댓글 ${commentCount}</h2>
                 <div class="comment-form">
                     <textarea id="comment_textarea"
                               class="comment-form__textarea"
@@ -89,9 +89,9 @@
                             <div class="comment__footer">
                                 <button type="button" class="comment__reply-btn" data-reply-toggle>답글</button>
                                 <div class="comment__actions">
-                                    <button type="button" class="comment__action-btn" data-comment-edit>수정</button>
+                                    <%--<button type="button" class="comment__action-btn" data-comment-edit>수정</button>--%>
                                     <button type="button" class="comment__action-btn" data-comment-delete>삭제</button>
-                                    <button type="button" class="comment__action-btn comment__action-btn--danger" data-comment-report>신고</button>
+                                    <%--<button type="button" class="comment__action-btn comment__action-btn--danger" data-comment-report>신고</button>--%>
                                 </div>
                             </div>
                             <div class="reply-form is-hidden">
@@ -113,9 +113,9 @@
                                     <div class="reply__body">${re.content}</div>
                                     <div class="reply__footer">
                                         <div class="reply__actions">
-                                            <button type="button" class="reply__action-btn" data-reply-edit>수정</button>
+                                            <%--<button type="button" class="reply__action-btn" data-reply-edit>수정</button>--%>
                                             <button type="button" class="reply__action-btn" data-reply-delete="delete">삭제</button>
-                                            <button type="button" class="reply__action-btn reply__action-btn--danger" data-reply-report>신고</button>
+                                            <%--<button type="button" class="reply__action-btn reply__action-btn--danger" data-reply-report>신고</button>--%>
                                         </div>
                                     </div>
                                 </li>

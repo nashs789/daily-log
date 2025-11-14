@@ -29,6 +29,10 @@ public class CommentService {
         return CommentOnPostInfo.of(commentWithoutReply, reply);
     }
 
+    public Long countCommentOnPost(Long postId) {
+        return commentRepository.countCommentOnPost(postId);
+    }
+
     public CommentInfo saveCommentOnPost(CommentInfo commentInfo) {
         return commentRepository.saveCommentOnPost(commentInfo);
     }

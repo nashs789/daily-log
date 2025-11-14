@@ -35,7 +35,7 @@ class PostServiceUnitTest {
     private PostService postService;
 
     @Test
-    @DisplayName("Unit: 일반 게시글 제외한 리스트 조회")
+    @DisplayName("Unit: 게시글 리스트 조회")
     void findAllNormalPost() {
         // given
         List<PostInfo> returnPost = List.of(
@@ -66,7 +66,7 @@ class PostServiceUnitTest {
     }
 
     @Test
-    @DisplayName("Unit: 나의 일반 게시글 제외한 리스트 조회")
+    @DisplayName("Unit: 나의 게시글 리스트 조회")
     void findMyAllNormalPost() {
         // given
         final String USER_SUB = "user1";

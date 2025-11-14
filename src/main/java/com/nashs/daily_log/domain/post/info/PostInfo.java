@@ -4,7 +4,6 @@ import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.common.utils.DateUtils;
 import com.nashs.daily_log.domain.template.info.TemplateInfo;
 import com.nashs.daily_log.domain.user.info.UserInfo;
-import com.nashs.daily_log.infra.post.entity.Post;
 import com.nashs.daily_log.infra.post.entity.Post.PostStatus;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +21,7 @@ public class PostInfo {
     private String title;
     private String content;
     private PostStatus status;
+    private Long totalComment;
     private LocalDateTime created;
     private LocalDateTime modified;
 
@@ -47,5 +47,9 @@ public class PostInfo {
         }
 
         return this;
+    }
+
+    public void setupCommentCount(Long commentCount) {
+        totalComment = commentCount;
     }
 }
