@@ -1,6 +1,5 @@
 package com.nashs.daily_log.api.post.controller;
 
-import com.nashs.daily_log.api.post.api.PostApi;
 import com.nashs.daily_log.api.post.request.PostRequest;
 import com.nashs.daily_log.api.post.response.PostResponse;
 import com.nashs.daily_log.application.post.PostFacade;
@@ -18,12 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/post")
 @RequiredArgsConstructor
-public class PostRestController implements PostApi {
+public class PostRestController {
 
     private final PostFacade postFacade;
     private final PostService postService;
 
-    @Override
     @LoginRequired
     @PutMapping
     public ResponseEntity<PostResponse> savePost(
