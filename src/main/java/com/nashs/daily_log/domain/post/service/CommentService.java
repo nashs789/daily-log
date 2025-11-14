@@ -38,19 +38,19 @@ public class CommentService {
     }
 
     public boolean updateCommentOnPost(LifeLogUser lifeLogUser, CommentInfo commentInfo) {
-        checkIsCommentOwner(lifeLogUser, commentInfo);
+        checkIsCommentOwner(lifeLogUser, commentInfo.getId());
 
         return commentRepository.updateCommentOnPost(commentInfo);
     }
 
-    public boolean deleteCommentOnPost(LifeLogUser lifeLogUser, CommentInfo commentInfo) {
-        checkIsCommentOwner(lifeLogUser, commentInfo);
+    public boolean deleteCommentOnPost(LifeLogUser lifeLogUser, Long commentId) {
+        checkIsCommentOwner(lifeLogUser, commentId);
 
-        return commentRepository.deleteCommentOnPost(commentInfo.getId());
+        return commentRepository.deleteCommentOnPost(commentId);
     }
 
-    private void checkIsCommentOwner(LifeLogUser lifeLogUser, CommentInfo commentInfo) {
-        CommentInfo savedCommentInfo = commentRepository.findById(commentInfo.getId());
+    private void checkIsCommentOwner(LifeLogUser lifeLogUser, Long commentId) {
+        CommentInfo savedCommentInfo = commentRepository.findById(commentId);
 
         if (!savedCommentInfo.getUserInfo().getSub().equals(lifeLogUser.sub())) {
             throw new CommentDomainException(NOT_COMMENT_OWNER);

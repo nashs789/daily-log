@@ -8,10 +8,7 @@ import com.nashs.daily_log.domain.post.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -51,6 +48,17 @@ public class CommentRestController {
                                              .build();
 
         commentService.saveReplyOnComment(commentInfo);
+
+        return ResponseEntity.ok()
+                             .build();
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> deleteCommentOnPost(
+            LifeLogUser lifeLogUser,
+            @PathVariable Long commentId
+    ) {
+        commentService.deleteCommentOnPost(lifeLogUser, commentId);
 
         return ResponseEntity.ok()
                              .build();

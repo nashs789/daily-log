@@ -4,6 +4,7 @@
         const method = (opts.method || 'POST').toUpperCase();
         const contentType = opts?.contentType ?? 'application/json';
         const params      = opts?.params ?? {};
+        // 응답 받을 때 json 으로 파싱할 필요 없으면 text 로
         const dataType    = opts?.dataType ?? 'json';
 
         const requiredQueryString = /^(GET|HEAD|DELETE)$/i.test(method);

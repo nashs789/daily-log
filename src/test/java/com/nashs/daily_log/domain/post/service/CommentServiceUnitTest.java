@@ -90,7 +90,7 @@ class CommentServiceUnitTest {
 
         // when
         CommentDomainException ex = assertThrows(CommentDomainException.class, () -> {
-            commentService.deleteCommentOnPost(lifeLogUser, deleteCommentInfo);
+            commentService.deleteCommentOnPost(lifeLogUser, deleteCommentInfo.getId());
         });
 
 

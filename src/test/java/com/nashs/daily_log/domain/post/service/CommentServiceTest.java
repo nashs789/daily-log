@@ -75,7 +75,7 @@ class CommentServiceTest extends ContainerTest {
                                              .build();
 
         // when & then
-        assertThatThrownBy(() -> commentService.deleteCommentOnPost(lifeLogUser, commentInfo))
+        assertThatThrownBy(() -> commentService.deleteCommentOnPost(lifeLogUser, commentInfo.getId()))
                 .isInstanceOf(CommentDomainException.class)
                 .extracting("status")
                 .isEqualTo(BAD_REQUEST);

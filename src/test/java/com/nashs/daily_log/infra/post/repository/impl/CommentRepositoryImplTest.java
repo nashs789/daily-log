@@ -20,7 +20,8 @@ import org.springframework.test.context.jdbc.SqlConfig;
 
 import java.util.List;
 
-import static com.nashs.daily_log.infra.post.entity.Comment.CommentStatus.*;
+import static com.nashs.daily_log.infra.post.entity.Comment.CommentStatus.NORMAL;
+import static com.nashs.daily_log.infra.post.entity.Comment.CommentStatus.UPDATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -103,7 +104,6 @@ class CommentRepositoryImplTest extends ContainerTest {
                 .isNotNull()
                 .isNotEmpty()
                 .allSatisfy(c -> {
-                    assertThat(c.getStatus()).isNotEqualTo(DELETED);
                     assertThat(c.getPostInfo().getId()).isEqualTo(POST_ID);
                     assertThat(c.getParent()).isNull();
                 });
@@ -132,9 +132,8 @@ class CommentRepositoryImplTest extends ContainerTest {
         assertThat(replyOnComment)
                 .isNotNull()
                 .isNotEmpty()
-                .hasSize(4)
+                .hasSize(6)
                 .allSatisfy(c -> {
-                    assertThat(c.getStatus()).isNotEqualTo(DELETED);
                     assertThat(c.getParent()).isEqualTo(POST_ID);
                     assertThat(c.getParent()).isNotNull();
                 });

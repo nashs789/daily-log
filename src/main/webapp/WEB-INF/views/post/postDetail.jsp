@@ -12,11 +12,9 @@
     <link rel="stylesheet" href="${lifelog.app.css}/post/postDetail.css"/>
 </head>
 <body>
-<!-- 상단바 -->
 <jsp:include page="${lifelog.app.jsp}/layout/top.jsp"/>
 
 <div class="page">
-    <!-- 좌측 메뉴 -->
     <aside class="sidebar-wrap">
         <jsp:include page="${lifelog.app.jsp}/layout/leftMenu.jsp"/>
     </aside>
@@ -86,7 +84,8 @@
                                 <span class="comment__dot">·</span>
                                 <span class="comment__date"><fmt:formatDate value="${comment.getCreatedTypeDate()}" pattern="yyyy.MM.dd HH:MM" /></span>
                             </div>
-                            <div class="comment__body">${comment.content}</div>
+                            <div class="comment__body"><c:choose><c:when test="${comment.status == 'NORMAL'}">${comment.content}</c:when><c:otherwise><span class="comment__deleted">삭제된 댓글 입니다.</span></c:otherwise></c:choose>
+                            </div>
                             <div class="comment__footer">
                                 <button type="button" class="comment__reply-btn" data-reply-toggle>답글</button>
                                 <div class="comment__actions">
@@ -151,10 +150,12 @@
         $comment.find('.reply-form').addClass('is-hidden');
     });
 
+    /**
+     * 게시글 삭제 버튼 클릭
+     */
     $('#btnDelete').on('click', function() {
         if (!confirm('정말 이 게시글을 삭제할까요?')) return;
 
-        const postId = $(this).data('post-id');
         const params = {
             method: 'DELETE'
         }
@@ -166,6 +167,9 @@
             });
     });
 
+    /**
+     * 템플릿 복사 (ctrl + c)
+     */
     $('#templateCopyBtn').on('click', function () {
         var text = $('#templateRaw').text().trim();
 
@@ -198,12 +202,35 @@
         }
     });
 
+    function getCommentId(targetEl) {
+        const $form = $(targetEl).closest('.comment__footer');
+        const $scope = $form.closest('[data-comment-id]');
+
+        return Number($scope.data('commentId'));
+    }
+
+    /**
+     * 댓글 삭제 버튼 클릭
+     */
     $(document).on('click', '[data-comment-delete]', function () {
-        console.log(this);
+        const commentId = getCommentId(this);
+        const params = {
+            method: 'DELETE',
+            dataType: 'text',
+        };
+
+        callApi('${lifelog.app.base}/api/comment/' + commentId, params)
+            .then(res => {
+                alert('삭제 되었습니다.');
+                location.reload();
+            });
     });
 
+    /**
+     * 대댓글 등록 버튼
+     */
     $(document).on('click', '[data-reply-submit]', function () {
-        const { $form, $textarea, parentId } = getCommentContext(this);
+        const { $textarea, parentId } = getCommentInputContext(this);
         const content = ($textarea.val() || '').trim();
 
         if (!parentId) {
@@ -219,6 +246,7 @@
 
         const params = {
             method: 'PUT',
+            dataType: 'text',
             params: {
                 parentId: parentId,
                 postId: '${postId}',
@@ -233,10 +261,14 @@
             });
     });
 
+    /**
+     * 댓글 등록 버튼
+     */
     $('#comment_save_btn').on('click', function() {
         const comment = $('#comment_textarea').val();
         const params = {
             method: 'PUT',
+            dataType: 'text',
             params: {
                 postId: '${postId}',
                 content: comment

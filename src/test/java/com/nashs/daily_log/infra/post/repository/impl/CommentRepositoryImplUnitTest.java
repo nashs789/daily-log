@@ -93,7 +93,7 @@ class CommentRepositoryImplUnitTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Comment> page = new PageImpl<>(list, pageable, list.size());
 
-        when(commentJpaRepository.findCommentByPostIdAndStatusNotAndParentIsNullOrderByIdDesc(anyLong(), any(CommentStatus.class), any(Pageable.class)))
+        when(commentJpaRepository.findCommentByPostIdAndParentIsNullOrderByIdDesc(anyLong(), any(Pageable.class)))
                 .thenReturn(page);
 
         // when
@@ -104,7 +104,7 @@ class CommentRepositoryImplUnitTest {
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);
-        verify(commentJpaRepository).findCommentByPostIdAndStatusNotAndParentIsNullOrderByIdDesc(anyLong(), any(CommentStatus.class), any(Pageable.class));
+        verify(commentJpaRepository).findCommentByPostIdAndParentIsNullOrderByIdDesc(anyLong(), any(Pageable.class));
         verifyNoMoreInteractions(commentJpaRepository);
     }
 
@@ -120,9 +120,8 @@ class CommentRepositoryImplUnitTest {
                 Comment.builder().user(user).post(post).build()
         );
 
-        when(commentJpaRepository.findCommentByPostIdAndParentIdInAndStatusNotOrderByIdDesc(
-                any(), anyList(), any(CommentStatus.class))
-        ).thenReturn(list);
+        when(commentJpaRepository.findCommentByPostIdAndParentIdInOrderByIdDesc(any(), anyList()))
+                .thenReturn(list);
 
         // when
         List<CommentInfo> replyOnComment = commentRepository.findReplyOnComment(1L, List.of());
@@ -132,7 +131,7 @@ class CommentRepositoryImplUnitTest {
                 .isNotEmpty()
                 .isNotNull()
                 .hasSize(list.size());
-        verify(commentJpaRepository).findCommentByPostIdAndParentIdInAndStatusNotOrderByIdDesc(any(), anyList(), any(CommentStatus.class));
+        verify(commentJpaRepository).findCommentByPostIdAndParentIdInOrderByIdDesc(any(), anyList());
         verifyNoMoreInteractions(commentJpaRepository);
     }
 

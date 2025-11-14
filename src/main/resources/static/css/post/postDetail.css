@@ -506,3 +506,10 @@
     gap: 8px;
     align-items: center;
 }
+
+.comment__deleted {
+    color: #e57373;
+    text-decoration: line-through;
+    opacity: 0.9;
+    font-style: italic;
+}

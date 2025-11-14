@@ -1,10 +1,9 @@
-function getCommentContext(targetEl) {
+function getCommentInputContext(targetEl) {
     const $form = $(targetEl).closest('.reply-form');
     // 부모 댓글 범위
     const $scope = $form.closest('[data-comment-id]');
 
     return {
-        $form,
         $textarea: $form.find('.reply-form__textarea'),
         parentId: Number($scope.data('commentId')),
     };

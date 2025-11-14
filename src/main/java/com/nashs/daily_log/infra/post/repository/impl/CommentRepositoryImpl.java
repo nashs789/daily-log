@@ -36,7 +36,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Page<CommentInfo> findCommentOnPostWithoutReply(Long postId, Pageable pageable) {
-        return commentJpaRepository.findCommentByPostIdAndStatusNotAndParentIsNullOrderByIdDesc(postId, DELETED, pageable)
+        return commentJpaRepository.findCommentByPostIdAndParentIsNullOrderByIdDesc(postId, pageable)
                                    .map(Comment::toInfo);
     }
 
@@ -46,7 +46,7 @@ public class CommentRepositoryImpl implements CommentRepository {
                                      .map(CommentInfo::getId)
                                      .toList();
 
-        return commentJpaRepository.findCommentByPostIdAndParentIdInAndStatusNotOrderByIdDesc(postId, parentIds, DELETED)
+        return commentJpaRepository.findCommentByPostIdAndParentIdInOrderByIdDesc(postId, parentIds)
                                    .stream()
                                    .map(Comment::toInfo)
                                    .toList();
