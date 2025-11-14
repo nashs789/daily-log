@@ -26,7 +26,7 @@
                 <select id="tplLoad" class="mdtpl__btn">
                     <option value="">저장된 템플릿 불러오기…</option>
                 </select>
-                <c:if test="${lifeLogUser}">
+                <c:if test="${not empty lifeLogUser}">
                     <button id="tplSave" class="mdtpl__btn">저장</button>
                     <button id="tplDelete" class="mdtpl__btn mdtpl__btn--danger">삭제</button>
                 </c:if>
