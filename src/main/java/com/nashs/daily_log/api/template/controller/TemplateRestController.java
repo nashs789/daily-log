@@ -5,6 +5,7 @@ import com.nashs.daily_log.api.template.response.TemplateFindResponse;
 import com.nashs.daily_log.api.template.response.TemplateResponse;
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.template.service.TemplateService;
+import com.nashs.daily_log.global.annotation.LoginRequired;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class TemplateRestController {
                                                 .toList());
     }
 
+    @LoginRequired
     @PatchMapping
     public ResponseEntity<TemplateResponse> updateTemplate(
             @Valid @RequestBody TemplateRequest templateRequest,
@@ -41,6 +43,7 @@ public class TemplateRestController {
                              .build();
     }
 
+    @LoginRequired
     @PutMapping
     public ResponseEntity<TemplateResponse> saveTemplate(
             @Valid @RequestBody TemplateRequest templateRequest,
@@ -52,6 +55,7 @@ public class TemplateRestController {
         ));
     }
 
+    @LoginRequired
     @DeleteMapping("/{templateId}")
     public ResponseEntity<Void> deleteTemplate(
             @PathVariable Long templateId,

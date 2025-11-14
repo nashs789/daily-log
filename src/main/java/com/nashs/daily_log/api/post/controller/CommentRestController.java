@@ -5,6 +5,7 @@ import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.post.info.CommentInfo;
 import com.nashs.daily_log.domain.post.info.PostInfo;
 import com.nashs.daily_log.domain.post.service.CommentService;
+import com.nashs.daily_log.global.annotation.LoginRequired;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ public class CommentRestController {
 
     private final CommentService commentService;
 
+    @LoginRequired
     @PutMapping
     public ResponseEntity<Void> saveCommentOnPost(
             LifeLogUser lifeLogUser,
@@ -35,6 +37,7 @@ public class CommentRestController {
                              .build();
     }
 
+    @LoginRequired
     @PutMapping("/reply")
     public ResponseEntity<Void> saveReplyOnComment(
             LifeLogUser lifeLogUser,
@@ -53,6 +56,7 @@ public class CommentRestController {
                              .build();
     }
 
+    @LoginRequired
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteCommentOnPost(
             LifeLogUser lifeLogUser,

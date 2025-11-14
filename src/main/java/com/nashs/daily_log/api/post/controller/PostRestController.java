@@ -7,6 +7,7 @@ import com.nashs.daily_log.application.post.PostFacade;
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.post.info.PostInfo;
 import com.nashs.daily_log.domain.post.service.PostService;
+import com.nashs.daily_log.global.annotation.LoginRequired;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class PostRestController implements PostApi {
     private final PostService postService;
 
     @Override
+    @LoginRequired
     @PutMapping
     public ResponseEntity<PostResponse> savePost(
             @Valid @RequestBody PostRequest postRequest,
@@ -36,6 +38,7 @@ public class PostRestController implements PostApi {
         ));
     }
 
+    @LoginRequired
     @PatchMapping
     public ResponseEntity<Void> editPost(
             @Valid @RequestBody PostRequest postRequest,
@@ -50,6 +53,7 @@ public class PostRestController implements PostApi {
                              .build();
     }
 
+    @LoginRequired
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePost(
             @PathVariable Long postId,
