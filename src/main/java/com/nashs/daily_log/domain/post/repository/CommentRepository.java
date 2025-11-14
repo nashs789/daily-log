@@ -11,7 +11,9 @@ import java.util.List;
 public interface CommentRepository {
     CommentInfo findById(Long commentId);
     Page<CommentInfo> findCommentOnPostWithoutReply(Long postId, Pageable pageable);
+    Long countCommentOnPost(Long postId);
     List<CommentInfo> findReplyOnComment(Long postId, List<CommentInfo> parent);
+    Long countReplyOnPost(Long parentId);
     CommentInfo saveCommentOnPost(CommentInfo commentInfo);
     CommentInfo saveCommentOnComment(CommentInfo commentInfo);
     boolean updateCommentOnPost(CommentInfo commentInfo);

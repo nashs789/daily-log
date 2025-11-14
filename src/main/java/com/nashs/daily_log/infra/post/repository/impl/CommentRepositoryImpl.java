@@ -41,6 +41,11 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
+    public Long countCommentOnPost(Long postId) {
+        return commentJpaRepository.countByPostId(postId);
+    }
+
+    @Override
     public List<CommentInfo> findReplyOnComment(Long postId, List<CommentInfo> parent) {
         List<Long> parentIds = parent.stream()
                                      .map(CommentInfo::getId)
@@ -50,6 +55,11 @@ public class CommentRepositoryImpl implements CommentRepository {
                                    .stream()
                                    .map(Comment::toInfo)
                                    .toList();
+    }
+
+    @Override
+    public Long countReplyOnPost(Long parentId) {
+        return commentJpaRepository.countByParentId(parentId);
     }
 
     @Override

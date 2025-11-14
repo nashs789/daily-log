@@ -14,7 +14,9 @@ import java.util.List;
 public interface CommentJpaRepository extends JpaRepository<Comment, Long> {
 
     Page<Comment> findCommentByPostIdAndParentIsNullOrderByIdDesc(Long postId, Pageable pageable);
+    Long countByPostId(Long postId);
     List<Comment> findCommentByPostIdAndParentIdInOrderByIdDesc(Long postId, List<Long> parentIds);
+    Long countByParentId(Long parentId);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = """

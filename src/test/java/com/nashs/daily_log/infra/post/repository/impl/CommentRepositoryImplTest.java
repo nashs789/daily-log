@@ -115,6 +115,21 @@ class CommentRepositoryImplTest extends ContainerTest {
     }
 
     @Test
+    @DisplayName("게시글에 작성된 댓글 갯수 조회")
+    void countCommentOnPost() {
+        // given
+        final Long POST_ID = 1L;
+
+        // when
+        Long commentCount = commentRepository.countCommentOnPost(POST_ID);
+
+        // then
+        assertThat(commentCount)
+                .isNotNull()
+                .isEqualTo(11L);
+    }
+
+    @Test
     @DisplayName("댓글에 해당하는 대댓글 조회")
     void findReplyOnComment() {
         // given
@@ -137,6 +152,21 @@ class CommentRepositoryImplTest extends ContainerTest {
                     assertThat(c.getParent()).isEqualTo(POST_ID);
                     assertThat(c.getParent()).isNotNull();
                 });
+    }
+
+    @Test
+    @DisplayName("댓글에 달린 대댓글 갯수 조회")
+    void countReplyOnComment() {
+        // given
+        final Long PARENT_ID = 1L;
+
+        // when
+        Long commentCount = commentRepository.countReplyOnPost(PARENT_ID);
+
+        // then
+        assertThat(commentCount)
+                .isNotNull()
+                .isEqualTo(6L);
     }
 
     @Test

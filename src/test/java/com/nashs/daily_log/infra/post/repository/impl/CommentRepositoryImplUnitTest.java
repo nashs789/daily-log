@@ -109,6 +109,20 @@ class CommentRepositoryImplUnitTest {
     }
 
     @Test
+    @DisplayName("Unit: 게시글에 작성된 댓글 갯수 조회")
+    void countCommentOnPost() {
+        // given
+        when(commentJpaRepository.countByPostId(anyLong()))
+                .thenReturn(3L);
+
+        // when
+        Long commentCountOnPost = commentRepository.countCommentOnPost(1L);
+
+        // then
+        assertEquals(3L, commentCountOnPost);
+    }
+
+    @Test
     @DisplayName("Unit: 댓글에 해당하는 대댓글 조회")
     void findReplyOnComment() {
         // given
@@ -133,6 +147,20 @@ class CommentRepositoryImplUnitTest {
                 .hasSize(list.size());
         verify(commentJpaRepository).findCommentByPostIdAndParentIdInOrderByIdDesc(any(), anyList());
         verifyNoMoreInteractions(commentJpaRepository);
+    }
+
+    @Test
+    @DisplayName("Unit: 댓글에 달린 대댓글 갯수 조회")
+    void countReplyOnComment() {
+        // given
+        when(commentJpaRepository.countByParentId(anyLong()))
+                .thenReturn(3L);
+
+        // when
+        Long replyOnComment = commentRepository.countReplyOnPost(1L);
+
+        // then
+        assertEquals(3L, replyOnComment);
     }
 
     @Test
