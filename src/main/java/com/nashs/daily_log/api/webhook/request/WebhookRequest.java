@@ -1,7 +1,7 @@
 package com.nashs.daily_log.api.webhook.request;
 
-import com.nashs.daily_log.domain.webhook.info.WebhookInfo;
-import com.nashs.daily_log.domain.webhook.info.WebhookInfo.WebhookPlatform;
+import com.nashs.daily_log.domain.webhook.info.WebhookHistoryInfo;
+import com.nashs.daily_log.infra.webhook.entity.WebhookHistory.WebhookPlatform;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -16,13 +16,13 @@ public record WebhookRequest(
         String discord,
         String slack
 ) {
-        public WebhookInfo toInfo() {
-                return WebhookInfo.builder()
-                                  .discord(discord)
-                                  .slack(slack)
-                                  .rawContent(rawContent)
-                                  .params(params)
-                                  .webhookPlatform(webhookPlatform)
-                                  .build();
+        public WebhookHistoryInfo toInfo() {
+                return WebhookHistoryInfo.builder()
+                                         .discord(discord)
+                                         .slack(slack)
+                                         .rawContent(rawContent)
+                                         .params(params)
+                                         .webhookPlatform(webhookPlatform)
+                                         .build();
         }
 }

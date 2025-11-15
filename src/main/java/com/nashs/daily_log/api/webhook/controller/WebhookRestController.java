@@ -25,7 +25,7 @@ public class WebhookRestController {
             @Valid @RequestBody WebhookRequest webhookRequest,
             LifeLogUser lifeLogUser
     ) {
-        webhookFacade.sendMessageToPlatform(webhookRequest.toInfo());
+        webhookFacade.sendMessageToPlatform(lifeLogUser, webhookRequest.toInfo());
 
         return ResponseEntity.noContent()
                              .build();

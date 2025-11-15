@@ -1,12 +1,15 @@
 package com.nashs.daily_log.domain.webhook.service;
 
+import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.webhook.exception.WebhookException;
-import com.nashs.daily_log.domain.webhook.info.WebhookInfo;
-import com.nashs.daily_log.domain.webhook.info.WebhookInfo.WebhookPlatform;
+import com.nashs.daily_log.domain.webhook.info.WebhookHistoryInfo;
 import com.nashs.daily_log.domain.webhook.props.WebhookProps;
+import com.nashs.daily_log.domain.webhook.repository.WebhookRepository;
+import com.nashs.daily_log.infra.webhook.entity.WebhookHistory.WebhookPlatform;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -32,6 +35,7 @@ public class WebhookService {
 
     private final WebhookProps props;
     private final RestClient client;
+    private final WebhookRepository webhookRepository;
 
     public void sendExceptionAsync(Exception ex, HttpServletRequest req) {
         if (props.isNotEnabled() || Objects.isNull(req)) {
@@ -81,11 +85,11 @@ public class WebhookService {
         );
     }
 
-    public void sendTemplateToPlatform(WebhookInfo webhookInfo) {
-        WebhookPlatform platform = webhookInfo.getWebhookPlatform();
-        String toUrl = platform.isDiscord() ? webhookInfo.getDiscord() : webhookInfo.getSlack();
-        String content = webhookInfo.getRawContent();
-        Map<String, String> savedParams = webhookInfo.getParams();
+    public void sendTemplateToPlatform(LifeLogUser lifeLogUser, WebhookHistoryInfo webhookHistoryInfo) {
+        WebhookPlatform platform = webhookHistoryInfo.getWebhookPlatform();
+        String toUrl = platform.isDiscord() ? webhookHistoryInfo.getDiscord() : webhookHistoryInfo.getSlack();
+        String content = webhookHistoryInfo.getRawContent();
+        Map<String, String> savedParams = webhookHistoryInfo.getParams();
         Map<Object, Object> platformParams = new HashMap<>();
 
         for (String key : savedParams.keySet()) {
@@ -100,7 +104,20 @@ public class WebhookService {
             platformParams.put("text", content);
         }
 
-        sendMessage(toUrl, platformParams);
+        try {
+            webhookHistoryInfo.setupResponse(sendMessage(toUrl, platformParams));
+
+            webhookHistoryInfo.setUrl(toUrl);
+            webhookHistoryInfo.setContent(content);
+            webhookHistoryInfo.setUserSub(lifeLogUser.sub());
+
+            webhookRepository.saveWebhookHistory(webhookHistoryInfo);
+        } catch (Exception ex) {
+            // 비지니스 로직에 영향가지 않도록 예외 무시
+//            webhookHistoryInfo.setErrorMessage(ex.getMessage());
+//
+//            webhookRepository.saveWebhookHistory(webhookHistoryInfo);
+        }
     }
 
     private void checkDiscordUrl(String url) {
@@ -115,8 +132,8 @@ public class WebhookService {
         }
     }
 
-    private void sendMessage(String url, Map<Object, Object> params) {
-        client.post()
+    private ResponseEntity<Void> sendMessage(String url, Map<Object, Object> params) {
+        return client.post()
               .uri(url)
               .body(params)
               .retrieve()
