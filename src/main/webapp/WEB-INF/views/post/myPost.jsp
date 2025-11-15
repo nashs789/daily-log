@@ -90,7 +90,7 @@
                 <li class="page-item">
                     <a href="${lifelog.app.base}/post/myPost?page=${page.getPrevPage()}" class="page-link">이전</a>
                 </li>
-                <c:forEach var="no" begin="${page.getMinPage()}" end="${page.getMaxPage()}">
+                <c:forEach var="no" begin="${page.getFirstPage()}" end="${page.getLastPage()}">
                     <li class="page-item <c:if test="${page.currentPage eq no}">active</c:if>">
                         <a href="${lifelog.app.base}/post/myPost?page=${no}" class="page-link">${no}</a>
                     </li>

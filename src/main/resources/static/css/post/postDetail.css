@@ -513,3 +513,29 @@
     opacity: 0.9;
     font-style: italic;
 }
+
+.c-pager {
+    display:flex; align-items:center; justify-content:center;
+    gap:6px; padding:10px; border-top:1px solid #eee; flex-wrap:wrap;
+}
+.c-page {
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:36px; height:36px; padding:0 10px; border:1px solid #ddd;
+    background:#f8f9fb; border-radius:8px; cursor:pointer; font-size:14px;
+    text-decoration:none; color:#111;
+}
+.c-page--nav { font-weight:700; }
+.c-page--active { background:#111; color:#fff; border-color:#111; }
+
+/* 비활성은 클릭 막기 */
+.c-page.is-disabled {
+    pointer-events:none; opacity:.45; cursor:not-allowed;
+}
+
+.c-page__nums { display:flex; gap:6px; }
+
+@media (max-width: 480px) {
+    .c-page { min-width:32px; height:34px; padding:0 8px; }
+    .c-page__nums { overflow-x:auto; -webkit-overflow-scrolling:touch; padding:4px; }
+    .c-page__nums::-webkit-scrollbar { display:none; }
+}
