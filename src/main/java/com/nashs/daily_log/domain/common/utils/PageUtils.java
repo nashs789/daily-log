@@ -54,7 +54,7 @@ public class PageUtils<T> {
 
     public int getDrawFirstPage() {
         return this.pageCount - getCurrentPage() < DISPLAY_PAGE_COUNT
-             ? Math.max(this.pageCount - DISPLAY_PAGE_COUNT + 1, 0)
+             ? Math.max(this.pageCount - DISPLAY_PAGE_COUNT + 1, 1)
              : getCurrentPage();
     }
 
