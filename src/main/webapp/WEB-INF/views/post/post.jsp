@@ -85,28 +85,29 @@
             </table>
         </section>
 
-        <section class="post-list__bottom">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a href="${lifelog.app.base}/post?page=${page.getPrevPage()}" class="page-link">이전</a>
-                </li>
-                <c:forEach var="no" begin="${page.getFirstPage()}" end="${page.getLastPage()}">
-                    <li class="page-item <c:if test="${page.currentPage eq no}">active</c:if>">
-                        <a href="${lifelog.app.base}/post?page=${no}" class="page-link">${no}</a>
+        <c:if test="${not empty postList}">
+            <section class="post-list__bottom">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a href="${lifelog.app.base}/post?page=${page.getPrevPage()}" class="page-link">이전</a>
                     </li>
-                </c:forEach>
-                <li class="page-item">
-                    <a href="${lifelog.app.base}/post?page=${page.getNextPage()}" class="page-link">다음</a>
-                </li>
-            </ul>
+                    <c:forEach var="no" begin="${page.getFirstPage()}" end="${page.getLastPage()}">
+                        <li class="page-item <c:if test="${page.currentPage eq no}">active</c:if>">
+                            <a href="${lifelog.app.base}/post?page=${no}" class="page-link">${no}</a>
+                        </li>
+                    </c:forEach>
+                    <li class="page-item">
+                        <a href="${lifelog.app.base}/post?page=${page.getNextPage()}" class="page-link">다음</a>
+                    </li>
+                </ul>
 
-            <div class="post-list__actions">
-                <c:if test="${not empty lifeLogUser}">
-                    <a href="${lifelog.app.base}/post/postWrite" class="btn-write">글쓰기</a>
-                </c:if>
-            </div>
-        </section>
-
+                <div class="post-list__actions">
+                    <c:if test="${not empty lifeLogUser}">
+                        <a href="${lifelog.app.base}/post/postWrite" class="btn-write">글쓰기</a>
+                    </c:if>
+                </div>
+            </section>
+        </c:if>
     </main>
 </div>
 

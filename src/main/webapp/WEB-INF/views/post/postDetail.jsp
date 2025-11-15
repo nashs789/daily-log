@@ -125,18 +125,20 @@
                         </c:forEach>
                     </c:forEach>
                 </ul>
-                <nav class="c-pager" aria-label="댓글 페이지네이션">
-                    <a class="c-page c-page--nav" href="${lifelog.app.base}/post/${postId}?page=1">«</a>
-                    <a class="c-page c-page--nav" href="${lifelog.app.base}/post/${postId}?page=${page.getPrevPage()}">‹</a>
-                    <div class="c-page__nums">
-                        <c:forEach var="no" begin="${page.getDrawFirstPage()}" end="${page.getDrawLastPage()}">
-                            <a class="c-page c-page--nav <c:if test="${page.currentPage eq no}">c-page--active</c:if>" href="${lifelog.app.base}/post/${postId}?page=${no}">${no}</a>
-                        </c:forEach>
-                    </div>
+                <c:if test="${not empty comment}">
+                    <nav class="c-pager">
+                        <a class="c-page c-page--nav" href="${lifelog.app.base}/post/${postId}?page=1">«</a>
+                        <a class="c-page c-page--nav" href="${lifelog.app.base}/post/${postId}?page=${page.getPrevPage()}">‹</a>
+                        <div class="c-page__nums">
+                            <c:forEach var="no" begin="${page.getDrawFirstPage()}" end="${page.getDrawLastPage()}">
+                                <a class="c-page c-page--nav <c:if test="${page.currentPage eq no}">c-page--active</c:if>" href="${lifelog.app.base}/post/${postId}?page=${no}">${no}</a>
+                            </c:forEach>
+                        </div>
 
-                    <a class="c-page c-page--nav" href="${lifelog.app.base}/post/${postId}?page=${page.getNextPage()}">›</a>
-                    <a class="c-page c-page--nav" href="${lifelog.app.base}/post/${postId}?page=${page.getLastPage()}">»</a>
-                </nav>
+                        <a class="c-page c-page--nav" href="${lifelog.app.base}/post/${postId}?page=${page.getNextPage()}">›</a>
+                        <a class="c-page c-page--nav" href="${lifelog.app.base}/post/${postId}?page=${page.getLastPage()}">»</a>
+                    </nav>
+                </c:if>
             </section>
         </section>
     </main>
