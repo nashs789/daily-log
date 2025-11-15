@@ -52,7 +52,7 @@ public class PostController {
     ) {
         PageUtils<PostInfo> pageUtils = new PageUtils<>(page);
 
-        pageUtils.setupContent(postService.findMyAllPost(lifeLogUser, pageUtils.getPageable()));
+        pageUtils.setupContent(postFacade.findMyAllPost(lifeLogUser, pageUtils.getPageable()));
 
         mv.addObject("postList", pageUtils.getContent());
         mv.addObject("page", pageUtils);

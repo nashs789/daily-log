@@ -35,6 +35,18 @@ public class PostFacade {
         return allPost;
     }
 
+    public Page<PostInfo> findMyAllPost(LifeLogUser lifeLogUser, Pageable pageable) {
+        Page<PostInfo> myAllPost = postService.findMyAllPost(lifeLogUser, pageable);
+
+        for (PostInfo postInfo : myAllPost.getContent()) {
+            postInfo.setupCommentCount(
+                    commentService.countCommentOnPost(postInfo.getId())
+            );
+        }
+
+        return myAllPost;
+    }
+
     public PostInfo savePost(LifeLogUser lifeLogUser, PostInfo postInfo) {
         TemplateInfo templateInfo = postInfo.getTemplateInfo();
         Long templateId = Objects.nonNull(templateInfo) ? templateInfo.getId() : null;
