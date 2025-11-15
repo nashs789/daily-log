@@ -61,7 +61,7 @@ public class Post extends Timestamp {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "varchar(20) default 'NORMAL'")
+    @Column(name = "status")
     private PostStatus status = NORMAL;
 
     public PostInfo toInfo() {

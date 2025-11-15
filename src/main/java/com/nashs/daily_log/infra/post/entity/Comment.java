@@ -53,7 +53,7 @@ public class Comment extends Timestamp {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "varchar(20) default 'NORMAL'")
+    @Column(name = "status")
     private CommentStatus status = NORMAL;
 
     public CommentInfo toInfo() {
