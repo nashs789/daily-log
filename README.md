@@ -18,8 +18,39 @@ Google OAuth2 기반 로그인 → JWT 발급 → 템플릿 입력 → Discord W
 - PostgreSQL 기반 영속
 
 ------------
-# 🏗 시스템 아키텍처
 
+# 📌서버 레이어
+
+서비스 레이어가 다른 레이어에 의존하지 않도록 설계했습니다.
+
+```text
+                        ┌─────────────────────────────────────┐
+                        │              API Layer              │  
+                        └───────────────────┬─────────────────┘
+                                            │ depends on
+                                            ▼
+                        ┌─────────────────────────────────────┐
+                        │     Application / Facade Layer      │
+                        └───────────────────┬─────────────────┘
+                                            │ depends on
+                                            ▼
+                        ┌─────────────────────────────────────┐
+                        │       Service Layer (Domain)        │
+                        └───────────────────▲─────────────────┘
+                                            │ depended on by
+                        ┌───────────────────┴─────────────────┐
+                        │       Infrastructure Layer          │
+                        └───────────────────▲─────────────────┘
+                                            │ uses
+                                            ▼
+                                    ┌─────────────────┐
+                                    │  PostgreSQL DB  │
+                                    └─────────────────┘
+```
+
+------------
+# 🏗 시스템 아키텍처
+```text
                             ┌───────────────────────────┐
                             │        User Browser       │
                             │  (JSP, jQuery, DataTables)│
@@ -53,8 +84,13 @@ Google OAuth2 기반 로그인 → JWT 발급 → 템플릿 입력 → Discord W
                           │ Jenkinsfile → Test → Deploy   │
                           │   (Home Server Deployment)    │
                           └───────────────────────────────┘
+```
+
 ------------
+
 # 🧪 테스트 환경(TDD + Docker)
+
+```text
                 ┌─────────────┐
                 │  JUnit5     │
                 │  Mockito    │
@@ -69,8 +105,10 @@ Google OAuth2 기반 로그인 → JWT 발급 → 템플릿 입력 → Discord W
                          │
                          ▼
        모든 테스트 통과 시에만 → Jenkins Build → Deploy
+```
 
 ------------
+
 # ⚙️ 기술 스택
 
 - Backend
@@ -97,6 +135,8 @@ Google OAuth2 기반 로그인 → JWT 발급 → 템플릿 입력 → Discord W
 ------------
 # 🚀 배포 파이프라인
 
+```text
+
     GitHub Push
     │
     ▼
@@ -109,3 +149,4 @@ Google OAuth2 기반 로그인 → JWT 발급 → 템플릿 입력 → Discord W
     │
     ▼
     Home Server (Spring Boot JAR or WAS)
+```
