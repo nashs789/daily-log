@@ -97,6 +97,7 @@ public class WebhookHistory extends Timestamp {
                                  .httpStatus(httpStatus)
                                  .isSuccess(isSuccess)
                                  .errorMessage(errorMessage)
+                                 .created(getCreated())
                                  .build();
     }
 }

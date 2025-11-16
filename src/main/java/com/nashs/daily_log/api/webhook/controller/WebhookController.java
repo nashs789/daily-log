@@ -1,5 +1,6 @@
 package com.nashs.daily_log.api.webhook.controller;
 
+import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -15,9 +16,9 @@ public class WebhookController {
 
     @GetMapping
     public ModelAndView historyPage(
+            LifeLogUser lifeLogUser,
             ModelAndView mv
     ) {
-
         mv.setViewName("webhook/history");
 
         return mv;

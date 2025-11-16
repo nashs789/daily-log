@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -36,6 +33,10 @@ public class WebhookService {
     private final WebhookProps props;
     private final RestClient client;
     private final WebhookRepository webhookRepository;
+
+    public List<WebhookHistoryInfo> findWebhookHistories(String userSub) {
+        return webhookRepository.findWebhookHistories(userSub);
+    }
 
     public void sendExceptionAsync(Exception ex, HttpServletRequest req) {
         if (props.isNotEnabled() || Objects.isNull(req)) {

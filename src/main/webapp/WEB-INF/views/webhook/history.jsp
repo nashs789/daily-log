@@ -41,16 +41,16 @@
                 </select>
             </div>
 
-            <!-- Table -->
             <table id="historyTable" class="display nowrap stripe" style="width:100%">
                 <thead>
                 <tr>
                     <th>시간</th>
-                    <th>유형</th>
-                    <th>사용자</th>
-                    <th>대상</th>
+                    <th>플랫폼</th>
+                    <th>성공</th>
+                    <th>HTTP</th>
+                    <th>URL</th>
                     <th>내용</th>
-                    <th>메타</th>
+                    <th>파라미터</th>
                 </tr>
                 </thead>
             </table>
@@ -70,3 +70,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <script src="${lifelog.app.js}/webhook/history.js"></script>
+<script src="${lifelog.app.js}/common/common.js"></script>

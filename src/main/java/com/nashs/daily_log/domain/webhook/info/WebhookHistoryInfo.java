@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
@@ -22,6 +23,7 @@ public class WebhookHistoryInfo {
     private int httpStatus;
     private boolean isSuccess;
     private String errorMessage;
+    private LocalDateTime created;
 
     public void setupResponse(ResponseEntity<Void> response) {
         httpStatus = response.getStatusCode().value();
