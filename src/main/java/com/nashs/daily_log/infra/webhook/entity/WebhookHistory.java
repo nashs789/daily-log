@@ -88,7 +88,7 @@ public class WebhookHistory extends Timestamp {
 
     public WebhookHistoryInfo toInfo() {
         return WebhookHistoryInfo.builder()
-                                 .url(user.getSub())
+                                 .userSub(user.getSub())
                                  .webhookPlatform(platform)
                                  .url(url)
                                  .content(content)

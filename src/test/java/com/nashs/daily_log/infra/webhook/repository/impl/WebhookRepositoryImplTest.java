@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
 import java.util.Collections;
+import java.util.List;
 
 import static com.nashs.daily_log.infra.webhook.entity.WebhookHistory.WebhookPlatform.DISCORD;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Sql(
         scripts = {
                 "/test-data/user/user_insert.sql",
+                "/test-data/webhook/history_insert.sql",
         },
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD,
         config = @SqlConfig(encoding = "UTF-8")
@@ -30,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Sql(
         scripts = {
                 "/test-data/user/user_cleanup.sql",
+                "/test-data/webhook/history_cleanup.sql",
         },
         executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD,
         config = @SqlConfig(encoding = "UTF-8")
@@ -38,6 +41,24 @@ class WebhookRepositoryImplTest extends ContainerTest {
 
     @Autowired
     private WebhookRepositoryImpl webhookRepository;
+
+    @Test
+    @DisplayName("웹훅 이력 조회")
+    void findWebhookHistories() {
+        // given
+        final String USER_SUB = "user1";
+
+        // when
+        List<WebhookHistoryInfo> webhookHistories = webhookRepository.findWebhookHistories(USER_SUB);
+
+        // then
+        assertThat(webhookHistories)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(6)
+                .extracting(WebhookHistoryInfo::getUserSub)
+                .allMatch(USER_SUB::equals);
+    }
 
     @Test
     @DisplayName("웹훅 메세지 이력 저장")

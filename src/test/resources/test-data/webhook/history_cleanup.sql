@@ -1,0 +1,1 @@
+TRUNCATE TABLE webhook_history          RESTART IDENTITY CASCADE;

@@ -8,12 +8,21 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @Transactional
 @RequiredArgsConstructor
 public class WebhookRepositoryImpl implements WebhookRepository {
 
     private final WebhookJpaRepository webhookRepository;
+
+    public List<WebhookHistoryInfo> findWebhookHistories(String userSub) {
+        return webhookRepository.findAllByUserSub(userSub)
+                                .stream()
+                                .map(WebhookHistory::toInfo)
+                                .toList();
+    }
 
     @Override
     public WebhookHistoryInfo saveWebhookHistory(WebhookHistoryInfo webhookHistoryInfo) {

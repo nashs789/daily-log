@@ -1,6 +1,6 @@
 // ===== 이력 테이블 =====
 (function(){
-    const USE_DEMO_DATA = true;                     // ← 실제 API 쓰려면 false
+    const USE_DEMO_DATA = true;  // ← 실제 API 쓰려면 false
     const API_URL = '/api/history';                 // ← 실제 API 경로
 
     // 데모 데이터
@@ -21,7 +21,7 @@
         data: USE_DEMO_DATA ? DEMO_ROWS : [],
         ajax: USE_DEMO_DATA ? null : { url: API_URL, dataSrc: '' },
         columns: [
-            { data:'timestamp', render:d => d ? new Date(d).toLocaleString() : '' , width: 160 },
+            { data: 'timestamp', render:d => d ? new Date(d).toLocaleString() : '' , width: 160 },
             { data:'type', render: d => {
                     const t = (d||'').toUpperCase();
                     const cls = t==='ERROR' ? 'chip--error' : (t==='WARN' ? 'chip--warn' : 'chip--info');
@@ -80,14 +80,5 @@
         return true;
     });
 
-    $('#fromDate,#toDate').on('change', ()=> table.draw());
-
-    // 새로고침
-    $('#btnReload').on('click', function(){
-        if (USE_DEMO_DATA){
-            table.clear().rows.add(DEMO_ROWS).draw();
-        } else {
-            table.ajax.reload(null, false);
-        }
-    });
+    $('#fromDate, #toDate').on('change', ()=> table.draw());
 })();
