@@ -3,6 +3,6 @@
     <div class="sidebar__scroll">
         <a class="nav-item" href="${lifelog.app.base}/">대시보드</a>
         <a class="nav-item" href="${lifelog.app.base}/post">게시글</a>
-        <a class="nav-item" href="${lifelog.app.base}/history">전송 이력(미구현)</a>
+        <a class="nav-item" href="${lifelog.app.base}/webhook/history">전송 이력(미구현)</a>
     </div>
 </nav>
