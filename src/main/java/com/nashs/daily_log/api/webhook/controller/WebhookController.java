@@ -1,6 +1,7 @@
 package com.nashs.daily_log.api.webhook.controller;
 
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
+import com.nashs.daily_log.global.annotation.LoginRequired;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(("/webhook/history"))
 public class WebhookController {
 
+    @LoginRequired
     @GetMapping
     public ModelAndView historyPage(
             LifeLogUser lifeLogUser,

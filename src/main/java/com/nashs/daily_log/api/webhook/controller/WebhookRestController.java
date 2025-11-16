@@ -5,6 +5,7 @@ import com.nashs.daily_log.api.webhook.response.WebhookResponse;
 import com.nashs.daily_log.application.webhook.WebhookFacade;
 import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.webhook.service.WebhookService;
+import com.nashs.daily_log.global.annotation.LoginRequired;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class WebhookRestController {
     private final WebhookService webhookService;
     private final WebhookFacade webhookFacade;
 
+    @LoginRequired
     @GetMapping("/history")
     public ResponseEntity<List<WebhookResponse>> test(
             LifeLogUser lifeLogUser

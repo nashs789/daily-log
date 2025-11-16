@@ -1,14 +1,11 @@
 package com.nashs.daily_log.global.interceptor;
 
-import com.nashs.daily_log.domain.auth.info.LifeLogUser;
 import com.nashs.daily_log.domain.common.exception.DomainException;
 import com.nashs.daily_log.global.annotation.LoginRequired;
 import com.nashs.daily_log.global.provider.LifeLogUserProvider;
-import com.nashs.daily_log.global.resolver.LifeLogUserArgumentResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
