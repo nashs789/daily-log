@@ -9,6 +9,9 @@
   - 사람마다 템플릿 형식이 일정하지 않음
   - 운동에 따라서 다른 템플릿을 사용함
 
+<img width="442" height="870" alt="스크린샷 2025-11-17 오전 3 32 15" src="https://github.com/user-attachments/assets/73a1d770-87b6-41e2-99d0-1d2140866ae7" />
+<img width="442" height="870" alt="스크린샷 2025-11-17 오전 3 32 22" src="https://github.com/user-attachments/assets/25ae9974-4e5d-4542-aefe-8278660024f9" />
+
 ------------
 
 # 📌프로젝트 개요
@@ -109,6 +112,10 @@ Google OAuth2 기반 로그인 → JWT 발급 → 템플릿 입력 → Discord W
                          ▼
        모든 테스트 통과 시에만 → Jenkins Build → Deploy
 ```
+
+테스트 코드 결과를 확인 후 배포까지 이루어짐
+
+<img width="716" height="371" alt="스크린샷 2025-11-17 오전 3 31 15" src="https://github.com/user-attachments/assets/b57e2255-a73f-4b6d-b834-71279da0fb08" />
 
 ------------
 
