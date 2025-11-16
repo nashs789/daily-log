@@ -16,7 +16,8 @@ public class WebhookRepositoryImpl implements WebhookRepository {
     private final WebhookJpaRepository webhookRepository;
 
     @Override
-    public void saveWebhookHistory(WebhookHistoryInfo webhookHistoryInfo) {
-        webhookRepository.save(WebhookHistory.fromInfo(webhookHistoryInfo));
+    public WebhookHistoryInfo saveWebhookHistory(WebhookHistoryInfo webhookHistoryInfo) {
+        return webhookRepository.save(WebhookHistory.fromInfo(webhookHistoryInfo))
+                                .toInfo();
     }
 }

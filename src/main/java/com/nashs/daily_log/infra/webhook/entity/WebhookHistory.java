@@ -85,4 +85,18 @@ public class WebhookHistory extends Timestamp {
                              .errorMessage(info.getErrorMessage())
                              .build();
     }
+
+    public WebhookHistoryInfo toInfo() {
+        return WebhookHistoryInfo.builder()
+                                 .url(user.getSub())
+                                 .webhookPlatform(platform)
+                                 .url(url)
+                                 .content(content)
+                                 .rawContent(rawContent)
+                                 .params(params)
+                                 .httpStatus(httpStatus)
+                                 .isSuccess(isSuccess)
+                                 .errorMessage(errorMessage)
+                                 .build();
+    }
 }
