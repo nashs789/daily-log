@@ -101,7 +101,7 @@ pipeline {
   }
   post {
     always {
-      sh 'tail -n 200 /opt/myapp/logs/app.out || true'
+      sh 'tail -n 500 /opt/myapp/logs/app.out || true'
     }
   }
 }
