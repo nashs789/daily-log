@@ -92,7 +92,7 @@ pipeline {
         cp -f "$WAR" /opt/myapp/app.war
         bash /opt/myapp/run.sh
 
-        sleep 2
+        sleep 1
         pgrep -af 'java.*app.war' || (echo "App not running!" && exit 1)
       '''
     }
