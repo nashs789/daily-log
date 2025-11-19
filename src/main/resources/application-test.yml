@@ -63,3 +63,10 @@ jwt:
   secret: "7ThrtestGJp2xhtest492test9k5utest9+Cptest4g="
   access-exp-minutes: 15
   refresh-exp-days: 14
+
+logging:
+  level:
+    root: ERROR
+    org.springframework: WARN
+    org.hibernate: ERROR
+    org.testcontainers: WARN
