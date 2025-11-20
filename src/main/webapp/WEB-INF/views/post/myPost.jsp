@@ -21,13 +21,8 @@
     <main class="content post-list-page">
         <section class="post-list__search">
             <form id="postSearchForm" method="get" action="#" class="post-search-form">
-                <input
-                        type="text"
-                        name="q"
-                        placeholder="검색어를 입력하세요"
-                        class="post-search__input" />
-
-                <button type="submit" class="post-search__btn">검색</button>
+                <%--<input type="text" name="q" placeholder="검색어를 입력하세요" class="post-search__input" />
+                <button type="submit" class="post-search__btn">검색</button>--%>
 
                 <c:if test="${not empty lifeLogUser}">
                     <div class="post-search__tabs">
